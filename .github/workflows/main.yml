@@ -31,7 +31,7 @@ jobs:
       - name: Rename jar file
         run: mv target/dxs-0.0.1-SNAPSHOT.jar target/dxs-${GITHUB_REF##*/}.jar
       - name: Execute Jar file
-        run: java -jar /home/g259722/actions-runner/_work/Developer-experience-survey/Developer-experience-survey/target/dxs-${GITHUB_REF##*/}.jar # TODO fix the path after creating the runner
+        run: java -jar /home/g259722/actions-runner/_work/DXS/DXS/target/dxs-${GITHUB_REF##*/}.jar # TODO fix the path after creating the runner
       - name: Stop pipeline successfully after executing Jar file
         if: always()
         run: exit 0

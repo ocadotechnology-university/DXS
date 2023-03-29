@@ -7,7 +7,7 @@
 
     <groupId>com.pwr.students</groupId>
     <artifactId>dxs</artifactId>
-    <version>${GITHUB_REF##*/}</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>DXS</name>
     <description>Description for DXS</description>

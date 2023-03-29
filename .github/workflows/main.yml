@@ -30,8 +30,10 @@ jobs:
         run: npm run java:jar:prod
       - name: Rename jar file
         run: mv target/dxs-0.0.1-SNAPSHOT.jar target/dxs-${GITHUB_REF##*/}.jar
+      - name: Kill old version
+        run: kill -9 $(lsof -i :8080 | grep LISTEN | awk '{print $2}')
       - name: Execute Jar file
-        run: java -jar /home/g259722/actions-runner/_work/DXS/DXS/target/dxs-${GITHUB_REF##*/}.jar # TODO fix the path after creating the runner
+        run: java -jar /home/g259722/actions-runner/_work/DXS/DXS/target/dxs-${GITHUB_REF##*/}.jar
       - name: Stop pipeline successfully after executing Jar file
         if: always()
         run: exit 0

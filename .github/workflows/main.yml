@@ -5,7 +5,6 @@ jobs:
     name: DXS pipeline
     runs-on: self-hosted
     if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
-    timeout-minutes: 50400
     env:
       NODE_VERSION: 16.17.0
       SPRING_OUTPUT_ANSI_ENABLED: DETECT
@@ -21,11 +20,9 @@ jobs:
           distribution: 'temurin'
           java-version: 17
       - name: Install node.js packages
-        run: npm install
+        run: npm install --force
       - name: Update mvnw permissions
         run: |
           chmod +x mvnw
       - name: Package application
         run: npm run java:jar:prod
-      - name: Execute Jar file
-        run: java -jar /home/g259722/actions-runner/_work/Developer-experience-survey/Developer-experience-survey/target/dxs-0.0.1-SNAPSHOT.jar

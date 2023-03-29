@@ -2,7 +2,7 @@ name: Deploy DXS to GCP workflow
 on:
   push:
     tags:
-      - '*'
+      - 'v*'
 jobs:
   deploy:
     name: deploy DXS to GCP
@@ -21,8 +21,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
-      - name: Rename jar file
-        run: mv target/dxs-0.0.1-SNAPSHOT.jar target/dxs-${GITHUB_REF##*/}.jar
       - name: Install node.js packages
         run: npm install
       - name: Update mvnw permissions
@@ -30,6 +28,8 @@ jobs:
           chmod +x mvnw
       - name: Package application
         run: npm run java:jar:prod
+      - name: Rename jar file
+        run: mv target/dxs-0.0.1-SNAPSHOT.jar target/dxs-${GITHUB_REF##*/}.jar
       - name: Execute Jar file
         run: java -jar /home/g259722/actions-runner/_work/Developer-experience-survey/Developer-experience-survey/target/dxs-${GITHUB_REF##*/}.jar # TODO fix the path after creating the runner
       - name: Stop pipeline successfully after executing Jar file

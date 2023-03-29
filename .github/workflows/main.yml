@@ -37,7 +37,7 @@ jobs:
       - name: update start script permissions
         run: chmod +x /home/g259722/start.sh
       - name: Execute Jar file
-        run: /home/g259722/start.sh /home/g259722/actions-runner/_work/DXS/DXS/target/dxs-${GITHUB_REF##*/}.jar
+        run: RUNNER_TRACKING_ID="" && /home/g259722/start.sh /home/g259722/actions-runner/_work/DXS/DXS/target/dxs-${GITHUB_REF##*/}.jar
       - name: Stop pipeline successfully after executing Jar file
         if: always()
         run: exit 0

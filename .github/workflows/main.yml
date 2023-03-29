@@ -31,9 +31,9 @@ jobs:
       - name: Rename jar file
         run: mv target/dxs-0.0.1-SNAPSHOT.jar target/dxs-${GITHUB_REF##*/}.jar
       - name: Kill old version
-        run: killall -9 java || echo "Process was not running."
+        run: ./home/g259722/stop.sh
       - name: Execute Jar file
-        run: java -jar /home/g259722/actions-runner/_work/DXS/DXS/target/dxs-${GITHUB_REF##*/}.jar
+        run: ./home/g259722/start.sh /home/g259722/actions-runner/_work/DXS/DXS/target/dxs-${GITHUB_REF##*/}.jar
       - name: Stop pipeline successfully after executing Jar file
         if: always()
         run: exit 0

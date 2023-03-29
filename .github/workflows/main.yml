@@ -30,10 +30,6 @@ jobs:
         run: npm run java:jar:prod
       - name: Rename jar file
         run: mv target/dxs-0.0.1-SNAPSHOT.jar target/dxs-${GITHUB_REF##*/}.jar
-      - name: update kill script permissions
-        run: chmod +x /home/g259722/stop.sh
-      - name: Kill old version
-        run: /home/g259722/stop.sh
       - name: update start script permissions
         run: chmod +x /home/g259722/start.sh
       - name: Execute Jar file

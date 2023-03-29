@@ -30,6 +30,8 @@ jobs:
         run: npm run java:jar:prod
       - name: Rename jar file
         run: mv target/dxs-0.0.1-SNAPSHOT.jar target/dxs-${GITHUB_REF##*/}.jar
+      - name: kill old process
+        run: killall -9 java || echo "Process was not running."
       - name: update start script permissions
         run: chmod +x /home/g259722/start.sh
       - name: Execute Jar file

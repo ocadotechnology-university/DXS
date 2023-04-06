@@ -44,7 +44,7 @@ const Header = (props: IHeaderProps) => {
             {props.isAuthenticated && props.isAdmin && (
               <AdminMenu showOpenAPI={props.isOpenAPIEnabled} showDatabase={!props.isInProduction} />
             )}
-            <AccountMenu isAuthenticated={props.isAuthenticated} />
+            <AccountMenu isAuthenticated={props.isAuthenticated} isAdmin={props.isAdmin} />
           </Nav>
         </Collapse>
       </Navbar>

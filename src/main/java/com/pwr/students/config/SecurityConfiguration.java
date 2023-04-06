@@ -69,7 +69,6 @@ public class SecurityConfiguration {
                 // prettier-ignore
                 authz
                     .requestMatchers("/account").permitAll()
-                    // TODO: delete submenu option for users to access this endpoint \/
                     .requestMatchers("/api/account/sessions").hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers("/", "/index.html", "/*.js", "/*.map", "/*.css").permitAll()
                     .requestMatchers("/*.ico", "/*.png", "/*.svg", "/*.webapp").permitAll()

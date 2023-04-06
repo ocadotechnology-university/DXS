@@ -26,3 +26,11 @@ export const Home = () => (
     </NavLink>
   </NavItem>
 );
+
+export const TestWebsite = () => (
+  <NavItem>
+    <NavLink tag={Link} to="/test-website" className="d-flex align-items-center">
+      <span>Test Website</span>
+    </NavLink>
+  </NavItem>
+);

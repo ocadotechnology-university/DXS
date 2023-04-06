@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        distribution: [ 'oracle' ]
+        distribution: [ 'temurin' ]
         node-version: [ 16.x ]
         java-version: [ 17 ]
 

@@ -11,7 +11,7 @@ const accountMenuItemsAuthenticated = (isAdmin: boolean) => (
     <MenuItem icon="lock" to="/account/password" data-cy="passwordItem">
       Password
     </MenuItem>
-    {isAdmin == true && (
+    {isAdmin === true && (
       <MenuItem icon="cloud" to="/account/sessions">
         Sessions
       </MenuItem>

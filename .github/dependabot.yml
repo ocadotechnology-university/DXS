@@ -4,8 +4,9 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    target-branch: "update-dependencies"
   - package-ecosystem: "maven"
     directory: "/"
     schedule:
       interval: "daily"
-      
+    target-branch: "update-dependencies"

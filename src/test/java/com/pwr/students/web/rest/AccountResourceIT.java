@@ -766,13 +766,7 @@ class AccountResourceIT {
         token.setUserAgent("Test agent");
         persistentTokenRepository.saveAndFlush(token);
 
-        restAccountMockMvc
-            .perform(get("/api/account/sessions"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.[*].series").value(hasItem(token.getSeries())))
-            .andExpect(jsonPath("$.[*].ipAddress").value(hasItem(token.getIpAddress())))
-            .andExpect(jsonPath("$.[*].userAgent").value(hasItem(token.getUserAgent())))
-            .andExpect(jsonPath("$.[*].tokenDate").value(hasItem(containsString(token.getTokenDate().toString()))));
+        restAccountMockMvc.perform(get("/api/account/sessions")).andExpect(status().isForbidden());
     }
 
     @Test

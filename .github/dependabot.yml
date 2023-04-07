@@ -5,8 +5,10 @@ updates:
     schedule:
       interval: "daily"
     target-branch: "update-dependencies"
+    open-pull-requests-limit: 10
   - package-ecosystem: "maven"
     directory: "/"
     schedule:
       interval: "daily"
     target-branch: "update-dependencies"
+    open-pull-requests-limit: 10

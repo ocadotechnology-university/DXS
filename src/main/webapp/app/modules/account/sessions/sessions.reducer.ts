@@ -13,7 +13,7 @@ const initialState = {
 export type SessionsState = Readonly<typeof initialState>;
 
 // Actions
-const apiUrl = '/api/account/sessions/';
+const apiUrl = '/api/account/sessions';
 
 export const findAll = createAsyncThunk('sessions/find_all', async () => axios.get<any>(apiUrl), {
   serializeError: serializeAxiosError,

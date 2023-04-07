@@ -68,6 +68,8 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(authz ->
                 // prettier-ignore
                 authz
+                    .requestMatchers("/account").permitAll()
+                    .requestMatchers("/api/account/sessions").hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers("/", "/index.html", "/*.js", "/*.map", "/*.css").permitAll()
                     .requestMatchers("/*.ico", "/*.png", "/*.svg", "/*.webapp").permitAll()
                     .requestMatchers("/app/**").permitAll()

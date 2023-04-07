@@ -61,18 +61,19 @@ export const SessionsPage = () => {
           </thead>
 
           <tbody>
-            {sessions.map((s, index) => (
-              <tr key={index}>
-                <td>{s.ipAddress}</td>
-                <td>{s.userAgent}</td>
-                <td>{s.tokenDate}</td>
-                <td>
-                  <Button color="primary" onClick={doSessionInvalidation(s.series)}>
-                    Invalidate
-                  </Button>
-                </td>
-              </tr>
-            ))}
+            {Array.isArray(sessions) &&
+              sessions.map((s, index) => (
+                <tr key={index}>
+                  <td>{s.ipAddress}</td>
+                  <td>{s.userAgent}</td>
+                  <td>{s.tokenDate}</td>
+                  <td>
+                    <Button color="primary" onClick={doSessionInvalidation(s.series)}>
+                      Invalidate
+                    </Button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </Table>
       </div>

@@ -3,7 +3,7 @@ import MenuItem from 'app/shared/layout/menus/menu-item';
 
 import { NavDropdown } from './menu-components';
 
-const accountMenuItemsAuthenticated = () => (
+const accountMenuItemsAuthenticated = (isAdmin: boolean) => (
   <>
     <MenuItem icon="wrench" to="/account/settings" data-cy="settings">
       Settings
@@ -11,9 +11,11 @@ const accountMenuItemsAuthenticated = () => (
     <MenuItem icon="lock" to="/account/password" data-cy="passwordItem">
       Password
     </MenuItem>
-    <MenuItem icon="cloud" to="/account/sessions">
-      Sessions
-    </MenuItem>
+    {isAdmin == true && (
+      <MenuItem icon="cloud" to="/account/sessions">
+        Sessions
+      </MenuItem>
+    )}
     <MenuItem icon="sign-out-alt" to="/logout" data-cy="logout">
       Sign out
     </MenuItem>
@@ -31,9 +33,9 @@ const accountMenuItems = () => (
   </>
 );
 
-export const AccountMenu = ({ isAuthenticated = false }) => (
+export const AccountMenu = ({ isAuthenticated = false, isAdmin = false }) => (
   <NavDropdown icon="user" name="Account" id="account-menu" data-cy="accountMenu">
-    {isAuthenticated && accountMenuItemsAuthenticated()}
+    {isAuthenticated && accountMenuItemsAuthenticated(isAdmin)}
     {!isAuthenticated && accountMenuItems()}
   </NavDropdown>
 );

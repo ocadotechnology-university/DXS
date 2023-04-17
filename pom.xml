@@ -62,7 +62,7 @@
         <!-- The liquibase version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <liquibase.version>4.20.0</liquibase.version>
-        <liquibase-hibernate6.version>4.20.0</liquibase-hibernate6.version>
+        <liquibase-hibernate6.version>4.21.1</liquibase-hibernate6.version>
         <validation-api.version>3.0.2.Final</validation-api.version>
         <jaxb-runtime.version>4.0.2</jaxb-runtime.version>
         <archunit-junit5.version>1.0.1</archunit-junit5.version>

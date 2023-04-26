@@ -16,12 +16,12 @@ export const Home = () => {
         Developer Experience Survey
       </p>
       <p className="text-center" style={{ fontFamily: 'Inter', fontSize: '30px', color: 'black' }}>
-        At Ocado, we believe that your opinion matters. That's why we've created a powerful tool for collecting and analyzing feedback from
-        our talented team of developers. With our user-friendly forms, you can easily share your thoughts and ideas, and help us improve our
-        workplace culture and practices.{' '}
+        At Ocado, we believe that your opinion matters. That&apos;s why we&apos;ve created a powerful tool for collecting and analyzing
+        feedback from our talented team of developers. With our user-friendly forms, you can easily share your thoughts and ideas, and help
+        us improve our workplace culture and practices.{' '}
       </p>
       <p className="text-center" style={{ fontFamily: 'Inter', fontSize: '20px', color: 'black' }}>
-        So why wait? Let's start shaping the future of Ocado together!{' '}
+        So why wait? Let&apos;s start shaping the future of Ocado together!{' '}
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', position: 'relative' }}>
@@ -46,7 +46,7 @@ export const Home = () => {
             Complete your pending surveys
           </button>
           <button className="btn btn-primary my-2" style={{ backgroundColor: '#EBEBF4', borderRadius: '25px', color: 'black', flex: 1 }}>
-            Your team members' responses
+            Your team members&apos; responses
           </button>
         </div>
         <span className="hipster rounded" style={{ position: 'absolute', top: '50px', right: '-500px' }} />

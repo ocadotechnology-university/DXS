@@ -6,6 +6,7 @@ import { MemoryRouter } from 'react-router-dom';
 import initStore from 'app/config/store';
 import Header from './header';
 
+// TODO alter tests to much header layout settings
 describe('Header', () => {
   let mountedWrapper;
   const devProps = {

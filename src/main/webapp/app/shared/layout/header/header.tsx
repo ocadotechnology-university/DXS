@@ -30,7 +30,6 @@ const Header = (props: IHeaderProps) => {
 
   /* jhipster-needle-add-element-to-menu - JHipster will add new menu items here */
 
-  // @ts-ignore
   return (
     <div id="app-header">
       {renderDevRibbon()}

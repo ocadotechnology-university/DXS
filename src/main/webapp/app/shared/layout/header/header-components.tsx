@@ -26,3 +26,11 @@ export const Home = () => (
     </NavLink>
   </NavItem>
 );
+
+export const SurveyCreator = () => (
+  <NavItem>
+    <NavLink tag={Link} to="/surveyCreator" className="d-flex align-items-center">
+      <span>Survey Creator</span>
+    </NavLink>
+  </NavItem>
+);

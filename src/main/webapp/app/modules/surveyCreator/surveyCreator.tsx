@@ -9,7 +9,7 @@ const SurveyCreator = () => {
   const [categoryInput, setCategoryInput] = useState('');
   const [answerTypeInput, setAnswerTypeInput] = useState('');
   const [questionInput, setQuestionInput] = useState('');
-  const [checked, setChecked] = useState(false);
+  const [isObligatorySwitch, setIsObligatorySwitch] = useState(false);
 
   const handleAddQuestion = () => {
     if (categoryInput && answerTypeInput && questionInput) {
@@ -17,16 +17,18 @@ const SurveyCreator = () => {
         category: categoryInput,
         answerType: answerTypeInput,
         question: questionInput,
+        isObligatory: isObligatorySwitch,
       };
       setQuestionList([...questionList, newQuestion]);
       setCategoryInput('');
       setAnswerTypeInput('');
       setQuestionInput('');
+      setIsObligatorySwitch(false);
     }
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
+  const handleIsObligatorySwitchStateChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsObligatorySwitch(event.target.checked);
   };
 
   const handleDeleteQuestion = index => {
@@ -137,10 +139,10 @@ const SurveyCreator = () => {
               <FormControlLabel
                 control={
                   <Switch
-                    checked={checked}
-                    onChange={handleChange}
+                    checked={isObligatorySwitch}
+                    onChange={handleIsObligatorySwitchStateChanged}
                     color="default"
-                    name="checked"
+                    name="isObligatoryCheck"
                     inputProps={{ 'aria-label': 'controlled' }}
                   />
                 }
@@ -168,7 +170,7 @@ const SurveyCreator = () => {
                       <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <p style={{ marginRight: '80px' }}>Category: {question.category} </p>
                         <p style={{ marginRight: '80px' }}>Answer Type: {question.answerType}</p>
-                        <p style={{ marginRight: '80px' }}>Required: {question.changed ? 'Yes' : 'No'}</p>
+                        <p style={{ marginRight: '80px' }}>Required: {question.isObligatory ? 'Yes' : 'No'}</p>
                         <button style={{ marginRight: '20px' }} onClick={() => handleDeleteQuestion(index)}>
                           <FaTrash />
                         </button>

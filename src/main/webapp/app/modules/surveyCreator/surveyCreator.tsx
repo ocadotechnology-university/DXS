@@ -37,7 +37,6 @@ const SurveyCreator = () => {
     setQuestionList(newQuestionList);
   };
 
-  // @ts-ignore
   return (
     <div style={{ backgroundColor: '#F5F5F5', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <div style={{ width: '50%', borderRadius: '15px', backgroundColor: '#D9D9D9', padding: '20px' }}>

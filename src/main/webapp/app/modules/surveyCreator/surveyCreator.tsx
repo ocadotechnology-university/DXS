@@ -37,6 +37,8 @@ const SurveyCreator = () => {
     setQuestionList(newQuestionList);
   };
 
+  // TODO probably need to add reducer to save surveys to database, for time mocks are used this code is acceptable
+
   return (
     <div style={{ backgroundColor: '#F5F5F5', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <div style={{ width: '50%', borderRadius: '15px', backgroundColor: '#D9D9D9', padding: '20px' }}>

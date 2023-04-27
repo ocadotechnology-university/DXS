@@ -1,8 +1,8 @@
 import { Row, Col, FormGroup, Label, Input, Button } from 'reactstrap';
 import React, { useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
 const SurveyCreator = () => {
   const [questionList, setQuestionList] = useState([]);
@@ -22,7 +22,6 @@ const SurveyCreator = () => {
       setCategoryInput('');
       setAnswerTypeInput('');
       setQuestionInput('');
-
     }
   };
 
@@ -135,15 +134,18 @@ const SurveyCreator = () => {
         <Row className="my-3">
           <Col>
             <FormGroup>
-              <FormControlLabel control={
-                <Switch
-                  checked={checked}
-                  onChange={handleChange}
-                  color="default"
-                  name="checked"
-                  inputProps={{ 'aria-label': 'controlled' }}
-                />}
-                                label="Answer required"/>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={checked}
+                    onChange={handleChange}
+                    color="default"
+                    name="checked"
+                    inputProps={{ 'aria-label': 'controlled' }}
+                  />
+                }
+                label="Answer required"
+              />
             </FormGroup>
           </Col>
         </Row>

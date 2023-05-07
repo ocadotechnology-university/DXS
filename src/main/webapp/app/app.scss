@@ -8,6 +8,14 @@ body {
   margin: 0;
 }
 
+html,
+body,
+#root,
+#root > div,
+.app-container {
+  height: 100%;
+}
+
 a {
   color: #533f03;
   font-weight: bold;
@@ -27,12 +35,13 @@ a {
   box-sizing: border-box;
   .view-container {
     width: 100%;
-    height: calc(100% - 40px);
+    height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 1rem;
+    //padding: 1rem;
     .card {
-      padding: 1rem;
+      padding: 1rem 0 0;
+      height: 100%;
     }
     .view-routes {
       height: 100%;

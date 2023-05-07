@@ -8,7 +8,7 @@ import { Row, Col, Alert } from 'reactstrap';
 import { useAppSelector } from 'app/config/store';
 
 export const Home = () => {
-  const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated); // add the authentication selector
+  const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
   const account = useAppSelector(state => state.authentication.account);
 
   return (
@@ -26,7 +26,7 @@ export const Home = () => {
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', position: 'relative' }}>
-        {isAuthenticated ? ( // render the buttons only if the user is authenticated
+        {isAuthenticated ? (
           <div
             className="mx-auto my-4"
             style={{

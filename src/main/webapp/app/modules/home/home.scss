@@ -8,3 +8,62 @@ Main page styles
   background: url('/content/images/jhipster_family_member_1_head-192.png') no-repeat center top;
   background-size: contain;
 }
+
+.container {
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  p {
+    font-family: Inter;
+    color: black;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 60px;
+  }
+
+  .subtitle {
+    font-size: 30px;
+  }
+
+  .description {
+    font-size: 20px;
+  }
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  .btn {
+    background-color: #ebebf4;
+    border-radius: 25px;
+    color: black;
+    flex: 1;
+    margin-top: 8px;
+  }
+
+  .btn-primary {
+    color: black;
+  }
+
+  .btn-primary:hover {
+    background-color: #d1d1d1;
+  }
+}
+
+.authenticated-container {
+  background-color: #d9d9d9;
+  border-radius: 35px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  min-width: fit-content;
+  margin: auto;
+  margin-top: 30px;
+}

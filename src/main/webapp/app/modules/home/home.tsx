@@ -8,6 +8,7 @@ import { Row, Col, Alert } from 'reactstrap';
 import { useAppSelector } from 'app/config/store';
 
 export const Home = () => {
+  const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated); // add the authentication selector
   const account = useAppSelector(state => state.authentication.account);
 
   return (
@@ -25,31 +26,48 @@ export const Home = () => {
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', position: 'relative' }}>
-        <div
-          className="mx-auto my-4"
-          style={{
-            backgroundColor: '#D9D9D9',
-            borderRadius: '35px',
-            padding: '20px',
-            display: 'flex',
-            flexDirection: 'column',
-            minWidth: 'fit-content',
-          }}
-        >
-          <button className="btn btn-primary my-2" style={{ backgroundColor: '#EBEBF4', borderRadius: '25px', color: 'black', flex: 1 }}>
-            Create a survey
-          </button>
-          <button className="btn btn-primary my-2" style={{ backgroundColor: '#EBEBF4', borderRadius: '25px', color: 'black', flex: 1 }}>
-            History of surveys
-          </button>
-          <button className="btn btn-primary my-2" style={{ backgroundColor: '#EBEBF4', borderRadius: '25px', color: 'black', flex: 1 }}>
-            Complete your pending surveys
-          </button>
-          <button className="btn btn-primary my-2" style={{ backgroundColor: '#EBEBF4', borderRadius: '25px', color: 'black', flex: 1 }}>
-            Your team members&apos; responses
-          </button>
-        </div>
-        <span className="hipster rounded" style={{ position: 'absolute', top: '50px', right: '-500px' }} />
+        {isAuthenticated ? ( // render the buttons only if the user is authenticated
+          <div
+            className="mx-auto my-4"
+            style={{
+              backgroundColor: '#D9D9D9',
+              borderRadius: '35px',
+              padding: '20px',
+              display: 'flex',
+              flexDirection: 'column',
+              minWidth: 'fit-content',
+            }}
+          >
+            <button className="btn btn-primary my-2" style={{ backgroundColor: '#EBEBF4', borderRadius: '25px', color: 'black', flex: 1 }}>
+              Create a survey
+            </button>
+            <button className="btn btn-primary my-2" style={{ backgroundColor: '#EBEBF4', borderRadius: '25px', color: 'black', flex: 1 }}>
+              History of surveys
+            </button>
+            <button className="btn btn-primary my-2" style={{ backgroundColor: '#EBEBF4', borderRadius: '25px', color: 'black', flex: 1 }}>
+              Complete your pending surveys
+            </button>
+            <button className="btn btn-primary my-2" style={{ backgroundColor: '#EBEBF4', borderRadius: '25px', color: 'black', flex: 1 }}>
+              Your team members&apos; responses
+            </button>
+          </div>
+        ) : (
+          <div
+            className="mx-auto my-4"
+            style={{
+              backgroundColor: '#D9D9D9',
+              borderRadius: '35px',
+              padding: '20px',
+              display: 'flex',
+              flexDirection: 'column',
+              minWidth: 'fit-content',
+            }}
+          >
+            <button className="btn btn-primary my-2" style={{ backgroundColor: '#EBEBF4', borderRadius: '25px', color: 'black', flex: 1 }}>
+              Log in
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

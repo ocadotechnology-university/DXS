@@ -12,9 +12,9 @@ export const BrandIcon = props => (
 
 export const Brand = () => (
   <NavbarBrand tag={Link} to="/" className="brand-logo">
-    <BrandIcon />
-    <span className="brand-title">DXS</span>
-    <span className="navbar-version">{VERSION}</span>
+    {/*<BrandIcon />*/}
+    <span className="brand-title">Developer Experience Survey</span>
+    {/*<span className="navbar-version">{VERSION}</span>*/}
   </NavbarBrand>
 );
 
@@ -34,3 +34,5 @@ export const SurveyCreator = () => (
     </NavLink>
   </NavItem>
 );
+
+

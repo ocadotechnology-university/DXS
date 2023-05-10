@@ -5,6 +5,7 @@ $header-color-hover: darken($header-color, 20%);
 /* ==========================================================================
 Developement Ribbon
 ========================================================================== */
+/*
 .ribbon {
   background-color: rgba(170, 0, 0, 0.5);
   left: -3.5em;
@@ -33,6 +34,7 @@ Developement Ribbon
     pointer-events: none;
   }
 }
+*/
 
 /* ==========================================================================
 Navbar styles
@@ -73,6 +75,7 @@ Navbar styles
     color: $header-color-hover;
     text-decoration: none;
   }
+  margin-left: 20px;
 }
 
 .loading-bar {

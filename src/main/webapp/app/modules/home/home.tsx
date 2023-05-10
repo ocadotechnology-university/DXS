@@ -15,11 +15,11 @@ export const Home = () => {
     <div className="container">
       <p className="title">Developer Experience Survey</p>
       <p className="subtitle">
-        At Ocado, we believe that your opinion matters. That&apos;s why we&apos;ve created a powerful tool for collecting and analyzing
+        In our company, we believe that your opinion matters. That&apos;s why we&apos;ve created a powerful tool for collecting and analyzing
         feedback from our talented team of developers. With our user-friendly forms, you can easily share your thoughts and ideas, and help
         us improve our workplace culture and practices.
       </p>
-      <p className="description">So why wait? Let&apos;s start shaping the future of Ocado together!</p>
+      <p className="description">So why wait? Let&apos;s start shaping the future of our company together!</p>
 
       <div className="button-container">
         {isAuthenticated ? (
@@ -28,7 +28,9 @@ export const Home = () => {
               <button className="btn btn-primary">Create a survey</button>
             </NavLink>
             <button className="btn btn-primary">History of surveys</button>
-            <button className="btn btn-primary">Complete your pending surveys</button>
+            <NavLink tag={Link} to="/surveyCompleter" className="d-flex align-items-center">
+              <button className="btn btn-primary">Complete your pending surveys</button>
+            </NavLink>
             <button className="btn btn-primary">Your team members&apos; responses</button>
           </div>
         ) : (

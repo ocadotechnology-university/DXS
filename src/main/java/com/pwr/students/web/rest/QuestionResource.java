@@ -1,7 +1,9 @@
 package com.pwr.students.web.rest;
 
 import com.pwr.students.domain.Question;
+import com.pwr.students.domain.Survey;
 import com.pwr.students.repository.QuestionRepository;
+import com.pwr.students.repository.SurveyRepository;
 import com.pwr.students.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -27,7 +29,6 @@ import tech.jhipster.web.util.ResponseUtil;
 @Transactional
 public class QuestionResource {
 
-    // TODO: I changed endpoints paths but have no idea how to use methods for specific surveyId, please try to do id in a way that questions entities are dependant on surveyId (like get only questions for surveyId=1 or post question for surveyId=1)
     private final Logger log = LoggerFactory.getLogger(QuestionResource.class);
 
     private static final String ENTITY_NAME = "question";
@@ -35,9 +36,11 @@ public class QuestionResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final SurveyRepository surveyRepository;
     private final QuestionRepository questionRepository;
 
-    public QuestionResource(QuestionRepository questionRepository) {
+    public QuestionResource(SurveyRepository surveyRepository, QuestionRepository questionRepository) {
+        this.surveyRepository = surveyRepository;
         this.questionRepository = questionRepository;
     }
 
@@ -48,9 +51,8 @@ public class QuestionResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new question, or with status {@code 400 (Bad Request)} if the question has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/surveys/{surveyId}/questions")
-    public ResponseEntity<Question> createQuestion(@Valid @RequestBody Question question, @PathVariable Long surveyId)
-        throws URISyntaxException {
+    @PostMapping("/questions")
+    public ResponseEntity<Question> createQuestion(@Valid @RequestBody Question question) throws URISyntaxException {
         log.debug("REST request to save Question : {}", question);
         if (question.getId() != null) {
             throw new BadRequestAlertException("A new question cannot already have an ID", ENTITY_NAME, "idexists");
@@ -72,11 +74,10 @@ public class QuestionResource {
      * or with status {@code 500 (Internal Server Error)} if the question couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/surveys/{surveyId}/questions/{id}")
+    @PutMapping("/questions/{id}")
     public ResponseEntity<Question> updateQuestion(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody Question question,
-        @PathVariable Long surveyId
+        @Valid @RequestBody Question question
     ) throws URISyntaxException {
         log.debug("REST request to update Question : {}, {}", id, question);
         if (question.getId() == null) {
@@ -108,11 +109,10 @@ public class QuestionResource {
      * or with status {@code 500 (Internal Server Error)} if the question couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/surveys/{surveyId}/questions/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PatchMapping(value = "/questions/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Question> partialUpdateQuestion(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody Question question,
-        @PathVariable Long surveyId
+        @NotNull @RequestBody Question question
     ) throws URISyntaxException {
         log.debug("REST request to partial update Question partially : {}, {}", id, question);
         if (question.getId() == null) {
@@ -158,11 +158,8 @@ public class QuestionResource {
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of questions in body.
      */
-    @GetMapping("/surveys/{surveyId}/questions")
-    public List<Question> getAllQuestions(
-        @RequestParam(required = false, defaultValue = "false") boolean eagerload,
-        @PathVariable Long surveyId
-    ) {
+    @GetMapping("/questions")
+    public List<Question> getAllQuestions(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all Questions");
         if (eagerload) {
             return questionRepository.findAllWithEagerRelationships();
@@ -171,14 +168,20 @@ public class QuestionResource {
         }
     }
 
+    @GetMapping("/surveys/{surveyId}/questions")
+    public List<Question> getAllQuestionsFromSurvey(@PathVariable Long surveyId) {
+        log.debug("REST request to get all Questions from survey {}", surveyId);
+        return questionRepository.findAllBySurveyId(surveyId);
+    }
+
     /**
      * {@code GET  /questions/:id} : get the "id" question.
      *
      * @param id the id of the question to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the question, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/surveys/{surveyId}/questions/{id}")
-    public ResponseEntity<Question> getQuestion(@PathVariable Long id, @PathVariable Long surveyId) {
+    @GetMapping("/questions/{id}")
+    public ResponseEntity<Question> getQuestion(@PathVariable Long id) {
         log.debug("REST request to get Question : {}", id);
         Optional<Question> question = questionRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(question);
@@ -190,8 +193,8 @@ public class QuestionResource {
      * @param id the id of the question to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/surveys/{surveyId}/questions/{id}")
-    public ResponseEntity<Void> deleteQuestion(@PathVariable Long id, @PathVariable Long surveyId) {
+    @DeleteMapping("/questions/{id}")
+    public ResponseEntity<Void> deleteQuestion(@PathVariable Long id) {
         log.debug("REST request to delete Question : {}", id);
         questionRepository.deleteById(id);
         return ResponseEntity

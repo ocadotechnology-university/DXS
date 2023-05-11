@@ -83,13 +83,15 @@ public class SecurityConfiguration {
                     .requestMatchers("/api/account/reset-password/init").permitAll()
                     .requestMatchers("/api/account/reset-password/finish").permitAll()
                     .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                    .requestMatchers("/api/**").authenticated()
                     .requestMatchers("/v3/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers("/management/health").permitAll()
                     .requestMatchers("/management/health/**").permitAll()
                     .requestMatchers("/management/info").permitAll()
                     .requestMatchers("/management/prometheus").permitAll()
                     .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers("/api/questions/**").permitAll()
+                    .requestMatchers("/api/surveys/**").permitAll()
+                    .requestMatchers("/api/**").authenticated()
             )
             .rememberMe(rememberMe ->
                 rememberMe

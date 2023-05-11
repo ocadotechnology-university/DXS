@@ -20,16 +20,13 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { PayloadAction } from '@reduxjs/toolkit';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isNumber, ValidatedField, ValidatedForm } from 'react-jhipster';
 import { ISurvey } from 'app/shared/model/survey.model';
 import * as vm from 'vm';
 
 const SurveyCreator = () => {
-  const surveys = useAppSelector(state => state.survey.entities);
-
-  const questionLists = useAppSelector(state => state.question.entities);
-
   useEffect(() => {
     dispatch(getEntities({}));
   }, []);
@@ -87,12 +84,19 @@ const SurveyCreator = () => {
 
     if (isNew) {
       const newSurvey = await dispatch(createSurveyEntity(entity));
-      // @ts-ignore
+      // @ts-expect-error not good practice but works for now
       saveQuestionEntity(newSurvey.payload.data);
     } else {
       dispatch(updateSurveyEntity(entity));
       saveQuestionEntity(entity);
     }
+  };
+
+  const handleClick = () => {
+    saveEntity().catch(error => {
+      // eslint-disable-next-line no-console
+      console.log('Error:', error);
+    });
   };
 
   const saveQuestionEntity = surveyEntity => {
@@ -251,7 +255,7 @@ const SurveyCreator = () => {
               data-cy="entityCreateSaveButton"
               type="submit"
               style={{ borderRadius: '25px' }}
-              onClick={saveEntity}
+              onClick={handleClick}
             >
               Create survey
             </Button>

@@ -7,28 +7,23 @@ import {
 } from 'app/entities/survey/survey.reducer';
 import {
   createEntity as createQuestionEntity,
-  getEntities,
+  getEntities as getQuestionEntities,
   updateEntity as updateQuestionEntity,
 } from 'app/entities/question/question.reducer';
 
-import { SurveyUpdate } from 'app/entities/survey/survey-update';
-
-import { Row, Col, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Row, Col, FormGroup, Label, Button } from 'reactstrap';
 import React, { useEffect, useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { PayloadAction } from '@reduxjs/toolkit';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { isNumber, ValidatedField, ValidatedForm } from 'react-jhipster';
-import { ISurvey } from 'app/shared/model/survey.model';
-import * as vm from 'vm';
+import { ValidatedField, ValidatedForm } from 'react-jhipster';
 
 const SurveyCreator = () => {
   useEffect(() => {
-    dispatch(getEntities({}));
+    dispatch(getQuestionEntities({}));
   }, []);
 
   useEffect(() => {
@@ -90,6 +85,7 @@ const SurveyCreator = () => {
       dispatch(updateSurveyEntity(entity));
       saveQuestionEntity(entity);
     }
+    setQuestionList([]);
   };
 
   const handleClick = () => {
@@ -126,7 +122,16 @@ const SurveyCreator = () => {
   // TODO probably need to add reducer to save surveys to database, for time mocks are used this code is acceptable
 
   return (
-    <div style={{ backgroundColor: '#F5F5F5', display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto' }}>
+    <div
+      style={{
+        backgroundColor: '#F5F5F5',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 'auto',
+        marginTop: '1.5rem',
+      }}
+    >
       <div style={{ width: '50%', borderRadius: '15px', backgroundColor: '#D9D9D9', padding: '20px' }}>
         <Row>
           <Col>
@@ -135,9 +140,9 @@ const SurveyCreator = () => {
         </Row>
         <Row className="my-3">
           <Col>
-            <FormGroup>
+            <ValidatedForm>
               <Label for="surveyName">Survey Name:</Label>
-              <Input
+              <ValidatedField
                 type="text"
                 name="surveyName"
                 id="surveyName"
@@ -145,15 +150,20 @@ const SurveyCreator = () => {
                 className="input-field"
                 value={surveyNameInput}
                 onChange={handleSurveyNameInputChange}
+                validate={{
+                  required: { value: true, message: 'This field is required.' },
+                  minLength: { value: 3, message: 'This field is required to be at least 3 characters.' },
+                  maxLength: { value: 120, message: 'This field cannot be longer than 120 characters.' },
+                }}
               />
-            </FormGroup>
+            </ValidatedForm>
           </Col>
         </Row>
         <Row className="my-3">
           <Col>
-            <FormGroup>
+            <ValidatedForm>
               <Label for="surveyDescription">Survey Description:</Label>
-              <Input
+              <ValidatedField
                 type="textarea"
                 name="surveyDescription"
                 id="surveyDescription"
@@ -161,8 +171,13 @@ const SurveyCreator = () => {
                 className="input-field"
                 value={surveyDescInput}
                 onChange={handleSurveyDescInputChange}
+                validate={{
+                  required: { value: true, message: 'This field is required.' },
+                  minLength: { value: 16, message: 'This field is required to be at least 16 characters.' },
+                  maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
+                }}
               />
-            </FormGroup>
+            </ValidatedForm>
           </Col>
         </Row>
         <Row className="my-3">
@@ -172,55 +187,68 @@ const SurveyCreator = () => {
         </Row>
         <Row className="my-3">
           <Col>
-            <FormGroup>
+            <ValidatedForm>
               <Label for="categoryInput">Category:</Label>
-              <Input
+              <ValidatedField
                 type="select"
                 name="categoryInput"
                 id="categoryInput"
                 value={categoryInput}
                 onChange={e => setCategoryInput(e.target.value)}
                 className="input-field"
+                validate={{
+                  required: { value: true, message: 'This field is required.' },
+                }}
               >
                 <option value="">Select a category</option>
                 <option value="technology">Technology</option>
                 <option value="food">Food</option>
                 <option value="sports">Sports</option>
-              </Input>
-            </FormGroup>
+              </ValidatedField>
+            </ValidatedForm>
           </Col>
           <Col>
-            <FormGroup>
+            <ValidatedForm>
               <Label for="answerTypeInput">Answer Type:</Label>
-              <Input
+              <ValidatedField
                 type="select"
                 name="answerTypeInput"
                 id="answerTypeInput"
                 value={answerTypeInput}
                 onChange={e => setAnswerTypeInput(e.target.value)}
                 className="input-field"
+                validate={{
+                  required: { value: true, message: 'This field is required.' },
+                }}
               >
                 <option value="">Select an answer type</option>
                 <option value="text">Text</option>
                 <option value="number">Number</option>
                 <option value="select">Select</option>
-              </Input>
-            </FormGroup>
+              </ValidatedField>
+            </ValidatedForm>
           </Col>
         </Row>
         <Row className="my-3">
           <Col>
             <FormGroup>
-              <Label for="questionInput">Question:</Label>
-              <Input
-                type="textarea"
-                name="questionInput"
-                id="questionInput"
-                placeholder="Enter question"
-                value={questionInput}
-                onChange={e => setQuestionInput(e.target.value)}
-                className="input-field"
-              />
+              <ValidatedForm>
+                <Label for="questionInput">Question:</Label>
+                <ValidatedField
+                  type="textarea"
+                  name="questionInput"
+                  id="questionInput"
+                  placeholder="Enter question"
+                  value={questionInput}
+                  onChange={e => setQuestionInput(e.target.value)}
+                  className="input-field"
+                  validate={{
+                    required: { value: true, message: 'This field is required.' },
+                    minLength: { value: 16, message: 'This field is required to be at least 16 characters.' },
+                    maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
+                  }}
+                />
+              </ValidatedForm>
             </FormGroup>
           </Col>
         </Row>
@@ -267,7 +295,7 @@ const SurveyCreator = () => {
             <h3 style={{ textAlign: 'center' }}>Question List</h3>
             <div style={{ borderRadius: '25px', backgroundColor: '#F5F5F5', padding: '10px' }}>
               {questionList.length > 0 ? (
-                <ul>
+                <ul key={questionList.length}>
                   {questionList.map((question, index) => (
                     <li key={index} style={{ marginBottom: '10px' }}>
                       <p style={{ marginLeft: '20px' }}>{question.question}</p>

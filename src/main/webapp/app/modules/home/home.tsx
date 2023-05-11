@@ -28,7 +28,9 @@ export const Home = () => {
               <button className="btn btn-primary">Create a survey</button>
             </NavLink>
             <button className="btn btn-primary">History of surveys</button>
-            <button className="btn btn-primary">Complete your pending surveys</button>
+            <NavLink tag={Link} to="/surveyCompleter" className="d-flex align-items-center">
+              <button className="btn btn-primary">Complete your pending surveys</button>
+            </NavLink>
             <button className="btn btn-primary">Your team members&apos; responses</button>
           </div>
         ) : (

@@ -15,6 +15,7 @@ import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 import PageNotFound from 'app/shared/error/page-not-found';
 import { AUTHORITIES } from 'app/config/constants';
 import SurveyCreator from 'app/modules/surveyCreator/surveyCreator';
+import SurveyCompleter from 'app/modules/surveyCompleter/surveyCompleter';
 
 const loading = <div>loading ...</div>;
 
@@ -40,6 +41,14 @@ const AppRoutes = () => {
           element={
             <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
               <SurveyCreator />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="surveyCompleter"
+          element={
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
+              <SurveyCompleter />
             </PrivateRoute>
           }
         />

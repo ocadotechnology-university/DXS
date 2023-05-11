@@ -1,12 +1,20 @@
 import './surveyCreator.scss';
 
-import { createEntity as createSurveyEntity, updateEntity as updateSurveyEntity } from 'app/entities/survey/survey.reducer';
-import { createEntity as createQuestionEntity, updateEntity as updateQuestionEntity } from 'app/entities/question/question.reducer';
+import {
+  createEntity as createSurveyEntity,
+  updateEntity as updateSurveyEntity,
+  getEntities as getSurveyEntities,
+} from 'app/entities/survey/survey.reducer';
+import {
+  createEntity as createQuestionEntity,
+  getEntities,
+  updateEntity as updateQuestionEntity,
+} from 'app/entities/question/question.reducer';
 
 import { SurveyUpdate } from 'app/entities/survey/survey-update';
 
 import { Row, Col, FormGroup, Label, Input, Button } from 'reactstrap';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
@@ -14,8 +22,22 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isNumber, ValidatedField, ValidatedForm } from 'react-jhipster';
+import { ISurvey } from 'app/shared/model/survey.model';
+import * as vm from 'vm';
 
 const SurveyCreator = () => {
+  const surveys = useAppSelector(state => state.survey.entities);
+
+  const questionLists = useAppSelector(state => state.question.entities);
+
+  useEffect(() => {
+    dispatch(getEntities({}));
+  }, []);
+
+  useEffect(() => {
+    dispatch(getSurveyEntities({}));
+  }, []);
+
   const dispatch = useAppDispatch();
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
@@ -54,7 +76,8 @@ const SurveyCreator = () => {
     newQuestionList.splice(index, 1);
     setQuestionList(newQuestionList);
   };
-  const saveEntity = () => {
+
+  const saveEntity = async () => {
     const entity = {
       name: surveyNameInput,
       description: surveyDescInput,
@@ -63,21 +86,23 @@ const SurveyCreator = () => {
     setSurveyDescInput('');
 
     if (isNew) {
-      dispatch(createSurveyEntity(entity));
+      const newSurvey = await dispatch(createSurveyEntity(entity));
+      // @ts-ignore
+      saveQuestionEntity(newSurvey.payload.data);
     } else {
       dispatch(updateSurveyEntity(entity));
+      saveQuestionEntity(entity);
     }
-
-    saveQuestionEntity();
   };
 
-  const saveQuestionEntity = () => {
+  const saveQuestionEntity = surveyEntity => {
     questionList.forEach(question => {
       const questionEntity = {
         category: question.category,
         answerType: question.answerType,
         questionContent: question.question,
         isRequired: question.isObligatory,
+        survey: surveyEntity,
       };
       if (isNew) {
         dispatch(createQuestionEntity(questionEntity));

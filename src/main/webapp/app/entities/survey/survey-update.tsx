@@ -10,7 +10,6 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { ISurvey } from 'app/shared/model/survey.model';
 import { getEntity, updateEntity, createEntity, reset } from './survey.reducer';
-
 export const SurveyUpdate = () => {
   const dispatch = useAppDispatch();
 

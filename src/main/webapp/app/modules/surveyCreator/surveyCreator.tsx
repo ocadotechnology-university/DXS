@@ -1,15 +1,33 @@
+import './surveyCreator.scss';
+
+import { createEntity as createSurveyEntity, updateEntity as updateSurveyEntity } from 'app/entities/survey/survey.reducer';
+import { createEntity as createQuestionEntity, updateEntity as updateQuestionEntity } from 'app/entities/question/question.reducer';
+
+import { SurveyUpdate } from 'app/entities/survey/survey-update';
+
 import { Row, Col, FormGroup, Label, Input, Button } from 'reactstrap';
 import React, { useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { isNumber, ValidatedField, ValidatedForm } from 'react-jhipster';
 
 const SurveyCreator = () => {
+  const dispatch = useAppDispatch();
+  const { id } = useParams<'id'>();
+  const isNew = id === undefined;
+
   const [questionList, setQuestionList] = useState([]);
   const [categoryInput, setCategoryInput] = useState('');
   const [answerTypeInput, setAnswerTypeInput] = useState('');
   const [questionInput, setQuestionInput] = useState('');
   const [isObligatorySwitch, setIsObligatorySwitch] = useState(false);
+
+  const [surveyNameInput, setSurveyNameInput] = useState('');
+  const [surveyDescInput, setSurveyDescInput] = useState('');
 
   const handleAddQuestion = () => {
     if (categoryInput && answerTypeInput && questionInput) {
@@ -36,11 +54,50 @@ const SurveyCreator = () => {
     newQuestionList.splice(index, 1);
     setQuestionList(newQuestionList);
   };
+  const saveEntity = () => {
+    const entity = {
+      name: surveyNameInput,
+      description: surveyDescInput,
+    };
+    setSurveyNameInput('');
+    setSurveyDescInput('');
+
+    if (isNew) {
+      dispatch(createSurveyEntity(entity));
+    } else {
+      dispatch(updateSurveyEntity(entity));
+    }
+
+    saveQuestionEntity();
+  };
+
+  const saveQuestionEntity = () => {
+    questionList.forEach(question => {
+      const questionEntity = {
+        category: question.category,
+        answerType: question.answerType,
+        questionContent: question.question,
+        isRequired: question.isObligatory,
+      };
+      if (isNew) {
+        dispatch(createQuestionEntity(questionEntity));
+      } else {
+        dispatch(updateQuestionEntity(questionEntity));
+      }
+    });
+  };
+  const handleSurveyNameInputChange = event => {
+    setSurveyNameInput(event.target.value);
+  };
+
+  const handleSurveyDescInputChange = event => {
+    setSurveyDescInput(event.target.value);
+  };
 
   // TODO probably need to add reducer to save surveys to database, for time mocks are used this code is acceptable
 
   return (
-    <div style={{ backgroundColor: '#F5F5F5', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <div style={{ backgroundColor: '#F5F5F5', display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto' }}>
       <div style={{ width: '50%', borderRadius: '15px', backgroundColor: '#D9D9D9', padding: '20px' }}>
         <Row>
           <Col>
@@ -56,7 +113,9 @@ const SurveyCreator = () => {
                 name="surveyName"
                 id="surveyName"
                 placeholder="Enter survey name"
-                style={{ borderRadius: '25px', backgroundColor: '#F5F5F5' }}
+                className="input-field"
+                value={surveyNameInput}
+                onChange={handleSurveyNameInputChange}
               />
             </FormGroup>
           </Col>
@@ -70,7 +129,9 @@ const SurveyCreator = () => {
                 name="surveyDescription"
                 id="surveyDescription"
                 placeholder="Enter survey description"
-                style={{ borderRadius: '25px', backgroundColor: '#F5F5F5' }}
+                className="input-field"
+                value={surveyDescInput}
+                onChange={handleSurveyDescInputChange}
               />
             </FormGroup>
           </Col>
@@ -90,7 +151,7 @@ const SurveyCreator = () => {
                 id="categoryInput"
                 value={categoryInput}
                 onChange={e => setCategoryInput(e.target.value)}
-                style={{ borderRadius: '25px', backgroundColor: '#F5F5F5' }}
+                className="input-field"
               >
                 <option value="">Select a category</option>
                 <option value="technology">Technology</option>
@@ -108,7 +169,7 @@ const SurveyCreator = () => {
                 id="answerTypeInput"
                 value={answerTypeInput}
                 onChange={e => setAnswerTypeInput(e.target.value)}
-                style={{ borderRadius: '25px', backgroundColor: '#F5F5F5' }}
+                className="input-field"
               >
                 <option value="">Select an answer type</option>
                 <option value="text">Text</option>
@@ -129,7 +190,7 @@ const SurveyCreator = () => {
                 placeholder="Enter question"
                 value={questionInput}
                 onChange={e => setQuestionInput(e.target.value)}
-                style={{ borderRadius: '25px', backgroundColor: '#F5F5F5' }}
+                className="input-field"
               />
             </FormGroup>
           </Col>
@@ -158,7 +219,20 @@ const SurveyCreator = () => {
               Add Question
             </Button>
           </Col>
+          <Col className="d-flex justify-content-center">
+            <Button
+              color="primary"
+              id="save-entity"
+              data-cy="entityCreateSaveButton"
+              type="submit"
+              style={{ borderRadius: '25px' }}
+              onClick={saveEntity}
+            >
+              Create survey
+            </Button>
+          </Col>
         </Row>
+
         <Row className="my-3">
           <Col>
             <h3 style={{ textAlign: 'center' }}>Question List</h3>

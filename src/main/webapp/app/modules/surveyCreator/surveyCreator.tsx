@@ -43,7 +43,7 @@ const SurveyCreator = () => {
   const [surveyDescInput, setSurveyDescInput] = useState('');
 
   const handleAddQuestion = () => {
-    if (categoryInput && answerTypeInput && questionInput) {
+    if (categoryInput && answerTypeInput && questionInput.length >= 16 && questionInput.length <= 255) {
       const newQuestion = {
         category: categoryInput,
         answerType: answerTypeInput,

@@ -38,6 +38,7 @@ jobs:
 
   deploy:
     name: deploy DXS to GCP
+    needs: build
     runs-on: self-hosted
     env:
       NODE_VERSION: 16.17.0

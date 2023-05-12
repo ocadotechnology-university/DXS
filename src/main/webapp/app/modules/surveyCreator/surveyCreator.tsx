@@ -17,8 +17,7 @@ import { FaTrash } from 'react-icons/fa';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link, Route, useNavigate, useParams, Routes } from 'react-router-dom';
 import { ValidatedField, ValidatedForm } from 'react-jhipster';
 
 const SurveyCreator = () => {
@@ -87,14 +86,12 @@ const SurveyCreator = () => {
     }
     setQuestionList([]);
   };
-
   const handleClick = () => {
     saveEntity().catch(error => {
       // eslint-disable-next-line no-console
       console.log('Error:', error);
     });
   };
-
   const saveQuestionEntity = surveyEntity => {
     questionList.forEach(question => {
       const questionEntity = {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { createAsyncThunk, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
-
+import { ASC } from 'app/shared/util/pagination.constants';
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { IQuestion, defaultValue } from 'app/shared/model/question.model';
@@ -18,8 +18,8 @@ const apiUrl = 'api/questions';
 
 // Actions
 
-export const getEntities = createAsyncThunk('question/fetch_entity_list', async ({ page, size, sort }: IQueryParams) => {
-  const requestUrl = `${apiUrl}?cacheBuster=${new Date().getTime()}`;
+export const getEntities = createAsyncThunk('question/fetch_entity_list', async ({ sort }: IQueryParams) => {
+  const requestUrl = `${apiUrl}?${sort ? `sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
   return axios.get<IQuestion[]>(requestUrl);
 });
 
@@ -95,7 +95,14 @@ export const QuestionSlice = createEntitySlice({
         return {
           ...state,
           loading: false,
-          entities: data,
+          entities: data.sort((a, b) => {
+            if (!action.meta?.arg?.sort) {
+              return 1;
+            }
+            const order = action.meta.arg.sort.split(',')[1];
+            const predicate = action.meta.arg.sort.split(',')[0];
+            return order === ASC ? (a[predicate] < b[predicate] ? -1 : 1) : b[predicate] < a[predicate] ? -1 : 1;
+          }),
         };
       })
       .addMatcher(isFulfilled(createEntity, updateEntity, partialUpdateEntity), (state, action) => {

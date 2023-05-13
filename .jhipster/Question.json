@@ -1,5 +1,6 @@
 {
   "changelogDate": "20230510181727",
+  "entityTableName": "question",
   "fields": [
     {
       "fieldName": "category",
@@ -35,5 +36,6 @@
       "relationshipType": "many-to-one"
     }
   ],
+  "searchEngine": "no",
   "service": "no"
 }

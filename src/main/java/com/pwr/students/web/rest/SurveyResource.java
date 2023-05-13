@@ -145,12 +145,17 @@ public class SurveyResource {
     /**
      * {@code GET  /surveys} : get all the surveys.
      *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of surveys in body.
      */
     @GetMapping("/surveys")
-    public List<Survey> getAllSurveys() {
+    public List<Survey> getAllSurveys(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Surveys");
-        return surveyRepository.findAll();
+        if (eagerload) {
+            return surveyRepository.findAllWithEagerRelationships();
+        } else {
+            return surveyRepository.findAll();
+        }
     }
 
     /**
@@ -162,7 +167,7 @@ public class SurveyResource {
     @GetMapping("/surveys/{id}")
     public ResponseEntity<Survey> getSurvey(@PathVariable Long id) {
         log.debug("REST request to get Survey : {}", id);
-        Optional<Survey> survey = surveyRepository.findById(id);
+        Optional<Survey> survey = surveyRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(survey);
     }
 

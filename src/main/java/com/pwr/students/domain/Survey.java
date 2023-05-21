@@ -35,10 +35,14 @@ public class Survey implements Serializable {
     @Column(name = "description", length = 255, nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "survey")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "survey")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "survey" }, allowSetters = true)
     private Set<Question> questions = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "rel_survey__user", joinColumns = @JoinColumn(name = "survey_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<User> users = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -109,6 +113,29 @@ public class Survey implements Serializable {
     public Survey removeQuestion(Question question) {
         this.questions.remove(question);
         question.setSurvey(null);
+        return this;
+    }
+
+    public Set<User> getUsers() {
+        return this.users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    public Survey users(Set<User> users) {
+        this.setUsers(users);
+        return this;
+    }
+
+    public Survey addUser(User user) {
+        this.users.add(user);
+        return this;
+    }
+
+    public Survey removeUser(User user) {
+        this.users.remove(user);
         return this;
     }
 

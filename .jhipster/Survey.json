@@ -1,5 +1,6 @@
 {
   "changelogDate": "20230510182328",
+  "entityTableName": "survey",
   "fields": [
     {
       "fieldName": "name",
@@ -25,7 +26,16 @@
       "otherEntityRelationshipName": "survey",
       "relationshipName": "question",
       "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "survey",
+      "ownerSide": true,
+      "relationshipName": "user",
+      "relationshipType": "many-to-many"
     }
   ],
+  "searchEngine": "no",
   "service": "no"
 }

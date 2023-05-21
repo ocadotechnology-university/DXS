@@ -12,6 +12,7 @@
                                  baseTableName="question"
                                  constraintName="fk_question__survey_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="survey"/>
+                                 referencedTableName="survey"
+                                 />
     </changeSet>
 </databaseChangeLog>

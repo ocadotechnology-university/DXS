@@ -40,9 +40,8 @@ public class Question implements Serializable {
     @Column(name = "is_required", nullable = false)
     private Boolean isRequired;
 
-    @ManyToOne
-    @JoinColumn(name = "survey_id", referencedColumnName = "id")
-    @JsonIgnoreProperties(value = { "questions" }, allowSetters = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties(value = { "questions", "users" }, allowSetters = true)
     private Survey survey;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

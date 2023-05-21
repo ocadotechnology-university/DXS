@@ -413,7 +413,7 @@ class QuestionResourceIT {
         Question partialUpdatedQuestion = new Question();
         partialUpdatedQuestion.setId(question.getId());
 
-        partialUpdatedQuestion.category(UPDATED_CATEGORY).answerType(UPDATED_ANSWER_TYPE).questionContent(UPDATED_QUESTION_CONTENT);
+        partialUpdatedQuestion.answerType(UPDATED_ANSWER_TYPE).questionContent(UPDATED_QUESTION_CONTENT).isRequired(UPDATED_IS_REQUIRED);
 
         restQuestionMockMvc
             .perform(
@@ -428,10 +428,10 @@ class QuestionResourceIT {
         List<Question> questionList = questionRepository.findAll();
         assertThat(questionList).hasSize(databaseSizeBeforeUpdate);
         Question testQuestion = questionList.get(questionList.size() - 1);
-        assertThat(testQuestion.getCategory()).isEqualTo(UPDATED_CATEGORY);
+        assertThat(testQuestion.getCategory()).isEqualTo(DEFAULT_CATEGORY);
         assertThat(testQuestion.getAnswerType()).isEqualTo(UPDATED_ANSWER_TYPE);
         assertThat(testQuestion.getQuestionContent()).isEqualTo(UPDATED_QUESTION_CONTENT);
-        assertThat(testQuestion.getIsRequired()).isEqualTo(DEFAULT_IS_REQUIRED);
+        assertThat(testQuestion.getIsRequired()).isEqualTo(UPDATED_IS_REQUIRED);
     }
 
     @Test

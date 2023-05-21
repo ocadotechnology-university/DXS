@@ -6,7 +6,6 @@ import { MemoryRouter } from 'react-router-dom';
 import initStore from 'app/config/store';
 import Header from './header';
 
-// TODO alter tests to much header layout settings
 describe('Header', () => {
   let mountedWrapper;
   const devProps = {
@@ -89,8 +88,8 @@ describe('Header', () => {
     expect(html).toContain('navbar');
     // Not find AdminMenu component
     expect(html).not.toContain('admin-menu');
-    // Find EntitiesMenu component
-    expect(html).toContain('entity-menu');
+    // Not find EntitiesMenu component
+    expect(html).not.toContain('entity-menu');
     // Find AccountMenu component
     expect(html).toContain('account-menu');
   });

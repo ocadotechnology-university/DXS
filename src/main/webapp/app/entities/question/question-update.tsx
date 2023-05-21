@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button, Row, Col, FormText } from 'reactstrap';
-import { isNumber, ValidatedField, ValidatedForm } from 'react-jhipster';
+import { isNumber, Translate, translate, ValidatedField, ValidatedForm } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
+import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
+import { ISurvey } from 'app/shared/model/survey.model';
 import { getEntities as getSurveys } from 'app/entities/survey/survey.reducer';
+import { IQuestion } from 'app/shared/model/question.model';
 import { getEntity, updateEntity, createEntity, reset } from './question.reducer';
 
 export const QuestionUpdate = () => {
@@ -70,7 +74,7 @@ export const QuestionUpdate = () => {
       <Row className="justify-content-center">
         <Col md="8">
           <h2 id="dxsApp.question.home.createOrEditLabel" data-cy="QuestionCreateUpdateHeading">
-            Create or edit a Question
+            <Translate contentKey="dxsApp.question.home.createOrEditLabel">Create or edit a Question</Translate>
           </h2>
         </Col>
       </Row>
@@ -80,7 +84,16 @@ export const QuestionUpdate = () => {
             <p>Loading...</p>
           ) : (
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
-              {!isNew ? <ValidatedField name="id" required readOnly id="question-id" label="ID" validate={{ required: true }} /> : null}
+              {!isNew ? (
+                <ValidatedField
+                  name="id"
+                  required
+                  readOnly
+                  id="question-id"
+                  label={translate('global.field.id')}
+                  validate={{ required: true }}
+                />
+              ) : null}
               <ValidatedField
                 label="Category"
                 id="question-category"
@@ -88,7 +101,7 @@ export const QuestionUpdate = () => {
                 data-cy="category"
                 type="text"
                 validate={{
-                  required: { value: true, message: 'This field is required.' },
+                  required: { value: true, message: translate('entity.validation.required') },
                 }}
               />
               <ValidatedField
@@ -98,7 +111,7 @@ export const QuestionUpdate = () => {
                 data-cy="answerType"
                 type="text"
                 validate={{
-                  required: { value: true, message: 'This field is required.' },
+                  required: { value: true, message: translate('entity.validation.required') },
                 }}
               />
               <ValidatedField
@@ -108,9 +121,9 @@ export const QuestionUpdate = () => {
                 data-cy="questionContent"
                 type="text"
                 validate={{
-                  required: { value: true, message: 'This field is required.' },
-                  minLength: { value: 16, message: 'This field is required to be at least 16 characters.' },
-                  maxLength: { value: 255, message: 'This field cannot be longer than 255 characters.' },
+                  required: { value: true, message: translate('entity.validation.required') },
+                  minLength: { value: 16, message: translate('entity.validation.minlength', { min: 16 }) },
+                  maxLength: { value: 255, message: translate('entity.validation.maxlength', { max: 255 }) },
                 }}
               />
               <ValidatedField label="Is Required" id="question-isRequired" name="isRequired" data-cy="isRequired" check type="checkbox" />
@@ -127,12 +140,15 @@ export const QuestionUpdate = () => {
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/question" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
-                <span className="d-none d-md-inline">Back</span>
+                <span className="d-none d-md-inline">
+                  <Translate contentKey="entity.action.back">Back</Translate>
+                </span>
               </Button>
               &nbsp;
               <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
                 <FontAwesomeIcon icon="save" />
-                &nbsp; Save
+                &nbsp;
+                <Translate contentKey="entity.action.save">Save</Translate>
               </Button>
             </ValidatedForm>
           )}

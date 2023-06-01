@@ -24,7 +24,7 @@ const ManagerSurveysDashboard = () => {
       });
   }, []);
 
-  function ActiveSurveysSection({ surveys }) {
+  function ActiveSurveysSection() {
     // const activeSurveys = surveys.filter((survey) => survey.status === 'active'); // TODO uncomment it after column status is added to survey table
     const activeSurveys = surveys.filter(survey => survey.id !== 0); // TODO remove it after column status is added to survey table
 
@@ -41,7 +41,7 @@ const ManagerSurveysDashboard = () => {
   }
 
   // Component for the expired surveys section
-  function NotPublishedSurveysSection({ surveys }) {
+  function NotPublishedSurveysSection() {
     const notPublishedSurveys = surveys.filter(survey => survey.status === 'inactive');
 
     return (
@@ -55,7 +55,7 @@ const ManagerSurveysDashboard = () => {
   }
 
   // Component for the expired surveys section
-  function ExpiredSurveysSection({ surveys }) {
+  function ExpiredSurveysSection() {
     const expiredSurveys = surveys.filter(survey => survey.status === 'expired');
 
     return (
@@ -112,9 +112,9 @@ const ManagerSurveysDashboard = () => {
   return (
     <div>
       <h1>Survey Dashboard</h1>
-      <ActiveSurveysSection surveys={surveys} />
-      <NotPublishedSurveysSection surveys={surveys} />
-      <ExpiredSurveysSection surveys={surveys} />
+      <ActiveSurveysSection />
+      <NotPublishedSurveysSection />
+      <ExpiredSurveysSection />
     </div>
   );
 };

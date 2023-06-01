@@ -16,7 +16,7 @@ const ManagerSurveysDashboard = () => {
 
   const dispatch = useAppDispatch();
 
-  // TODO this code will look different bacause we will have to fetch the surveys created only by this manager (for now it fetches everything, waiting for backend to be ready)
+  // TODO this code will look different because we will have to fetch the surveys created only by this manager (for now it fetches everything, waiting for backend to be ready)
   useEffect(() => {
     // Fetch survey data from the backend API
     axios

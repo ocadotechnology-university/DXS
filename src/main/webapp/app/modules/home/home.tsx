@@ -27,9 +27,12 @@ export const Home = () => {
             <NavLink tag={Link} to="/surveyCreator" className="d-flex align-items-center">
               <button className="btn btn-primary">Create a survey</button>
             </NavLink>
-            <button className="btn btn-primary">History of surveys</button>
-            <button className="btn btn-primary">Complete your pending surveys</button>
-            <button className="btn btn-primary">Your team members&apos; responses</button>
+            <NavLink tag={Link} to="/manager-surveys-dashboard" className="d-flex align-items-center">
+              <button className="btn btn-primary">Manage created surveys</button>
+            </NavLink>
+            <NavLink tag={Link} to="/user-surveys-dashboard" className="d-flex align-items-center">
+              <button className="btn btn-primary">Complete your pending surveys</button>
+            </NavLink>
           </div>
         ) : (
           <div className="authenticated-container">

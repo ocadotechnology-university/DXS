@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Dropdown } from 'react-bootstrap';
+import { Button, Dropdown, Modal } from 'react-bootstrap';
 import './managerSurveysDashboard.css';
 import { BsThreeDots, BsGear } from 'react-icons/bs';
 import { FiSend, FiTrash2 } from 'react-icons/fi';
 import { GrStatusInfo } from 'react-icons/gr';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { deleteEntity } from 'app/entities/survey/survey.reducer';
+import { useAppDispatch } from 'app/config/store';
 
 const ManagerSurveysDashboard = () => {
   const [surveys, setSurveys] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [refreshSurveys, setRefreshSurveys] = useState(false);
+
+  const dispatch = useAppDispatch();
 
   // TODO this code will look different bacause we will have to fetch the surveys created only by this manager (for now it fetches everything, waiting for backend to be ready)
   useEffect(() => {
@@ -21,8 +27,12 @@ const ManagerSurveysDashboard = () => {
       })
       .catch(error => {
         console.error('Error fetching survey data:', error);
+      })
+      .finally(() => {
+        // Reset the refresh status
+        setRefreshSurveys(false);
       });
-  }, []);
+  }, [refreshSurveys]);
 
   function ActiveSurveysSection() {
     // const activeSurveys = surveys.filter((survey) => survey.status === 'active'); // TODO uncomment it after column status is added to survey table
@@ -72,6 +82,20 @@ const ManagerSurveysDashboard = () => {
   function SurveyBox({ survey }) {
     const surveyPath = `/survey/${survey.id}`;
 
+    const handleDeleteClick = () => {
+      setShowDeleteModal(true);
+    };
+
+    const handleDeleteCancel = () => {
+      setShowDeleteModal(false);
+    };
+
+    const handleDeleteConfirm = () => {
+      dispatch(deleteEntity(survey.id));
+      setShowDeleteModal(false);
+      setRefreshSurveys(true);
+    };
+
     return (
       <div className={'survey'}>
         <div className={'survey-inside'}></div>
@@ -93,7 +117,7 @@ const ManagerSurveysDashboard = () => {
               <GrStatusInfo className={'icon'} />
               Status
             </Dropdown.Item>
-            <Dropdown.Item className={'option-delete'}>
+            <Dropdown.Item className={'option-delete'} onClick={handleDeleteClick}>
               <FiTrash2 className={'icon'} />
               Delete
             </Dropdown.Item>
@@ -104,7 +128,24 @@ const ManagerSurveysDashboard = () => {
             <p>{survey.name}</p>
           </div>
         </Link>
-        {/* Render other survey details as needed */}
+
+        {/* Delete Confirmation Modal */}
+        <Modal show={showDeleteModal} onHide={handleDeleteCancel} centered backdropClassName="custom-backdrop">
+          <Modal.Header closeButton>
+            <Modal.Title>Delete Survey</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Are you sure you want to delete this survey?</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleDeleteCancel}>
+              Cancel
+            </Button>
+            <Button variant="danger" onClick={handleDeleteConfirm}>
+              Delete
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }

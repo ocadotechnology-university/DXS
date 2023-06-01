@@ -11,10 +11,7 @@ import { useAppDispatch } from 'app/config/store';
 
 const ManagerSurveysDashboard = () => {
   const [surveys, setSurveys] = useState([]);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [refreshSurveys, setRefreshSurveys] = useState(false);
-
-  const dispatch = useAppDispatch();
 
   // TODO this code will look different because we will have to fetch the surveys created only by this manager (for now it fetches everything, waiting for backend to be ready)
   useEffect(() => {
@@ -81,6 +78,8 @@ const ManagerSurveysDashboard = () => {
   // Component for a survey box
   function SurveyBox({ survey }) {
     const surveyPath = `/survey/${survey.id}`;
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const dispatch = useAppDispatch();
 
     const handleDeleteClick = () => {
       setShowDeleteModal(true);
@@ -129,13 +128,12 @@ const ManagerSurveysDashboard = () => {
           </div>
         </Link>
 
-        {/* Delete Confirmation Modal */}
         <Modal show={showDeleteModal} onHide={handleDeleteCancel} centered backdropClassName="custom-backdrop">
           <Modal.Header closeButton>
             <Modal.Title>Delete Survey</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p>Are you sure you want to delete this survey?</p>
+            <p>Are you sure you want to delete a survey with id {survey.id}?</p>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleDeleteCancel}>

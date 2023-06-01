@@ -1,0 +1,44 @@
+.survey-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.survey {
+  width: 247px;
+  height: 209px;
+  background-color: #e6e6e6;
+  border-radius: 15px;
+  border-width: 1px;
+  border-color: #000000;
+  flex-direction: column;
+  display: flex;
+  border-style: solid;
+  margin-left: 2rem;
+  margin-bottom: 1rem;
+}
+
+.survey-inside {
+  width: 204px;
+  height: 113px;
+  background-color: rgba(245, 245, 245, 1);
+  border-radius: 16px;
+  margin-top: 23px;
+  margin-left: 21px;
+}
+
+.name-row {
+  height: 43px;
+  flex-direction: row;
+  display: flex;
+  margin-top: 12px;
+  margin-left: 12px;
+  margin-right: 9px;
+}
+
+p {
+  white-space: nowrap;
+  width: 100%; /* IE6 needs any width */
+  overflow: hidden; /* "overflow" value must be different from  visible"*/
+  -o-text-overflow: ellipsis; /* Opera < 11*/
+  text-overflow: ellipsis; /* IE, Safari (WebKit), Opera >= 11, FF > 6 */
+}

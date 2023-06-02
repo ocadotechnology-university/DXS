@@ -163,7 +163,7 @@ public class SurveyResource {
     public List<Survey> getAllSurveys(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Surveys");
         if (eagerload) {
-            return surveyRepository.findAllWithEagerRelationships();
+            return surveyRepository.findAllWithQuestions();
         } else {
             return surveyRepository.findAll();
         }
@@ -178,7 +178,7 @@ public class SurveyResource {
     @GetMapping("/surveys/{id}")
     public ResponseEntity<Survey> getSurvey(@PathVariable Long id) {
         log.debug("REST request to get Survey : {}", id);
-        Optional<Survey> survey = surveyRepository.findOneWithEagerRelationships(id);
+        Optional<Survey> survey = surveyRepository.findOneWithQuestions(id);
         return ResponseUtil.wrapOrNotFound(survey);
     }
 

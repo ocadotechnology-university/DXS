@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './userSurveysDashboard.css';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Button, Modal } from 'react-bootstrap';
 
 const UserSurveysDashboard = () => {
   const [surveys, setSurveys] = useState([]);
@@ -52,17 +53,50 @@ const UserSurveysDashboard = () => {
 
   // Component for a survey box
   function SurveyBox({ survey }) {
-    const surveyPath = `/survey/${survey.id}`;
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const navigate = useNavigate();
+
+    const handleSurvey = () => {
+      navigate(`/survey/${survey.id}`);
+    };
+
+    const openModal = () => {
+      setModalOpen(true);
+    };
+
+    const closeModal = () => {
+      setModalOpen(false);
+    };
 
     return (
       <div className={'survey'}>
         <div className={'survey-inside'}></div>
-        <Link to={surveyPath}>
-          <div className={'name-row'}>
-            <p className={'wrap-text'}>{survey.name}</p>
-          </div>
-        </Link>
-        {/* Render other survey details as needed */}
+        <div className={'name-row'} onClick={openModal}>
+          <p className={'wrap-text'}>{survey.name}</p>
+        </div>
+
+        <Modal show={modalOpen} onHide={closeModal} dialogClassName="rounded-modal">
+          <Modal.Header closeButton>
+            <Modal.Title className="modal-title">{survey.name}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p className={'modal-subtitle'}>{survey.description}</p>
+            <p>Number of questions: {survey.questions.length}</p>
+            {/*TODO add approximate completion time column to survey table or find another way to calculate it*/}
+            <p>Completion time: placeholder</p>
+            {/*TODO add author column to survey table*/}
+            <p>Author: placeholder</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={closeModal}>
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={handleSurvey}>
+              Start Survey
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }

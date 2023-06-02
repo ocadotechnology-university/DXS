@@ -40,4 +40,10 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
     @Query("select survey from Survey survey left join fetch survey.user where survey.id =:id")
     Optional<Survey> findOneWithToOneRelationships(@Param("id") Long id);
+
+    @Query("SELECT DISTINCT s FROM Survey s LEFT JOIN FETCH s.questions")
+    List<Survey> findAllWithQuestions();
+
+    @Query("SELECT s FROM Survey s LEFT JOIN FETCH s.questions WHERE s.id = :surveyId")
+    Optional<Survey> findOneWithQuestions(@Param("surveyId") Long surveyId);
 }

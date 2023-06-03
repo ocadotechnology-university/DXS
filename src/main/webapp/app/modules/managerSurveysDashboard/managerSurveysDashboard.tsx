@@ -70,7 +70,7 @@ const ManagerSurveysDashboard = () => {
 
   // Component for a survey box
   function SurveyBox({ survey }) {
-    const surveyPath = `/survey/${survey.id}`;
+    const surveyPath = `/SurveyStatusView`;
 
     return (
       <div className={'survey'}>
@@ -99,19 +99,22 @@ const ManagerSurveysDashboard = () => {
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
+        <Link to={surveyPath}>
+          <div className={'name-row'}>
+            <p>{survey.name}</p>
+          </div>
+        </Link>
+        {/* Render other survey details as needed */}
       </div>
     );
   }
 
   return (
-    <div className={'manager-surveys-dashboard'}>
-      <h1 className={'title'}>Manager Surveys Dashboard</h1>
-
-      <div className={'sections-container'}>
-        <ActiveSurveysSection />
-        <NotPublishedSurveysSection />
-        <ExpiredSurveysSection />
-      </div>
+    <div>
+      <h1>Surveys Dashboard</h1>
+      <ActiveSurveysSection />
+      <NotPublishedSurveysSection />
+      <ExpiredSurveysSection />
     </div>
   );
 };

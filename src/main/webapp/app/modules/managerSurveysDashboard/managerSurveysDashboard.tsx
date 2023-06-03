@@ -70,8 +70,6 @@ const ManagerSurveysDashboard = () => {
 
   // Component for a survey box
   function SurveyBox({ survey }) {
-    const surveyPath = `/SurveyStatusView`;
-
     return (
       <div className={'survey'}>
         <div className={'survey-inside'}></div>
@@ -99,7 +97,7 @@ const ManagerSurveysDashboard = () => {
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <Link to={surveyPath}>
+        <Link to="/SurveyStatusView">
           <div className={'name-row'}>
             <p>{survey.name}</p>
           </div>

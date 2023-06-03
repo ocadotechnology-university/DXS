@@ -70,8 +70,6 @@ const ManagerSurveysDashboard = () => {
 
   // Component for a survey box
   function SurveyBox({ survey }) {
-    const surveyPath = `/survey/${survey.id}`;
-
     return (
       <div className={'survey'}>
         <div className={'survey-inside'}></div>
@@ -89,7 +87,7 @@ const ManagerSurveysDashboard = () => {
               <BsGear className={'icon'} />
               Modify
             </Dropdown.Item>
-            <Dropdown.Item>
+            <Dropdown.Item as={Link} to="/SurveyStatusView">
               <GrStatusInfo className={'icon'} />
               Status
             </Dropdown.Item>
@@ -99,7 +97,7 @@ const ManagerSurveysDashboard = () => {
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <Link to={surveyPath}>
+        <Link to="/SurveyStatusView">
           <div className={'name-row'}>
             <p>{survey.name}</p>
           </div>
@@ -111,7 +109,7 @@ const ManagerSurveysDashboard = () => {
 
   return (
     <div>
-      <h1>Survey Dashboard</h1>
+      <h1>Surveys Dashboard</h1>
       <ActiveSurveysSection />
       <NotPublishedSurveysSection />
       <ExpiredSurveysSection />

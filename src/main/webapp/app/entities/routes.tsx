@@ -5,6 +5,7 @@ import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 
 import Question from './question';
 import Survey from './survey';
+import Answer from './answer';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 export default () => {
@@ -14,6 +15,7 @@ export default () => {
         {/* prettier-ignore */}
         <Route path="question/*" element={<Question />} />
         <Route path="survey/*" element={<Survey />} />
+        <Route path="answer/*" element={<Answer />} />
         {/* jhipster-needle-add-route-path - JHipster will add routes here */}
       </ErrorBoundaryRoutes>
     </div>

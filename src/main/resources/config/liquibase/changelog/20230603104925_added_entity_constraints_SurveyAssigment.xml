@@ -4,20 +4,20 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <!--
-        Added the constraints for entity Survey.
+        Added the constraints for entity SurveyAssigment.
     -->
-    <changeSet id="20230510182328-2" author="jhipster">
+    <changeSet id="20230603104925-2" author="jhipster">
 
         <addForeignKeyConstraint baseColumnNames="survey_id"
-                                 baseTableName="rel_survey__user"
-                                 constraintName="fk_rel_survey__user__survey_id"
+                                 baseTableName="survey_assigment"
+                                 constraintName="fk_survey_assigment__survey_id"
                                  referencedColumnNames="id"
                                  referencedTableName="survey"
                                  />
 
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="rel_survey__user"
-                                 constraintName="fk_rel_survey__user__user_id"
+                                 baseTableName="survey_assigment"
+                                 constraintName="fk_survey_assigment__user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"
                                  />

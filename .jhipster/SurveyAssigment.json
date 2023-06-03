@@ -1,0 +1,31 @@
+{
+  "changelogDate": "20230603104925",
+  "entityTableName": "survey_assigment",
+  "fields": [
+    {
+      "fieldName": "is_finished",
+      "fieldType": "Boolean"
+    }
+  ],
+  "name": "SurveyAssigment",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "survey",
+      "relationshipName": "survey",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "surveyAssigment",
+      "ownerSide": true,
+      "relationshipName": "user",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "no"
+}

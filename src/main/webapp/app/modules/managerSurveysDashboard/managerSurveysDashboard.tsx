@@ -5,6 +5,7 @@ import './managerSurveysDashboard.css';
 import { BsThreeDots, BsGear } from 'react-icons/bs';
 import { FiSend, FiTrash2 } from 'react-icons/fi';
 import { GrStatusInfo } from 'react-icons/gr';
+import PublishPopUp from './components/publishPopUp';
 import { Link, useNavigate } from 'react-router-dom';
 import { deleteEntity } from 'app/entities/survey/survey.reducer';
 import { useAppDispatch } from 'app/config/store';
@@ -96,6 +97,17 @@ const ManagerSurveysDashboard = () => {
       }, 1000);
     };
 
+    const surveyPath = `/survey/${survey.id}`;
+    const [showPopup, setShowPopup] = useState(false);
+
+    const handleCancel = () => {
+      setShowPopup(false);
+    };
+
+    const handlePublish = () => {
+      // TODO publish survey
+    };
+
     return (
       <div className={'survey'}>
         <div className={'survey-inside'}></div>
@@ -105,7 +117,7 @@ const ManagerSurveysDashboard = () => {
           </Dropdown.Toggle>
 
           <Dropdown.Menu style={{ borderRadius: '15px' }}>
-            <Dropdown.Item>
+            <Dropdown.Item onClick={() => setShowPopup(true)}>
               <FiSend className={'icon'} />
               Publish
             </Dropdown.Item>
@@ -128,6 +140,14 @@ const ManagerSurveysDashboard = () => {
             <p className={'wrap-text'}>{survey.name}</p>
           </div>
         </Link>
+        {showPopup && (
+          <PublishPopUp
+            surveyName={survey.name}
+            onCancel={handleCancel}
+            onPublish={handlePublish}
+          />
+        )}
+        {/* Render other survey details as needed */}
 
         <Modal show={showDeleteModal} onHide={handleDeleteCancel} centered backdropClassName="custom-backdrop">
           <Modal.Header closeButton>

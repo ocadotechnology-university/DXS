@@ -57,6 +57,7 @@ public class CacheConfiguration {
             createCache(cm, com.pwr.students.domain.Answer.class.getName());
             createCache(cm, com.pwr.students.domain.SurveyAssigment.class.getName());
             createCache(cm, com.pwr.students.domain.Group.class.getName());
+            createCache(cm, com.pwr.students.domain.SurveyTargetGroups.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

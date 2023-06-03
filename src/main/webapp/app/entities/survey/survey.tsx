@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Table } from 'reactstrap';
-import { Translate, getSortState } from 'react-jhipster';
+import { Translate, TextFormat, getSortState } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, SORT } from 'app/shared/util/pagination.constants';
 import { overrideSortStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
@@ -82,6 +83,12 @@ export const Survey = () => {
                 <th className="hand" onClick={sort('description')}>
                   <Translate contentKey="dxsApp.survey.description">Description</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
+                <th className="hand" onClick={sort('deadline')}>
+                  <Translate contentKey="dxsApp.survey.deadline">Deadline</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={sort('status')}>
+                  <Translate contentKey="dxsApp.survey.status">Status</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
                 <th>
                   <Translate contentKey="dxsApp.survey.user">User</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
@@ -98,6 +105,8 @@ export const Survey = () => {
                   </td>
                   <td>{survey.name}</td>
                   <td>{survey.description}</td>
+                  <td>{survey.deadline ? <TextFormat type="date" value={survey.deadline} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
+                  <td>{survey.status}</td>
                   <td>
                     {survey.users
                       ? survey.users.map((val, j) => (

@@ -11,6 +11,8 @@ import com.pwr.students.IntegrationTest;
 import com.pwr.students.domain.Survey;
 import com.pwr.students.repository.SurveyRepository;
 import jakarta.persistence.EntityManager;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -45,6 +47,12 @@ class SurveyResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBBBBBBBB";
 
+    private static final LocalDate DEFAULT_DEADLINE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DEADLINE = LocalDate.now(ZoneId.systemDefault());
+
+    private static final String DEFAULT_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_STATUS = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/surveys";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -72,7 +80,7 @@ class SurveyResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Survey createEntity(EntityManager em) {
-        Survey survey = new Survey().name(DEFAULT_NAME).description(DEFAULT_DESCRIPTION);
+        Survey survey = new Survey().name(DEFAULT_NAME).description(DEFAULT_DESCRIPTION).deadline(DEFAULT_DEADLINE).status(DEFAULT_STATUS);
         return survey;
     }
 
@@ -83,7 +91,7 @@ class SurveyResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Survey createUpdatedEntity(EntityManager em) {
-        Survey survey = new Survey().name(UPDATED_NAME).description(UPDATED_DESCRIPTION);
+        Survey survey = new Survey().name(UPDATED_NAME).description(UPDATED_DESCRIPTION).deadline(UPDATED_DEADLINE).status(UPDATED_STATUS);
         return survey;
     }
 
@@ -109,6 +117,8 @@ class SurveyResourceIT {
         Survey testSurvey = surveyList.get(surveyList.size() - 1);
         assertThat(testSurvey.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testSurvey.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testSurvey.getDeadline()).isEqualTo(DEFAULT_DEADLINE);
+        assertThat(testSurvey.getStatus()).isEqualTo(DEFAULT_STATUS);
     }
 
     @Test
@@ -182,7 +192,9 @@ class SurveyResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(survey.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].deadline").value(hasItem(DEFAULT_DEADLINE.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -215,7 +227,9 @@ class SurveyResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(survey.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION));
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.deadline").value(DEFAULT_DEADLINE.toString()))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS));
     }
 
     @Test
@@ -237,7 +251,7 @@ class SurveyResourceIT {
         Survey updatedSurvey = surveyRepository.findById(survey.getId()).get();
         // Disconnect from session so that the updates on updatedSurvey are not directly saved in db
         em.detach(updatedSurvey);
-        updatedSurvey.name(UPDATED_NAME).description(UPDATED_DESCRIPTION);
+        updatedSurvey.name(UPDATED_NAME).description(UPDATED_DESCRIPTION).deadline(UPDATED_DEADLINE).status(UPDATED_STATUS);
 
         restSurveyMockMvc
             .perform(
@@ -254,6 +268,8 @@ class SurveyResourceIT {
         Survey testSurvey = surveyList.get(surveyList.size() - 1);
         assertThat(testSurvey.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testSurvey.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testSurvey.getDeadline()).isEqualTo(UPDATED_DEADLINE);
+        assertThat(testSurvey.getStatus()).isEqualTo(UPDATED_STATUS);
     }
 
     @Test
@@ -328,7 +344,7 @@ class SurveyResourceIT {
         Survey partialUpdatedSurvey = new Survey();
         partialUpdatedSurvey.setId(survey.getId());
 
-        partialUpdatedSurvey.name(UPDATED_NAME);
+        partialUpdatedSurvey.description(UPDATED_DESCRIPTION);
 
         restSurveyMockMvc
             .perform(
@@ -343,8 +359,10 @@ class SurveyResourceIT {
         List<Survey> surveyList = surveyRepository.findAll();
         assertThat(surveyList).hasSize(databaseSizeBeforeUpdate);
         Survey testSurvey = surveyList.get(surveyList.size() - 1);
-        assertThat(testSurvey.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testSurvey.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testSurvey.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testSurvey.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testSurvey.getDeadline()).isEqualTo(DEFAULT_DEADLINE);
+        assertThat(testSurvey.getStatus()).isEqualTo(DEFAULT_STATUS);
     }
 
     @Test
@@ -359,7 +377,7 @@ class SurveyResourceIT {
         Survey partialUpdatedSurvey = new Survey();
         partialUpdatedSurvey.setId(survey.getId());
 
-        partialUpdatedSurvey.name(UPDATED_NAME).description(UPDATED_DESCRIPTION);
+        partialUpdatedSurvey.name(UPDATED_NAME).description(UPDATED_DESCRIPTION).deadline(UPDATED_DEADLINE).status(UPDATED_STATUS);
 
         restSurveyMockMvc
             .perform(
@@ -376,6 +394,8 @@ class SurveyResourceIT {
         Survey testSurvey = surveyList.get(surveyList.size() - 1);
         assertThat(testSurvey.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testSurvey.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testSurvey.getDeadline()).isEqualTo(UPDATED_DEADLINE);
+        assertThat(testSurvey.getStatus()).isEqualTo(UPDATED_STATUS);
     }
 
     @Test

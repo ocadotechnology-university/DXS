@@ -297,6 +297,8 @@ class AnswerResourceIT {
         Answer partialUpdatedAnswer = new Answer();
         partialUpdatedAnswer.setId(answer.getId());
 
+        partialUpdatedAnswer.comment_answer(UPDATED_COMMENT_ANSWER);
+
         restAnswerMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedAnswer.getId())
@@ -312,7 +314,7 @@ class AnswerResourceIT {
         Answer testAnswer = answerList.get(answerList.size() - 1);
         assertThat(testAnswer.getAnswer()).isEqualTo(DEFAULT_ANSWER);
         assertThat(testAnswer.getComment()).isEqualTo(DEFAULT_COMMENT);
-        assertThat(testAnswer.getComment_answer()).isEqualTo(DEFAULT_COMMENT_ANSWER);
+        assertThat(testAnswer.getComment_answer()).isEqualTo(UPDATED_COMMENT_ANSWER);
     }
 
     @Test

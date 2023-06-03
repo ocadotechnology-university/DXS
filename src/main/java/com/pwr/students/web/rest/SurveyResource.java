@@ -131,6 +131,12 @@ public class SurveyResource {
                 if (survey.getDescription() != null) {
                     existingSurvey.setDescription(survey.getDescription());
                 }
+                if (survey.getDeadline() != null) {
+                    existingSurvey.setDeadline(survey.getDeadline());
+                }
+                if (survey.getStatus() != null) {
+                    existingSurvey.setStatus(survey.getStatus());
+                }
 
                 return existingSurvey;
             })

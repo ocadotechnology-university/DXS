@@ -15,6 +15,14 @@
       "fieldValidateRules": ["required", "minlength", "maxlength"],
       "fieldValidateRulesMaxlength": "255",
       "fieldValidateRulesMinlength": "16"
+    },
+    {
+      "fieldName": "deadline",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "String"
     }
   ],
   "name": "Survey",

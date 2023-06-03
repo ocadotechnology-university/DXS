@@ -59,7 +59,7 @@ const UserSurveysDashboard = () => {
         <div className={'survey-inside'}></div>
         <Link to={surveyPath}>
           <div className={'name-row'}>
-            <p>{survey.name}</p>
+            <p className={'wrap-text'}>{survey.name}</p>
           </div>
         </Link>
         {/* Render other survey details as needed */}

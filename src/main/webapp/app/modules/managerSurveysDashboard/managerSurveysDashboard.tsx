@@ -77,7 +77,6 @@ const ManagerSurveysDashboard = () => {
 
   // Component for a survey box
   function SurveyBox({ survey }) {
-
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const dispatch = useAppDispatch();
 
@@ -92,7 +91,9 @@ const ManagerSurveysDashboard = () => {
     const handleDeleteConfirm = () => {
       dispatch(deleteEntity(survey.id));
       setShowDeleteModal(false);
-      setRefreshSurveys(true);
+      setTimeout(() => {
+        setRefreshSurveys(true);
+      }, 1000);
     };
 
     return (
@@ -124,7 +125,7 @@ const ManagerSurveysDashboard = () => {
         </Dropdown>
         <Link to="/SurveyStatusView">
           <div className={'name-row'}>
-            <p>{survey.name}</p>
+            <p className={'wrap-text'}>{survey.name}</p>
           </div>
         </Link>
 
@@ -133,7 +134,7 @@ const ManagerSurveysDashboard = () => {
             <Modal.Title>Delete Survey</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p>Are you sure you want to delete a survey with id {survey.id}?</p>
+            <p className={'wrap-text'}>Are you sure you want to delete a survey with id {survey.id}?</p>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleDeleteCancel}>

@@ -41,7 +41,7 @@
   background-color: #e6e6e6;
 }
 
-p {
+.wrap-text {
   white-space: nowrap;
   width: 100%; /* IE6 needs any width */
   overflow: hidden; /* "overflow" value must be different from  visible"*/

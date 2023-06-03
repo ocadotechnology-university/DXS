@@ -31,7 +31,6 @@
     <include file="config/liquibase/changelog/20230603104925_added_entity_constraints_SurveyAssigment.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230603111502_added_entity_constraints_SurveyTargetGroups.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230603112050_added_entity_constraints_GroupAssigment.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20230510182328_added_entity_constraints_Survey.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

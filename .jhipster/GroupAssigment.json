@@ -1,0 +1,26 @@
+{
+  "changelogDate": "20230603112050",
+  "entityTableName": "group_assigment",
+  "fields": [],
+  "name": "GroupAssigment",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "groupAssigment",
+      "ownerSide": true,
+      "relationshipName": "user",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "group",
+      "relationshipName": "group",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "no"
+}

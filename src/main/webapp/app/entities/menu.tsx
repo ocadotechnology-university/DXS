@@ -24,6 +24,9 @@ const EntitiesMenu = () => {
       <MenuItem icon="asterisk" to="/survey-target-groups">
         Survey Target Groups
       </MenuItem>
+      <MenuItem icon="asterisk" to="/group-assigment">
+        Group Assigment
+      </MenuItem>
       {/* jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here */}
     </>
   );

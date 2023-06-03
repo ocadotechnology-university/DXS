@@ -88,6 +88,9 @@ export const Question = () => {
                 <th className="hand" onClick={sort('isRequired')}>
                   <Translate contentKey="dxsApp.question.isRequired">Is Required</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
+                <th className="hand" onClick={sort('order')}>
+                  <Translate contentKey="dxsApp.question.order">Order</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
                 <th>
                   <Translate contentKey="dxsApp.question.survey">Survey</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
@@ -106,6 +109,7 @@ export const Question = () => {
                   <td>{question.answerType}</td>
                   <td>{question.questionContent}</td>
                   <td>{question.isRequired ? 'true' : 'false'}</td>
+                  <td>{question.order}</td>
                   <td>{question.survey ? <Link to={`/survey/${question.survey.id}`}>{question.survey.name}</Link> : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">

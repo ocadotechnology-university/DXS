@@ -6,6 +6,7 @@ export interface IQuestion {
   answerType?: string;
   questionContent?: string;
   isRequired?: boolean;
+  order?: number | null;
   survey?: ISurvey | null;
 }
 

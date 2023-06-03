@@ -26,6 +26,9 @@
             <column name="is_required" type="boolean">
                 <constraints nullable="false" />
             </column>
+            <column name="jhi_order" type="integer">
+                <constraints nullable="true" />
+            </column>
             <column name="survey_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -54,6 +57,7 @@
             <column name="answer_type" type="string"/>
             <column name="question_content" type="string"/>
             <column name="is_required" type="boolean"/>
+            <column name="jhi_order" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

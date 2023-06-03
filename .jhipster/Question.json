@@ -23,6 +23,10 @@
       "fieldName": "isRequired",
       "fieldType": "Boolean",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "order",
+      "fieldType": "Integer"
     }
   ],
   "name": "Question",

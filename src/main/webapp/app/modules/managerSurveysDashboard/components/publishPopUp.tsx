@@ -64,7 +64,7 @@ const PublishPopUp: React.FC<PublishPopupProps> = ({ surveyName, onCancel, onPub
       </Modal.Footer>
       {showNotification && (
         <div className="notification">
-          Survey "{surveyName}" published successfully
+          Survey {surveyName} published successfully
         </div>
       )}
     </Modal>

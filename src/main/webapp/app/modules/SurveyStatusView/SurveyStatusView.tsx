@@ -53,7 +53,7 @@ const SurveyStatusView = () => {
             {headerGroups.map(headerGroup => (
               <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map(column => (
-                  <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                  <th key={column.id} {...column.getHeaderProps()}>{column.render('Header')}</th>
                 ))}
               </tr>
             ))}

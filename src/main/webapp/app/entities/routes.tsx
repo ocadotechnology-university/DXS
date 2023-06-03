@@ -7,6 +7,7 @@ import Question from './question';
 import Survey from './survey';
 import Answer from './answer';
 import SurveyAssigment from './survey-assigment';
+import Group from './group';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 export default () => {
@@ -18,6 +19,7 @@ export default () => {
         <Route path="survey/*" element={<Survey />} />
         <Route path="answer/*" element={<Answer />} />
         <Route path="survey-assigment/*" element={<SurveyAssigment />} />
+        <Route path="group/*" element={<Group />} />
         {/* jhipster-needle-add-route-path - JHipster will add routes here */}
       </ErrorBoundaryRoutes>
     </div>

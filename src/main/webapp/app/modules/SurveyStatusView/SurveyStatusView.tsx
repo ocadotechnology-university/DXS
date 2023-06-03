@@ -64,7 +64,7 @@ const SurveyStatusView = () => {
               return (
                 <tr {...row.getRowProps()}>
                   {row.cells.map(cell => (
-                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                    <td key={cell.id} {...cell.getCellProps()}>{cell.render('Cell')}</td>
                   ))}
                 </tr>
               );

@@ -7,6 +7,7 @@
         Added the constraints for entity Survey.
     -->
     <changeSet id="20230510182328-2" author="jhipster">
+
         <addForeignKeyConstraint baseColumnNames="survey_id"
                                  baseTableName="rel_survey__user"
                                  constraintName="fk_rel_survey__user__survey_id"

@@ -141,6 +141,9 @@ public class QuestionResource {
                 if (question.getIsRequired() != null) {
                     existingQuestion.setIsRequired(question.getIsRequired());
                 }
+                if (question.getOrder() != null) {
+                    existingQuestion.setOrder(question.getOrder());
+                }
 
                 return existingQuestion;
             })

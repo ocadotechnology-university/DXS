@@ -1,0 +1,24 @@
+{
+  "changelogDate": "20230603111502",
+  "entityTableName": "survey_target_groups",
+  "fields": [],
+  "name": "SurveyTargetGroups",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "survey",
+      "relationshipName": "survey",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "group",
+      "relationshipName": "group",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "no"
+}

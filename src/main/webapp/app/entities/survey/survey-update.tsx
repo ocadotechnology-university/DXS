@@ -118,6 +118,8 @@ export const SurveyUpdate = () => {
                   maxLength: { value: 255, message: translate('entity.validation.maxlength', { max: 255 }) },
                 }}
               />
+              <ValidatedField label="Deadline" id="survey-deadline" name="deadline" data-cy="deadline" type="date" />
+              <ValidatedField label="Status" id="survey-status" name="status" data-cy="status" type="text" />
               <ValidatedField label="User" id="survey-user" data-cy="user" type="select" multiple name="users">
                 <option value="" key="0" />
                 {users

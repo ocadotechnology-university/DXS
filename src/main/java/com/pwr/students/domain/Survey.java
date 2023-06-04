@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import org.hibernate.annotations.Cache;
@@ -35,11 +36,18 @@ public class Survey implements Serializable {
     @Column(name = "description", length = 255, nullable = false)
     private String description;
 
+    @Column(name = "deadline")
+    private LocalDate deadline;
+
+    @Column(name = "status")
+    private String status;
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "survey")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "survey" }, allowSetters = true)
     private Set<Question> questions = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "rel_survey__user", joinColumns = @JoinColumn(name = "survey_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<User> users = new HashSet<>();
@@ -83,6 +91,32 @@ public class Survey implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public LocalDate getDeadline() {
+        return this.deadline;
+    }
+
+    public Survey deadline(LocalDate deadline) {
+        this.setDeadline(deadline);
+        return this;
+    }
+
+    public void setDeadline(LocalDate deadline) {
+        this.deadline = deadline;
+    }
+
+    public String getStatus() {
+        return this.status;
+    }
+
+    public Survey status(String status) {
+        this.setStatus(status);
+        return this;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Set<Question> getQuestions() {
@@ -165,6 +199,8 @@ public class Survey implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", deadline='" + getDeadline() + "'" +
+            ", status='" + getStatus() + "'" +
             "}";
     }
 }

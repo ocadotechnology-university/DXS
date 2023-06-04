@@ -51,6 +51,9 @@ class QuestionResourceIT {
     private static final Boolean DEFAULT_IS_REQUIRED = false;
     private static final Boolean UPDATED_IS_REQUIRED = true;
 
+    private static final Integer DEFAULT_ORDER = 1;
+    private static final Integer UPDATED_ORDER = 2;
+
     private static final String ENTITY_API_URL = "/api/questions";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -82,7 +85,8 @@ class QuestionResourceIT {
             .category(DEFAULT_CATEGORY)
             .answerType(DEFAULT_ANSWER_TYPE)
             .questionContent(DEFAULT_QUESTION_CONTENT)
-            .isRequired(DEFAULT_IS_REQUIRED);
+            .isRequired(DEFAULT_IS_REQUIRED)
+            .order(DEFAULT_ORDER);
         return question;
     }
 
@@ -97,7 +101,8 @@ class QuestionResourceIT {
             .category(UPDATED_CATEGORY)
             .answerType(UPDATED_ANSWER_TYPE)
             .questionContent(UPDATED_QUESTION_CONTENT)
-            .isRequired(UPDATED_IS_REQUIRED);
+            .isRequired(UPDATED_IS_REQUIRED)
+            .order(UPDATED_ORDER);
         return question;
     }
 
@@ -128,6 +133,7 @@ class QuestionResourceIT {
         assertThat(testQuestion.getAnswerType()).isEqualTo(DEFAULT_ANSWER_TYPE);
         assertThat(testQuestion.getQuestionContent()).isEqualTo(DEFAULT_QUESTION_CONTENT);
         assertThat(testQuestion.getIsRequired()).isEqualTo(DEFAULT_IS_REQUIRED);
+        assertThat(testQuestion.getOrder()).isEqualTo(DEFAULT_ORDER);
     }
 
     @Test
@@ -256,7 +262,8 @@ class QuestionResourceIT {
             .andExpect(jsonPath("$.[*].category").value(hasItem(DEFAULT_CATEGORY)))
             .andExpect(jsonPath("$.[*].answerType").value(hasItem(DEFAULT_ANSWER_TYPE)))
             .andExpect(jsonPath("$.[*].questionContent").value(hasItem(DEFAULT_QUESTION_CONTENT)))
-            .andExpect(jsonPath("$.[*].isRequired").value(hasItem(DEFAULT_IS_REQUIRED.booleanValue())));
+            .andExpect(jsonPath("$.[*].isRequired").value(hasItem(DEFAULT_IS_REQUIRED.booleanValue())))
+            .andExpect(jsonPath("$.[*].order").value(hasItem(DEFAULT_ORDER)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -291,7 +298,8 @@ class QuestionResourceIT {
             .andExpect(jsonPath("$.category").value(DEFAULT_CATEGORY))
             .andExpect(jsonPath("$.answerType").value(DEFAULT_ANSWER_TYPE))
             .andExpect(jsonPath("$.questionContent").value(DEFAULT_QUESTION_CONTENT))
-            .andExpect(jsonPath("$.isRequired").value(DEFAULT_IS_REQUIRED.booleanValue()));
+            .andExpect(jsonPath("$.isRequired").value(DEFAULT_IS_REQUIRED.booleanValue()))
+            .andExpect(jsonPath("$.order").value(DEFAULT_ORDER));
     }
 
     @Test
@@ -317,7 +325,8 @@ class QuestionResourceIT {
             .category(UPDATED_CATEGORY)
             .answerType(UPDATED_ANSWER_TYPE)
             .questionContent(UPDATED_QUESTION_CONTENT)
-            .isRequired(UPDATED_IS_REQUIRED);
+            .isRequired(UPDATED_IS_REQUIRED)
+            .order(UPDATED_ORDER);
 
         restQuestionMockMvc
             .perform(
@@ -336,6 +345,7 @@ class QuestionResourceIT {
         assertThat(testQuestion.getAnswerType()).isEqualTo(UPDATED_ANSWER_TYPE);
         assertThat(testQuestion.getQuestionContent()).isEqualTo(UPDATED_QUESTION_CONTENT);
         assertThat(testQuestion.getIsRequired()).isEqualTo(UPDATED_IS_REQUIRED);
+        assertThat(testQuestion.getOrder()).isEqualTo(UPDATED_ORDER);
     }
 
     @Test
@@ -413,7 +423,7 @@ class QuestionResourceIT {
         Question partialUpdatedQuestion = new Question();
         partialUpdatedQuestion.setId(question.getId());
 
-        partialUpdatedQuestion.answerType(UPDATED_ANSWER_TYPE).questionContent(UPDATED_QUESTION_CONTENT).isRequired(UPDATED_IS_REQUIRED);
+        partialUpdatedQuestion.answerType(UPDATED_ANSWER_TYPE).questionContent(UPDATED_QUESTION_CONTENT);
 
         restQuestionMockMvc
             .perform(
@@ -431,7 +441,8 @@ class QuestionResourceIT {
         assertThat(testQuestion.getCategory()).isEqualTo(DEFAULT_CATEGORY);
         assertThat(testQuestion.getAnswerType()).isEqualTo(UPDATED_ANSWER_TYPE);
         assertThat(testQuestion.getQuestionContent()).isEqualTo(UPDATED_QUESTION_CONTENT);
-        assertThat(testQuestion.getIsRequired()).isEqualTo(UPDATED_IS_REQUIRED);
+        assertThat(testQuestion.getIsRequired()).isEqualTo(DEFAULT_IS_REQUIRED);
+        assertThat(testQuestion.getOrder()).isEqualTo(DEFAULT_ORDER);
     }
 
     @Test
@@ -450,7 +461,8 @@ class QuestionResourceIT {
             .category(UPDATED_CATEGORY)
             .answerType(UPDATED_ANSWER_TYPE)
             .questionContent(UPDATED_QUESTION_CONTENT)
-            .isRequired(UPDATED_IS_REQUIRED);
+            .isRequired(UPDATED_IS_REQUIRED)
+            .order(UPDATED_ORDER);
 
         restQuestionMockMvc
             .perform(
@@ -469,6 +481,7 @@ class QuestionResourceIT {
         assertThat(testQuestion.getAnswerType()).isEqualTo(UPDATED_ANSWER_TYPE);
         assertThat(testQuestion.getQuestionContent()).isEqualTo(UPDATED_QUESTION_CONTENT);
         assertThat(testQuestion.getIsRequired()).isEqualTo(UPDATED_IS_REQUIRED);
+        assertThat(testQuestion.getOrder()).isEqualTo(UPDATED_ORDER);
     }
 
     @Test

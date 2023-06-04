@@ -56,6 +56,12 @@ export const QuestionDetail = () => {
           </dt>
           <dd>{questionEntity.isRequired ? 'true' : 'false'}</dd>
           <dt>
+            <span id="order">
+              <Translate contentKey="dxsApp.question.order">Order</Translate>
+            </span>
+          </dt>
+          <dd>{questionEntity.order}</dd>
+          <dt>
             <Translate contentKey="dxsApp.question.survey">Survey</Translate>
           </dt>
           <dd>{questionEntity.survey ? questionEntity.survey.name : ''}</dd>

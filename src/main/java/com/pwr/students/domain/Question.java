@@ -40,6 +40,9 @@ public class Question implements Serializable {
     @Column(name = "is_required", nullable = false)
     private Boolean isRequired;
 
+    @Column(name = "jhi_order")
+    private Integer order;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "questions", "users" }, allowSetters = true)
     private Survey survey;
@@ -111,6 +114,19 @@ public class Question implements Serializable {
         this.isRequired = isRequired;
     }
 
+    public Integer getOrder() {
+        return this.order;
+    }
+
+    public Question order(Integer order) {
+        this.setOrder(order);
+        return this;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
+
     public Survey getSurvey() {
         return this.survey;
     }
@@ -152,6 +168,7 @@ public class Question implements Serializable {
             ", answerType='" + getAnswerType() + "'" +
             ", questionContent='" + getQuestionContent() + "'" +
             ", isRequired='" + getIsRequired() + "'" +
+            ", order=" + getOrder() +
             "}";
     }
 }

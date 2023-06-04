@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
-import { Translate } from 'react-jhipster';
+import { Translate, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntity } from './survey.reducer';
@@ -43,6 +44,18 @@ export const SurveyDetail = () => {
             </span>
           </dt>
           <dd>{surveyEntity.description}</dd>
+          <dt>
+            <span id="deadline">
+              <Translate contentKey="dxsApp.survey.deadline">Deadline</Translate>
+            </span>
+          </dt>
+          <dd>{surveyEntity.deadline ? <TextFormat value={surveyEntity.deadline} type="date" format={APP_LOCAL_DATE_FORMAT} /> : null}</dd>
+          <dt>
+            <span id="status">
+              <Translate contentKey="dxsApp.survey.status">Status</Translate>
+            </span>
+          </dt>
+          <dd>{surveyEntity.status}</dd>
           <dt>
             <Translate contentKey="dxsApp.survey.user">User</Translate>
           </dt>

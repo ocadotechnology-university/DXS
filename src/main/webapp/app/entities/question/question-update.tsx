@@ -127,6 +127,7 @@ export const QuestionUpdate = () => {
                 }}
               />
               <ValidatedField label="Is Required" id="question-isRequired" name="isRequired" data-cy="isRequired" check type="checkbox" />
+              <ValidatedField label="Order" id="question-order" name="order" data-cy="order" type="text" />
               <ValidatedField id="question-survey" name="survey" data-cy="survey" label="Survey" type="select">
                 <option value="" key="0" />
                 {surveys

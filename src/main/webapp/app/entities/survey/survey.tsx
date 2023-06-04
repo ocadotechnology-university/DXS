@@ -107,16 +107,7 @@ export const Survey = () => {
                   <td>{survey.description}</td>
                   <td>{survey.deadline ? <TextFormat type="date" value={survey.deadline} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
                   <td>{survey.status}</td>
-                  <td>
-                    {survey.users
-                      ? survey.users.map((val, j) => (
-                          <span key={j}>
-                            {val.login}
-                            {j === survey.users.length - 1 ? '' : ', '}
-                          </span>
-                        ))
-                      : null}
-                  </td>
+                  <td>{survey.user ? survey.user.login : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/survey/${survey.id}`} color="info" size="sm" data-cy="entityDetailsButton">

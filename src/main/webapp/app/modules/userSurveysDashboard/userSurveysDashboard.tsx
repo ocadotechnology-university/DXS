@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './userSurveysDashboard.css';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Modal } from 'react-bootstrap';
 
 const UserSurveysDashboard = () => {
   const [surveys, setSurveys] = useState([]);
+  const [surveyAssignments, setSurveyAssignments] = useState([]);
 
   // TODO this code will look different bacause we will have to fetch the surveys assigned for this user (for now it fetches everything, waiting for backend to be ready)
   useEffect(() => {
@@ -19,18 +20,54 @@ const UserSurveysDashboard = () => {
       .catch(error => {
         console.error('Error fetching survey data:', error);
       });
+    axios
+      .get('/api/survey-assignments') // Replace '/api/survey-assignments' with the appropriate endpoint URL
+      .then(response => {
+        // Update the surveyAssignments state with the fetched data
+        setSurveyAssignments(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching survey assignment data:', error);
+      });
   }, []);
 
   function ActiveSurveysSection() {
-    // const activeSurveys = surveys.filter((survey) => survey.status === 'active'); // TODO uncomment it after column status is added to survey table
-    const activeSurveys = surveys.filter(survey => survey.id !== 0); // TODO remove it after column status is added to survey table
+    const activeSurveys = surveyAssignments
+      .filter(assignment => assignment.is_finished === false)
+      .map(assignment => {
+        const survey = surveys.find(survey => survey.id === assignment.survey.id && survey.status === 'ACTIVE');
+        return survey || null;
+      })
+      .filter(survey => survey !== null);
 
     return (
       <div>
         <h2>Active</h2>
         <div className={'survey-container'}>
           {activeSurveys.map(survey => (
-            <SurveyBox key={survey.id} survey={survey} />
+            <SurveyBox key={survey.id} survey={survey} openLinkTo={null} isSurveyActive={true} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  function CompletedSurveysSection() {
+    const completedSurveys = surveyAssignments
+      .filter(assignment => assignment.is_finished === true)
+      .map(assignment => {
+        const survey = surveys.find(survey => survey.id === assignment.survey.id && survey.status === 'ACTIVE');
+        return survey || null;
+      })
+      .filter(survey => survey !== null);
+
+    return (
+      <div>
+        <h2>Completed</h2>
+        <div className={'survey-container'}>
+          {completedSurveys.map(survey => (
+            <SurveyBox key={survey.id} survey={survey} openLinkTo="history-test" isSurveyActive={false} />
+            // TODO openLinkTo="history-test" is a placeholder for the link to the survey history page
           ))}
         </div>
       </div>
@@ -39,20 +76,22 @@ const UserSurveysDashboard = () => {
 
   // Component for the expired surveys section
   function ExpiredSurveysSection() {
-    const expiredSurveys = surveys.filter(survey => survey.status === 'expired');
+    const expiredSurveys = surveys.filter(survey => survey.status === 'EXPIRED');
 
     return (
       <div>
         <h2>Expired</h2>
-        {expiredSurveys.map(survey => (
-          <SurveyBox key={survey.id} survey={survey} />
-        ))}
+        <div className={'survey-container'}>
+          {expiredSurveys.map(survey => (
+            <SurveyBox key={survey.id} survey={survey} openLinkTo={null} isSurveyActive={false} />
+          ))}
+        </div>
       </div>
     );
   }
 
   // Component for a survey box
-  function SurveyBox({ survey }) {
+  function SurveyBox({ survey, openLinkTo, isSurveyActive }) {
     const [modalOpen, setModalOpen] = useState(false);
 
     const navigate = useNavigate();
@@ -72,9 +111,19 @@ const UserSurveysDashboard = () => {
     return (
       <div className={'survey'}>
         <div className={'survey-inside'}></div>
-        <div className={'name-row'} onClick={openModal}>
-          <p className={'wrap-text'}>{survey.name}</p>
-        </div>
+        {isSurveyActive ? (
+          <Link to={null} onClick={openModal}>
+            <div className={'name-row'}>
+              <p className={'wrap-text'}>{survey.name}</p>
+            </div>
+          </Link>
+        ) : (
+          <Link to={openLinkTo}>
+            <div className={'name-row'}>
+              <p className={'wrap-text'}>{survey.name}</p>
+            </div>
+          </Link>
+        )}
 
         <Modal show={modalOpen} onHide={closeModal} dialogClassName="rounded-modal">
           <Modal.Header closeButton>
@@ -85,8 +134,9 @@ const UserSurveysDashboard = () => {
             <p>Number of questions: {survey.questions.length}</p>
             {/*TODO add approximate completion time column to survey table or find another way to calculate it*/}
             <p>Completion time: placeholder</p>
-            {/*TODO add author column to survey table*/}
-            <p>Author: placeholder</p>
+            <p>
+              Author: {survey.users[0].firstName} {survey.users[0].lastName}
+            </p>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={closeModal}>
@@ -103,8 +153,9 @@ const UserSurveysDashboard = () => {
 
   return (
     <div>
-      <h1>Survey Dashboard</h1>
+      <h1>Assigned Surveys Dashboard</h1>
       <ActiveSurveysSection />
+      <CompletedSurveysSection />
       <ExpiredSurveysSection />
     </div>
   );

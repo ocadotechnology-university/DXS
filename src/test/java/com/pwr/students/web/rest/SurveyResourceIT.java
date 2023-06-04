@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.pwr.students.IntegrationTest;
 import com.pwr.students.domain.Survey;
 import com.pwr.students.repository.SurveyRepository;
+import com.pwr.students.repository.SurveyStatus;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -50,8 +51,8 @@ class SurveyResourceIT {
     private static final LocalDate DEFAULT_DEADLINE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DEADLINE = LocalDate.now(ZoneId.systemDefault());
 
-    private static final String DEFAULT_STATUS = "AAAAAAAAAA";
-    private static final String UPDATED_STATUS = "BBBBBBBBBB";
+    private static final SurveyStatus DEFAULT_STATUS = SurveyStatus.ACTIVE;
+    private static final SurveyStatus UPDATED_STATUS = SurveyStatus.EXPIRED;
 
     private static final String ENTITY_API_URL = "/api/surveys";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";

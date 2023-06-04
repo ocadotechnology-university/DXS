@@ -39,13 +39,13 @@ public class SurveyAssigmentResource {
     }
 
     /**
-     * {@code POST  /survey-assigments} : Create a new surveyAssigment.
+     * {@code POST  /survey-assignments} : Create a new surveyAssigment.
      *
      * @param surveyAssigment the surveyAssigment to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new surveyAssigment, or with status {@code 400 (Bad Request)} if the surveyAssigment has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/survey-assigments")
+    @PostMapping("/survey-assignments")
     public ResponseEntity<SurveyAssigment> createSurveyAssigment(@RequestBody SurveyAssigment surveyAssigment) throws URISyntaxException {
         log.debug("REST request to save SurveyAssigment : {}", surveyAssigment);
         if (surveyAssigment.getId() != null) {
@@ -53,13 +53,13 @@ public class SurveyAssigmentResource {
         }
         SurveyAssigment result = surveyAssigmentRepository.save(surveyAssigment);
         return ResponseEntity
-            .created(new URI("/api/survey-assigments/" + result.getId()))
+            .created(new URI("/api/survey-assignments/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
     /**
-     * {@code PUT  /survey-assigments/:id} : Updates an existing surveyAssigment.
+     * {@code PUT  /survey-assignments/:id} : Updates an existing surveyAssigment.
      *
      * @param id the id of the surveyAssigment to save.
      * @param surveyAssigment the surveyAssigment to update.
@@ -68,7 +68,7 @@ public class SurveyAssigmentResource {
      * or with status {@code 500 (Internal Server Error)} if the surveyAssigment couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/survey-assigments/{id}")
+    @PutMapping("/survey-assignments/{id}")
     public ResponseEntity<SurveyAssigment> updateSurveyAssigment(
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody SurveyAssigment surveyAssigment
@@ -93,7 +93,7 @@ public class SurveyAssigmentResource {
     }
 
     /**
-     * {@code PATCH  /survey-assigments/:id} : Partial updates given fields of an existing surveyAssigment, field will ignore if it is null
+     * {@code PATCH  /survey-assignments/:id} : Partial updates given fields of an existing surveyAssigment, field will ignore if it is null
      *
      * @param id the id of the surveyAssigment to save.
      * @param surveyAssigment the surveyAssigment to update.
@@ -103,7 +103,7 @@ public class SurveyAssigmentResource {
      * or with status {@code 500 (Internal Server Error)} if the surveyAssigment couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/survey-assigments/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PatchMapping(value = "/survey-assignments/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<SurveyAssigment> partialUpdateSurveyAssigment(
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody SurveyAssigment surveyAssigment
@@ -138,12 +138,12 @@ public class SurveyAssigmentResource {
     }
 
     /**
-     * {@code GET  /survey-assigments} : get all the surveyAssigments.
+     * {@code GET  /survey-assignments} : get all the surveyAssigments.
      *
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of surveyAssigments in body.
      */
-    @GetMapping("/survey-assigments")
+    @GetMapping("/survey-assignments")
     public List<SurveyAssigment> getAllSurveyAssigments(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all SurveyAssigments");
         if (eagerload) {
@@ -154,12 +154,12 @@ public class SurveyAssigmentResource {
     }
 
     /**
-     * {@code GET  /survey-assigments/:id} : get the "id" surveyAssigment.
+     * {@code GET  /survey-assignments/:id} : get the "id" surveyAssigment.
      *
      * @param id the id of the surveyAssigment to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the surveyAssigment, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/survey-assigments/{id}")
+    @GetMapping("/survey-assignments/{id}")
     public ResponseEntity<SurveyAssigment> getSurveyAssigment(@PathVariable Long id) {
         log.debug("REST request to get SurveyAssigment : {}", id);
         Optional<SurveyAssigment> surveyAssigment = surveyAssigmentRepository.findOneWithEagerRelationships(id);
@@ -167,12 +167,12 @@ public class SurveyAssigmentResource {
     }
 
     /**
-     * {@code DELETE  /survey-assigments/:id} : delete the "id" surveyAssigment.
+     * {@code DELETE  /survey-assignments/:id} : delete the "id" surveyAssigment.
      *
      * @param id the id of the surveyAssigment to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/survey-assigments/{id}")
+    @DeleteMapping("/survey-assignments/{id}")
     public ResponseEntity<Void> deleteSurveyAssigment(@PathVariable Long id) {
         log.debug("REST request to delete SurveyAssigment : {}", id);
         surveyAssigmentRepository.deleteById(id);

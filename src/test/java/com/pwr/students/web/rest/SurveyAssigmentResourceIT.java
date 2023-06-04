@@ -42,7 +42,7 @@ class SurveyAssigmentResourceIT {
     private static final Boolean DEFAULT_IS_FINISHED = false;
     private static final Boolean UPDATED_IS_FINISHED = true;
 
-    private static final String ENTITY_API_URL = "/api/survey-assigments";
+    private static final String ENTITY_API_URL = "/api/survey-assignments";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
     private static Random random = new Random();

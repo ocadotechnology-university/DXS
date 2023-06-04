@@ -23,7 +23,7 @@ public class SurveyTargetGroups implements Serializable {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnoreProperties(value = { "questions", "users" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "questions", "user" }, allowSetters = true)
     private Survey survey;
 
     @ManyToOne(fetch = FetchType.EAGER)

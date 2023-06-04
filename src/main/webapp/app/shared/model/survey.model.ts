@@ -9,7 +9,7 @@ export interface ISurvey {
   deadline?: string | null;
   status?: string | null;
   questions?: IQuestion[] | null;
-  users?: IUser[] | null;
+  user?: IUser | null;
 }
 
 export const defaultValue: Readonly<ISurvey> = {};

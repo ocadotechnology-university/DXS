@@ -26,7 +26,7 @@ public class SurveyAssigment implements Serializable {
     private Boolean is_finished;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnoreProperties(value = { "questions", "users" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "questions", "user" }, allowSetters = true)
     private Survey survey;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -44,7 +44,7 @@ public class Question implements Serializable {
     private Integer order;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnoreProperties(value = { "questions", "users" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "questions", "user" }, allowSetters = true)
     private Survey survey;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

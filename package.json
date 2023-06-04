@@ -87,6 +87,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "7.43.9",
     "react-icons": "^4.8.0",
+    "react-input-slider": "^6.0.1",
     "react-jhipster": "jhipster/react-jhipster",
     "react-loadable": "5.5.0",
     "react-redux": "8.0.5",

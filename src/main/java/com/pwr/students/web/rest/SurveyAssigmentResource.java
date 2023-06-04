@@ -144,12 +144,19 @@ public class SurveyAssigmentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of surveyAssigments in body.
      */
     @GetMapping("/survey-assignments")
-    public List<SurveyAssigment> getAllSurveyAssigments(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
-        log.debug("REST request to get all SurveyAssigments");
-        if (eagerload) {
-            return surveyAssigmentRepository.findAllWithEagerRelationships();
+    public List<SurveyAssigment> getSurveyAssignments(
+        @RequestParam(required = false, defaultValue = "false") boolean eagerload,
+        @RequestParam(required = false) Long surveyId
+    ) {
+        log.debug("REST request to get SurveyAssignments");
+        if (surveyId != null) {
+            return surveyAssigmentRepository.findAllBySurveyId(surveyId);
         } else {
-            return surveyAssigmentRepository.findAll();
+            if (eagerload) {
+                return surveyAssigmentRepository.findAllWithEagerRelationships();
+            } else {
+                return surveyAssigmentRepository.findAll();
+            }
         }
     }
 

@@ -3,6 +3,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import './survey-page.scss';
 import { BiCommentDetail } from 'react-icons/bi';
+import Slider from 'react-input-slider';
+import { useAppDispatch } from 'app/config/store';
+import { createEntity, getEntities } from 'app/entities/answer/answer.reducer';
+import { IAnswer } from 'app/shared/model/answer.model';
+import { partialUpdateEntity, updateEntity } from 'app/entities/survey-assigment/survey-assigment.reducer';
+import { ISurveyAssigment } from 'app/shared/model/survey-assigment.model';
 
 const SurveyPage = () => {
   const navigate = useNavigate();
@@ -12,6 +18,9 @@ const SurveyPage = () => {
   const [answers, setAnswers] = useState([]);
   const [comments, setComments] = useState([]);
   const [isCommentBoxVisible, setIsCommentBoxVisible] = useState(false);
+  const [surveyAssignmentId, setSurveyAssignmentId] = useState(null);
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     axios
@@ -22,18 +31,134 @@ const SurveyPage = () => {
       .catch(error => {
         console.error('Error fetching survey data:', error);
       });
+    axios
+      .get(`/api/survey-assignments?surveyId=${surveyId}`)
+      .then(response => {
+        const surveyAssignment = response.data[0]; // Assuming there is only one survey assignment per survey
+        setSurveyAssignmentId(surveyAssignment.id);
+      })
+      .catch(error => {
+        console.error('Error fetching survey assignment data:', error);
+      });
   }, [surveyId]);
 
-  const handleNext = () => {
+  const renderAnswerInput = () => {
+    const currentQuestion = survey.questions[currentQuestionIndex];
+
+    if (currentQuestion.answerType === 'SLIDER') {
+      const minValue = 1;
+      const maxValue = 10;
+      const stepValue = 1;
+      const sliderValue = parseInt(answers[currentQuestionIndex], 10) || minValue;
+
+      const steps = [];
+      for (let i = minValue; i <= maxValue; i += stepValue) {
+        steps.push(i);
+      }
+
+      return (
+        <div>
+          <div className="slider-step-labels">
+            {steps.map(step => (
+              <div key={step} className="slider-step-label">
+                {step}
+              </div>
+            ))}
+          </div>
+          <Slider
+            styles={{
+              track: {
+                backgroundColor: 'darkgray',
+                width: '100%',
+              },
+              thumb: {
+                width: 20,
+                height: 20,
+              },
+              disabled: {
+                opacity: 0.5,
+              },
+            }}
+            axis="x"
+            x={sliderValue}
+            xmin={minValue}
+            xmax={maxValue}
+            onChange={({ x }) => handleAnswerChange({ target: { value: x.toString() } })}
+          />
+        </div>
+      );
+    }
+
+    if (currentQuestion.answerType === 'RADIO') {
+      return (
+        <div>
+          {currentQuestion.radioOptions.map((option, index) => (
+            <label key={index}>
+              <input type="radio" value={option} checked={answers[currentQuestionIndex] === option} onChange={handleAnswerChange} />
+              {option}
+            </label>
+          ))}
+        </div>
+      );
+    }
+
+    if (currentQuestion.answerType === 'TEXT') {
+      return (
+        <div>
+          <input
+            type="text"
+            className="answer-input"
+            placeholder="Enter your answer..."
+            value={answers[currentQuestionIndex] || ''}
+            onChange={handleAnswerChange}
+          />
+        </div>
+      );
+    }
+
+    return null; // Handle unsupported answer types or default case
+  };
+
+  const handleNext = async () => {
     if (currentQuestionIndex < survey.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setIsCommentBoxVisible(false);
     } else {
-      // TODO Save answers to the backend
-      // ...
-      // TODO Redirect to survey history page
-      navigate(`/survey/${surveyId}/history-url`);
+      // Prepare the data to be submitted
+      const submittedAnswers: IAnswer[] = answers.map((answer, index) => ({
+        answer,
+        comment: comments[index] || '',
+        question: survey.questions[index],
+      }));
+
+      try {
+        // Dispatch the createEntity action for each answer
+        for (const answer of submittedAnswers) {
+          await dispatch(createEntity(answer));
+        }
+
+        if (surveyAssignmentId) {
+          await updateSurveyAssignment();
+        }
+
+        // Handle the success response
+        console.log('Answers submitted successfully');
+        // TODO: Redirect to the survey history page or any other desired page
+        navigate(`/survey/${surveyId}/history-url`);
+      } catch (error) {
+        // Handle the error response
+        console.error('Error submitting answers:', error);
+        // TODO: Handle the error and show appropriate feedback to the user
+      } finally {
+        // Dispatch the getEntities action to update the entities
+        dispatch(getEntities({}));
+      }
     }
+  };
+
+  const updateSurveyAssignment = async () => {
+    const changes: ISurveyAssigment = { is_finished: true, id: surveyAssignmentId };
+    dispatch(partialUpdateEntity(changes));
   };
 
   const handlePrevious = () => {
@@ -68,7 +193,7 @@ const SurveyPage = () => {
 
   const handleCommentSubmit = () => {
     setIsCommentBoxVisible(prevState => !prevState);
-    // TODO add comment submit logic with notification if success or error
+    // TODO i guess we need to save the comment somewhere to save while submitting the answers
   };
 
   if (!survey) {
@@ -100,15 +225,7 @@ const SurveyPage = () => {
         <div className="question-content">{currentQuestion.questionContent}</div>
         {/* Render answer input based on the question type */}
         {/* ... */}
-        <div>
-          {/*TODO Render answer input based on the question type*/}
-          <textarea
-            className="answer-input"
-            placeholder="Enter your answer"
-            value={answers[currentQuestionIndex] || ''}
-            onChange={handleAnswerChange}
-          />
-        </div>
+        <div>{renderAnswerInput()}</div>
         {isCommentBoxVisible && (
           <div>
             <textarea

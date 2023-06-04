@@ -40,4 +40,7 @@ public interface SurveyAssigmentRepository extends JpaRepository<SurveyAssigment
 
     @Query("select surveyAssigment from SurveyAssigment surveyAssigment left join fetch surveyAssigment.user where surveyAssigment.id =:id")
     Optional<SurveyAssigment> findOneWithToOneRelationships(@Param("id") Long id);
+
+    @Query("SELECT sa FROM SurveyAssigment sa WHERE sa.survey.id = :surveyId")
+    List<SurveyAssigment> findAllBySurveyId(@Param("surveyId") Long surveyId);
 }

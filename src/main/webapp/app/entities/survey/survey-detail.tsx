@@ -59,16 +59,7 @@ export const SurveyDetail = () => {
           <dt>
             <Translate contentKey="dxsApp.survey.user">User</Translate>
           </dt>
-          <dd>
-            {surveyEntity.users
-              ? surveyEntity.users.map((val, i) => (
-                  <span key={val.id}>
-                    <a>{val.login}</a>
-                    {surveyEntity.users && i === surveyEntity.users.length - 1 ? '' : ', '}
-                  </span>
-                ))
-              : null}
-          </dd>
+          <dd>{surveyEntity.user ? surveyEntity.user.login : ''}</dd>
         </dl>
         <Button tag={Link} to="/survey" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

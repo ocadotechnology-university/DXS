@@ -41,7 +41,7 @@
       "otherEntityRelationshipName": "survey",
       "ownerSide": true,
       "relationshipName": "user",
-      "relationshipType": "many-to-many"
+      "relationshipType": "many-to-one"
     }
   ],
   "searchEngine": "no",

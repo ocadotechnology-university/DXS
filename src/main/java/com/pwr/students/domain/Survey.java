@@ -47,10 +47,8 @@ public class Survey implements Serializable {
     @JsonIgnoreProperties(value = { "survey" }, allowSetters = true)
     private Set<Question> questions = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "rel_survey__user", joinColumns = @JoinColumn(name = "survey_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<User> users = new HashSet<>();
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -150,26 +148,16 @@ public class Survey implements Serializable {
         return this;
     }
 
-    public Set<User> getUsers() {
-        return this.users;
+    public User getUser() {
+        return this.user;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Survey users(Set<User> users) {
-        this.setUsers(users);
-        return this;
-    }
-
-    public Survey addUser(User user) {
-        this.users.add(user);
-        return this;
-    }
-
-    public Survey removeUser(User user) {
-        this.users.remove(user);
+    public Survey user(User user) {
+        this.setUser(user);
         return this;
     }
 

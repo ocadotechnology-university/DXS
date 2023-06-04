@@ -51,7 +51,7 @@ export const SurveyUpdate = () => {
     const entity = {
       ...surveyEntity,
       ...values,
-      users: mapIdList(values.users),
+      user: users.find(it => it.id.toString() === values.user.toString()),
     };
 
     if (isNew) {
@@ -66,7 +66,7 @@ export const SurveyUpdate = () => {
       ? {}
       : {
           ...surveyEntity,
-          users: surveyEntity?.users?.map(e => e.id.toString()),
+          user: surveyEntity?.user?.id,
         };
 
   return (
@@ -120,7 +120,7 @@ export const SurveyUpdate = () => {
               />
               <ValidatedField label="Deadline" id="survey-deadline" name="deadline" data-cy="deadline" type="date" />
               <ValidatedField label="Status" id="survey-status" name="status" data-cy="status" type="text" />
-              <ValidatedField label="User" id="survey-user" data-cy="user" type="select" multiple name="users">
+              <ValidatedField id="survey-user" name="user" data-cy="user" label="User" type="select">
                 <option value="" key="0" />
                 {users
                   ? users.map(otherEntity => (

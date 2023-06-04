@@ -1,9 +1,7 @@
 package com.pwr.students.web.rest;
 
 import com.pwr.students.domain.Question;
-import com.pwr.students.domain.Survey;
 import com.pwr.students.repository.QuestionRepository;
-import com.pwr.students.repository.SurveyRepository;
 import com.pwr.students.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -36,11 +34,9 @@ public class QuestionResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final SurveyRepository surveyRepository;
     private final QuestionRepository questionRepository;
 
-    public QuestionResource(SurveyRepository surveyRepository, QuestionRepository questionRepository) {
-        this.surveyRepository = surveyRepository;
+    public QuestionResource(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
 
@@ -169,12 +165,6 @@ public class QuestionResource {
         } else {
             return questionRepository.findAll();
         }
-    }
-
-    @GetMapping("/surveys/{surveyId}/questions")
-    public List<Question> getAllQuestionsFromSurvey(@PathVariable Long surveyId) {
-        log.debug("REST request to get all Questions from survey {}", surveyId);
-        return questionRepository.findAllBySurveyId(surveyId);
     }
 
     /**

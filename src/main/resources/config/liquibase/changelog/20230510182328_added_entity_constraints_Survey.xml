@@ -8,16 +8,9 @@
     -->
     <changeSet id="20230510182328-2" author="jhipster">
 
-        <addForeignKeyConstraint baseColumnNames="survey_id"
-                                 baseTableName="rel_survey__user"
-                                 constraintName="fk_rel_survey__user__survey_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="survey"
-                                 />
-
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="rel_survey__user"
-                                 constraintName="fk_rel_survey__user__user_id"
+                                 baseTableName="survey"
+                                 constraintName="fk_survey__user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"
                                  />

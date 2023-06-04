@@ -261,7 +261,7 @@ class QuestionResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(question.getId().intValue())))
             .andExpect(jsonPath("$.[*].category").value(hasItem(DEFAULT_CATEGORY)))
-            .andExpect(jsonPath("$.[*].answerType").value(hasItem(DEFAULT_ANSWER_TYPE)))
+            .andExpect(jsonPath("$.[*].answerType").value(hasItem(DEFAULT_ANSWER_TYPE.toString())))
             .andExpect(jsonPath("$.[*].questionContent").value(hasItem(DEFAULT_QUESTION_CONTENT)))
             .andExpect(jsonPath("$.[*].isRequired").value(hasItem(DEFAULT_IS_REQUIRED.booleanValue())))
             .andExpect(jsonPath("$.[*].order").value(hasItem(DEFAULT_ORDER)));
@@ -297,7 +297,7 @@ class QuestionResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(question.getId().intValue()))
             .andExpect(jsonPath("$.category").value(DEFAULT_CATEGORY))
-            .andExpect(jsonPath("$.answerType").value(DEFAULT_ANSWER_TYPE))
+            .andExpect(jsonPath("$.answerType").value(DEFAULT_ANSWER_TYPE.toString()))
             .andExpect(jsonPath("$.questionContent").value(DEFAULT_QUESTION_CONTENT))
             .andExpect(jsonPath("$.isRequired").value(DEFAULT_IS_REQUIRED.booleanValue()))
             .andExpect(jsonPath("$.order").value(DEFAULT_ORDER));

@@ -135,7 +135,7 @@ const UserSurveysDashboard = () => {
             {/*TODO add approximate completion time column to survey table or find another way to calculate it*/}
             <p>Completion time: placeholder</p>
             <p>
-              Author: {survey.users[0].firstName} {survey.users[0].lastName}
+              Author: {survey.user.firstName} {survey.user.lastName}
             </p>
           </Modal.Body>
           <Modal.Footer>

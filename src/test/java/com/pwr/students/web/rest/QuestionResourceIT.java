@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.pwr.students.IntegrationTest;
+import com.pwr.students.domain.AnswerType;
 import com.pwr.students.domain.Question;
 import com.pwr.students.repository.QuestionRepository;
 import jakarta.persistence.EntityManager;
@@ -42,8 +43,8 @@ class QuestionResourceIT {
     private static final String DEFAULT_CATEGORY = "AAAAAAAAAA";
     private static final String UPDATED_CATEGORY = "BBBBBBBBBB";
 
-    private static final String DEFAULT_ANSWER_TYPE = "AAAAAAAAAA";
-    private static final String UPDATED_ANSWER_TYPE = "BBBBBBBBBB";
+    private static final AnswerType DEFAULT_ANSWER_TYPE = AnswerType.TEXT;
+    private static final AnswerType UPDATED_ANSWER_TYPE = AnswerType.RADIO;
 
     private static final String DEFAULT_QUESTION_CONTENT = "AAAAAAAAAAAAAAAA";
     private static final String UPDATED_QUESTION_CONTENT = "BBBBBBBBBBBBBBBB";

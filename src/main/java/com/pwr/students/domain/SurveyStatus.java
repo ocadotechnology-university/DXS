@@ -1,4 +1,4 @@
-package com.pwr.students.repository;
+package com.pwr.students.domain;
 
 public enum SurveyStatus {
     DRAFT,

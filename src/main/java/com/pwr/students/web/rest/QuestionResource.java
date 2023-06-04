@@ -167,6 +167,12 @@ public class QuestionResource {
         }
     }
 
+    @GetMapping("/surveys/{surveyId}/questions")
+    public List<Question> getAllQuestionsFromSurvey(@PathVariable Long surveyId) {
+        log.debug("REST request to get all Questions from survey {}", surveyId);
+        return questionRepository.findAllBySurveyId(surveyId);
+    }
+
     /**
      * {@code GET  /questions/:id} : get the "id" question.
      *

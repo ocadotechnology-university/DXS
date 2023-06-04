@@ -119,7 +119,7 @@ const SurveyPage = () => {
     return null; // Handle unsupported answer types or default case
   };
 
-  const handleNext = async () => {
+  const handleNext = () => {
     if (currentQuestionIndex < survey.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setIsCommentBoxVisible(false);
@@ -134,16 +134,11 @@ const SurveyPage = () => {
       try {
         // Dispatch the createEntity action for each answer
         for (const answer of submittedAnswers) {
-          await dispatch(createEntity(answer));
+          dispatch(createEntity(answer));
         }
-
         if (surveyAssignmentId) {
-          await updateSurveyAssignment();
+          updateSurveyAssignment();
         }
-
-        // Handle the success response
-        console.log('Answers submitted successfully');
-        // TODO: Redirect to the survey history page or any other desired page
         navigate(`/survey/${surveyId}/history-url`);
       } catch (error) {
         // Handle the error response
@@ -156,7 +151,7 @@ const SurveyPage = () => {
     }
   };
 
-  const updateSurveyAssignment = async () => {
+  const updateSurveyAssignment = () => {
     const changes: ISurveyAssigment = { is_finished: true, id: surveyAssignmentId };
     dispatch(partialUpdateEntity(changes));
   };

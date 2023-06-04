@@ -35,8 +35,8 @@ const UserSurveysDashboard = () => {
     const activeSurveys = surveyAssignments
       .filter(assignment => assignment.is_finished === false)
       .map(assignment => {
-        const survey = surveys.find(survey => survey.id === assignment.survey.id && survey.status === 'ACTIVE');
-        return survey || null;
+        const surveybox = surveys.find(survey => survey.id === assignment.survey.id && survey.status === 'ACTIVE');
+        return surveybox || null;
       })
       .filter(survey => survey !== null);
 
@@ -56,8 +56,8 @@ const UserSurveysDashboard = () => {
     const completedSurveys = surveyAssignments
       .filter(assignment => assignment.is_finished === true)
       .map(assignment => {
-        const survey = surveys.find(survey => survey.id === assignment.survey.id && survey.status === 'ACTIVE');
-        return survey || null;
+        const surveybox = surveys.find(survey => survey.id === assignment.survey.id && survey.status === 'ACTIVE');
+        return surveybox || null;
       })
       .filter(survey => survey !== null);
 

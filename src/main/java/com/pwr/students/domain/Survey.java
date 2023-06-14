@@ -1,5 +1,6 @@
 package com.pwr.students.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -42,13 +43,23 @@ public class Survey implements Serializable {
     @Column(name = "status")
     private String status;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "survey")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "survey")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "survey" }, allowSetters = true)
     private Set<Question> questions = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "survey")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<SurveyAssigment> SurveyAssigments = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "survey")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<SurveyTargetGroups> SurveyTargetGroups = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 

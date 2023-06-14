@@ -57,11 +57,28 @@ public class QuestionResource {
         if (question.getId() != null) {
             throw new BadRequestAlertException("A new question cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Question result = questionRepository.save(question);
+
+        // Fetch the Survey using surveyId from question
+        Optional<Survey> optionalSurvey = surveyRepository.findById(question.getSurvey().getId());
+        if (!optionalSurvey.isPresent()) {
+            throw new BadRequestAlertException("Invalid survey ID", ENTITY_NAME, "invalidsurveyid");
+        }
+
+        Survey survey = optionalSurvey.get();
+
+        // Save the question first to ensure it has an ID
+        question = questionRepository.save(question);
+
+        // Add question to survey
+        survey.addQuestion(question);
+
+        // Save survey (which will cascade and save question as well)
+        surveyRepository.save(survey);
+
         return ResponseEntity
-            .created(new URI("/api/questions/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+            .created(new URI("/api/questions/" + question.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, question.getId().toString()))
+            .body(question);
     }
 
     /**
@@ -91,11 +108,24 @@ public class QuestionResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Question result = questionRepository.save(question);
+        // Fetch the Survey using surveyId from question
+        Optional<Survey> optionalSurvey = surveyRepository.findById(question.getSurvey().getId());
+        if (!optionalSurvey.isPresent()) {
+            throw new BadRequestAlertException("Invalid survey ID", ENTITY_NAME, "invalidsurveyid");
+        }
+
+        Survey survey = optionalSurvey.get();
+
+        // Add question to survey
+        survey.addQuestion(question);
+
+        // Save survey (which will cascade and save question as well)
+        surveyRepository.save(survey);
+
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, question.getId().toString()))
-            .body(result);
+            .body(question);
     }
 
     /**
@@ -162,13 +192,9 @@ public class QuestionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of questions in body.
      */
     @GetMapping("/questions")
-    public List<Question> getAllQuestions(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public List<Question> getAllQuestions() {
         log.debug("REST request to get all Questions");
-        if (eagerload) {
-            return questionRepository.findAllWithEagerRelationships();
-        } else {
-            return questionRepository.findAll();
-        }
+        return questionRepository.findAll();
     }
 
     @GetMapping("/surveys/{surveyId}/questions")
@@ -186,7 +212,7 @@ public class QuestionResource {
     @GetMapping("/questions/{id}")
     public ResponseEntity<Question> getQuestion(@PathVariable Long id) {
         log.debug("REST request to get Question : {}", id);
-        Optional<Question> question = questionRepository.findOneWithEagerRelationships(id);
+        Optional<Question> question = questionRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(question);
     }
 
@@ -198,8 +224,24 @@ public class QuestionResource {
      */
     @DeleteMapping("/questions/{id}")
     public ResponseEntity<Void> deleteQuestion(@PathVariable Long id) {
-        log.debug("REST request to delete Question : {}", id);
-        questionRepository.deleteById(id);
+        log.debug("REST request to delete Question: {}", id);
+
+        Optional<Question> questionOptional = questionRepository.findById(id);
+
+        if (questionOptional.isPresent()) {
+            Question question = questionOptional.get();
+            Survey survey = question.getSurvey();
+
+            if (survey != null) {
+                survey.removeQuestion(question);
+            }
+
+            questionRepository.deleteById(id);
+        } else {
+            // Handle the case when the question with the given ID does not exist
+            return ResponseEntity.notFound().build();
+        }
+
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

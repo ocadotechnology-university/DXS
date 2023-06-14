@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -58,25 +59,20 @@ public class QuestionResource {
             throw new BadRequestAlertException("A new question cannot already have an ID", ENTITY_NAME, "idexists");
         }
 
-        // Fetch the Survey using surveyId from question
-        Optional<Survey> optionalSurvey = surveyRepository.findById(question.getSurvey().getId());
-        if (!optionalSurvey.isPresent()) {
-            throw new BadRequestAlertException("Invalid survey ID", ENTITY_NAME, "invalidsurveyid");
+        if (question.getSurvey() != null) {
+            Survey survey = surveyRepository
+                .findById(question.getSurvey().getId())
+                .orElseThrow(() -> new BadRequestAlertException("Invalid survey ID", ENTITY_NAME, "surveynotfound"));
+            survey.addQuestion(question);
+            Survey savedSurvey = surveyRepository.save(survey);
+            List<Question> questionList = new ArrayList<>(savedSurvey.getQuestions());
+            question = questionList.get(questionList.size() - 1);
+        } else {
+            question = questionRepository.save(question);
         }
 
-        Survey survey = optionalSurvey.get();
-
-        // Save the question first to ensure it has an ID
-        question = questionRepository.save(question);
-
-        // Add question to survey
-        survey.addQuestion(question);
-
-        // Save survey (which will cascade and save question as well)
-        surveyRepository.save(survey);
-
         return ResponseEntity
-            .created(new URI("/api/questions/" + question.getId()))
+            .created(new URI("/api/questions/" + question.getId().toString()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, question.getId().toString()))
             .body(question);
     }
@@ -108,24 +104,20 @@ public class QuestionResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        // Fetch the Survey using surveyId from question
-        Optional<Survey> optionalSurvey = surveyRepository.findById(question.getSurvey().getId());
-        if (!optionalSurvey.isPresent()) {
-            throw new BadRequestAlertException("Invalid survey ID", ENTITY_NAME, "invalidsurveyid");
+        if (question.getSurvey() != null) {
+            Survey survey = surveyRepository
+                .findById(question.getSurvey().getId())
+                .orElseThrow(() -> new BadRequestAlertException("Invalid survey ID", ENTITY_NAME, "surveynotfound"));
+            survey.addQuestion(question);
+            surveyRepository.save(survey);
         }
 
-        Survey survey = optionalSurvey.get();
-
-        // Add question to survey
-        survey.addQuestion(question);
-
-        // Save survey (which will cascade and save question as well)
-        surveyRepository.save(survey);
+        Question result = questionRepository.save(question);
 
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, question.getId().toString()))
-            .body(question);
+            .body(result);
     }
 
     /**

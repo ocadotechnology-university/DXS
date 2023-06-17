@@ -44,7 +44,7 @@ class QuestionResourceIT {
     private static final String UPDATED_CATEGORY = "BBBBBBBBBB";
 
     private static final AnswerType DEFAULT_ANSWER_TYPE = AnswerType.TEXT;
-    private static final AnswerType UPDATED_ANSWER_TYPE = AnswerType.RADIO;
+    private static final AnswerType UPDATED_ANSWER_TYPE = AnswerType.SLIDER;
 
     private static final String DEFAULT_QUESTION_CONTENT = "AAAAAAAAAAAAAAAA";
     private static final String UPDATED_QUESTION_CONTENT = "BBBBBBBBBBBBBBBB";

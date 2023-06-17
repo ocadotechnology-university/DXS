@@ -4,11 +4,13 @@ import axios from 'axios';
 import './survey-page.scss';
 import { BiCommentDetail } from 'react-icons/bi';
 import Slider from 'react-input-slider';
-import { useAppDispatch } from 'app/config/store';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { createEntity, getEntities } from 'app/entities/answer/answer.reducer';
 import { IAnswer } from 'app/shared/model/answer.model';
-import { partialUpdateEntity, updateEntity } from 'app/entities/survey-assigment/survey-assigment.reducer';
+import { partialUpdateEntity } from 'app/entities/survey-assigment/survey-assigment.reducer';
 import { ISurveyAssigment } from 'app/shared/model/survey-assigment.model';
+import { getSession } from 'app/shared/reducers/authentication';
+import { reset } from 'app/modules/account/settings/settings.reducer';
 
 const SurveyPage = () => {
   const navigate = useNavigate();
@@ -21,6 +23,15 @@ const SurveyPage = () => {
   const [surveyAssignmentId, setSurveyAssignmentId] = useState(null);
 
   const dispatch = useAppDispatch();
+  const user = useAppSelector(state => state.authentication.account);
+
+  // Fetch the user information during component initialization
+  useEffect(() => {
+    dispatch(getSession());
+    return () => {
+      dispatch(reset());
+    };
+  }, []);
 
   useEffect(() => {
     axios
@@ -89,19 +100,6 @@ const SurveyPage = () => {
       );
     }
 
-    if (currentQuestion.answerType === 'RADIO') {
-      return (
-        <div>
-          {currentQuestion.radioOptions.map((option, index) => (
-            <label key={index}>
-              <input type="radio" value={option} checked={answers[currentQuestionIndex] === option} onChange={handleAnswerChange} />
-              {option}
-            </label>
-          ))}
-        </div>
-      );
-    }
-
     if (currentQuestion.answerType === 'TEXT') {
       return (
         <div>
@@ -129,6 +127,7 @@ const SurveyPage = () => {
         answer,
         comment: comments[index] || '',
         question: survey.questions[index],
+        user: user,
       }));
 
       try {
@@ -186,10 +185,10 @@ const SurveyPage = () => {
     setIsCommentBoxVisible(prevState => !prevState);
   };
 
-  const handleCommentSubmit = () => {
-    setIsCommentBoxVisible(prevState => !prevState);
-    // TODO i guess we need to save the comment somewhere to save while submitting the answers
-  };
+  // const handleCommentSubmit = () => {
+  //   setIsCommentBoxVisible(prevState => !prevState);
+  //   // TODO i guess we need to save the comment somewhere to save while submitting the answers
+  // };
 
   if (!survey) {
     return <div>Loading survey...</div>;
@@ -229,9 +228,9 @@ const SurveyPage = () => {
               value={comments[currentQuestionIndex] || ''}
               onChange={handleCommentChange}
             />
-            <button className="comment-submit" onClick={handleCommentSubmit}>
-              Submit
-            </button>
+            {/*<button className="comment-submit" onClick={handleCommentSubmit}>*/}
+            {/*  Submit*/}
+            {/*</button>*/}
           </div>
         )}
         <div className="buttons">

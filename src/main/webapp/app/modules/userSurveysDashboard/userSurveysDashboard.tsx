@@ -97,7 +97,7 @@ const UserSurveysDashboard = () => {
     const navigate = useNavigate();
 
     const handleSurvey = () => {
-      navigate(`/survey/${survey.id}`);
+      navigate(`/complete-survey/${survey.id}`);
     };
 
     const openModal = () => {

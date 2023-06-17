@@ -56,7 +56,7 @@ const AppRoutes = () => {
           }
         />
         <Route
-          path="/survey/:surveyId"
+          path="/complete-survey/:surveyId"
           element={
             <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
               <SurveyPage />

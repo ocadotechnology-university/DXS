@@ -29,7 +29,8 @@ public class Question implements Serializable {
 
     @NotNull
     @Column(name = "answer_type", nullable = false)
-    private String answerType;
+    @Enumerated(EnumType.STRING)
+    private AnswerType answerType;
 
     @NotNull
     @Size(min = 16, max = 255)
@@ -75,16 +76,16 @@ public class Question implements Serializable {
         this.category = category;
     }
 
-    public String getAnswerType() {
+    public AnswerType getAnswerType() {
         return this.answerType;
     }
 
-    public Question answerType(String answerType) {
+    public Question answerType(AnswerType answerType) {
         this.setAnswerType(answerType);
         return this;
     }
 
-    public void setAnswerType(String answerType) {
+    public void setAnswerType(AnswerType answerType) {
         this.answerType = answerType;
     }
 

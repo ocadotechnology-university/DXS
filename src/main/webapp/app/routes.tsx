@@ -17,6 +17,7 @@ import { AUTHORITIES } from 'app/config/constants';
 import SurveyCreator from 'app/modules/surveyCreator/surveyCreator';
 import UserSurveysDashboard from 'app/modules/userSurveysDashboard/userSurveysDashboard';
 import ManagerSurveysDashboard from 'app/modules/managerSurveysDashboard/managerSurveysDashboard';
+import SurveyPage from 'app/modules/surveyCompletion/survey-page';
 import SurveyStatusView from 'app/modules/SurveyStatusView/SurveyStatusView';
 
 const loading = <div>loading ...</div>;
@@ -51,6 +52,14 @@ const AppRoutes = () => {
           element={
             <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
               <UserSurveysDashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/complete-survey/:surveyId"
+          element={
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
+              <SurveyPage />
             </PrivateRoute>
           }
         />

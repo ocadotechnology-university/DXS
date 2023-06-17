@@ -1,11 +1,11 @@
-id;category;answer_type;question_content;is_required;jhi_order
-1;attitude;calculate Infrastructure;including Networked;true;44743
-2;Integration Berkshire up;Rubber;revolutionary above Jazz;true;48233
-3;Jazz;XML;Classical Chevrolet who;true;75409
-4;sensor Phased;Engineer firewall Northwest;orchestration Palladium;true;33686
-5;Account provided;Jersey capacitor Thiel;VanXXXXXXXXXXXXX;true;91402
-6;strategic lame;since Screen Country;lens Principal CSS;true;73489
-7;cyan Denver ferociously;Southwest;to SouthXXXXXXXX;true;11450
-8;Thorium Bowie;bluetooth brr;Soap RubberXXXXX;true;17469
-9;Forward;grey California;Southeast Bacon Copernicium;false;26648
-10;Czech New;benchmark invoice Rialto;but Brakus South;true;60643
+id;category;answer_type;question_content;is_required;jhi_order;survey_id
+1;attitude;TEXT;including Networked;true;44743;1
+2;Integration Berkshire up;TEXT;whatever question content;true;48233;2
+3;Jazz;SLIDER;whatever question content;true;75409;3
+4;sensor Phased;TEXT;orchestration Palladium;true;33686;4
+5;Account provided;TEXT;VanXXXXXXXXXXXXX;true;91402;5
+6;strategic lame;TEXT;lens Principal CSS;true;73489;6
+7;cyan Denver ferociously;SLIDER;to SouthXXXXXXXX;true;11450;7
+8;Thorium Bowie;SLIDER;Soap RubberXXXXX;true;17469;8
+9;Forward;SLIDER;Southeast Bacon Copernicium;false;26648;9
+10;Czech New;SLIDER;but Brakus South;true;60643;10

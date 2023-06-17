@@ -14,7 +14,7 @@ const initialState: EntityState<ISurveyAssigment> = {
   updateSuccess: false,
 };
 
-const apiUrl = 'api/survey-assigments';
+const apiUrl = 'api/survey-assignments';
 
 // Actions
 

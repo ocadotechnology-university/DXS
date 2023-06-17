@@ -8,9 +8,14 @@ type PublishPopupProps = {
 };
 
 const PublishPopUp: React.FC<PublishPopupProps> = ({ surveyName, onCancel, onPublish }) => {
+  const [surveyStart, setSurveyStart] = useState('');
   const [surveyDuration, setSurveyDuration] = useState('');
   const [targetGroup, setTargetGroup] = useState('');
   const [showNotification, setShowNotification] = useState(false);
+
+  const handleSurveyStartChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSurveyStart(event.target.value);
+  };
 
   const handleDurationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSurveyDuration(event.target.value);
@@ -47,6 +52,10 @@ const PublishPopUp: React.FC<PublishPopupProps> = ({ surveyName, onCancel, onPub
           <div style={{ marginRight: '1rem' }}>
             <label htmlFor="targetGroup">Target group:</label>
             <input type="text" id="targetGroup" className="form-control" value={targetGroup} onChange={handleTargetGroupChange} />
+          </div>
+          <div style={{ marginRight: '1rem' }}>
+            <label htmlFor="surveyStart">Survey start:</label>
+            <input type="date" id="surveyStart" className="form-control" value={surveyStart} onChange={handleSurveyStartChange} />
           </div>
           <div>
             <label htmlFor="surveyDuration">Survey duration:</label>

@@ -9,7 +9,7 @@ type Group = {
 type PublishPopupProps = {
   surveyName: string;
   onCancel: () => void;
-  onPublish: (deadline: string, targetGroup: string) => void;
+  onPublish: (deadline: string, targetGroup: string) => Promise<void>;
 };
 
 const PublishPopUp: React.FC<PublishPopupProps> = ({ surveyName, onCancel, onPublish }) => {

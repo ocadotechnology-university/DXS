@@ -138,7 +138,7 @@ const SurveyPage = () => {
         if (surveyAssignmentId) {
           updateSurveyAssignment();
         }
-        navigate(`/survey/${surveyId}/history-url`);
+        navigate(`/survey-history/${surveyId}`);
       } catch (error) {
         // Handle the error response
         console.error('Error submitting answers:', error);

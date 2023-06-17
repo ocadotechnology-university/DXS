@@ -120,7 +120,7 @@ const ManagerSurveysDashboard = () => {
         const updatedFields = {
           id: survey.id, // Include the survey ID
           status: 'Published',
-          deadline: deadline,
+          deadline,
         };
 
         // Make the API request to update the specific fields of the survey

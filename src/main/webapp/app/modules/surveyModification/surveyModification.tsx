@@ -105,7 +105,12 @@ const SurveyModification = () => {
               >
                 BACK
               </button>
-              <button style={{ backgroundColor: 'gray', color: 'white', borderRadius: '5px' }} onClick={handleSaveButtonClick}>
+              <button
+                style={{ backgroundColor: 'gray', color: 'white', borderRadius: '5px' }}
+                onClick={() => {
+                  void handleSaveButtonClick();
+                }}
+              >
                 SAVE
               </button>
             </div>

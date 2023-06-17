@@ -44,12 +44,11 @@ const SurveyCreator = () => {
     const createSurveyResult = await dispatch(createSurveyAction);
 
     if (createSurveyResult.payload) {
-      // Survey creation successful
-      // @ts-ignore
-      navigate('/questionManager', { state: { surveyData: createSurveyResult.payload.data } });
+      // @ts-expect-error not good practice but works for now
+      const dataToSend = createSurveyResult.payload.data;
+      navigate('/questionManager', { state: { surveyData: dataToSend } });
     } else {
-      // Handle error during survey creation
-      console.error('Error creating survey');
+      // Handle the case when the survey creation was not successful
     }
   };
 
@@ -121,7 +120,12 @@ const SurveyCreator = () => {
               >
                 BACK
               </button>
-              <button style={{ backgroundColor: 'gray', color: 'white', borderRadius: '5px' }} onClick={handleSaveButtonClick}>
+              <button
+                style={{ backgroundColor: 'gray', color: 'white', borderRadius: '5px' }}
+                onClick={() => {
+                  void handleSaveButtonClick();
+                }}
+              >
                 SAVE
               </button>
             </div>

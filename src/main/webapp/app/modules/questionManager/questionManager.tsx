@@ -68,7 +68,7 @@ const QuestionManager = () => {
       newQuestion = {
         questionContent: selectedQuestion,
         category: selectedCategory,
-        // @ts-ignore
+        // @ts-expect-error not good practice but works for now
         id: getQuestionData.payload.data.id,
         answerType: selectedAnswerType,
         isRequired: isObligatorySwitch, // Include the isRequired property
@@ -224,7 +224,13 @@ const QuestionManager = () => {
         </Row>
         <Row className="my-3">
           <Col className="d-flex justify-content-center">
-            <Button color="primary" style={{ borderRadius: '25px' }} onClick={handleAddQuestion}>
+            <Button
+              color="primary"
+              style={{ borderRadius: '25px' }}
+              onClick={() => {
+                void handleAddQuestion();
+              }}
+            >
               Add Question
             </Button>
           </Col>

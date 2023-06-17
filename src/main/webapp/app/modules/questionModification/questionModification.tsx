@@ -46,10 +46,9 @@ const QuestionModification = () => {
     const updateQuestionAction = updateQuestionEntity(modifiedQuestion);
     const updateQuestionResult = await dispatch(updateQuestionAction);
 
-    console.log(updateQuestionResult);
     if (updateQuestionResult.payload) {
       // Survey creation successful
-      // @ts-ignore
+      // @ts-expect-error not good practice but works for now
       navigate('/questionManager', { state: { surveyData: updateQuestionResult.payload.data.survey } });
     } else {
       // Handle error during question updating
@@ -165,7 +164,12 @@ const QuestionModification = () => {
               >
                 BACK
               </button>
-              <button style={{ backgroundColor: 'gray', color: 'white', borderRadius: '5px' }} onClick={handleModifyButtonClick}>
+              <button
+                style={{ backgroundColor: 'gray', color: 'white', borderRadius: '5px' }}
+                onClick={() => {
+                  void handleModifyButtonClick;
+                }}
+              >
                 Modify
               </button>
             </div>

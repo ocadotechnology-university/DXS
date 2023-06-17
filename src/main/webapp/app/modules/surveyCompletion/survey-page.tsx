@@ -127,7 +127,7 @@ const SurveyPage = () => {
         answer,
         comment: comments[index] || '',
         question: survey.questions[index],
-        user: user,
+        user,
       }));
 
       try {

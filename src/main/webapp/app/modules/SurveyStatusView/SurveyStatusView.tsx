@@ -1,80 +1,109 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './SurveyStatusView.css';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useTable } from 'react-table';
+import axios from 'axios';
 
-const SurveyStatusView = () => {
-  const surveyTitle = 'Survey1';
-  const surveyDescription =
-    'This survey will consist of a series of questions relating to various aspects of your work experience. We encourage you to answer each question honestly and to the best of your ability.';
-  const surveyDueDate = '20.06.2023';
+const SurveyInfo = ({ surveyTitle, surveyDueDate, surveyDescription }) => {
+  return (
+    <div className="info-container">
+      <h2 className="survey-title">{surveyTitle}</h2>
+      <p className="survey-due">Survey due to: {surveyDueDate}</p>
+      <hr className="divider" />
+      <p className="survey-description">{surveyDescription}</p>
+    </div>
+  );
+};
 
-  const Users = [
-    { name: 'Jan Kowalski', status: 'Completed' },
-    { name: 'Piotr Nowak', status: 'Completed' },
-    { name: 'Julia Wiśniewska', status: 'Completed' },
-    { name: 'Hanna Wojcik', status: 'In progress' },
-    { name: 'Paweł Kowalczyk', status: 'Not started' },
-    { name: 'Michał Jankowski', status: 'Not started' },
-    { name: 'Aleksandra Szymańska', status: 'Not started' },
-  ];
-
-  // Table columns definition
-  const columns = [
-    {
-      Header: 'User',
-      accessor: 'name', // Key in the user object
-    },
-    {
-      Header: 'Completion Status',
-      accessor: 'status', // Key in the user object
-    },
-  ];
-
-  // Initialization of react-table
+const SurveyTable = ({ columns, data }) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
     columns,
-    data: Users, // Use placeholder as user data
+    data: data.users || [],
   });
 
   return (
-    <div className="survey-page">
-      <div className="info-container">
-        <h2 className="survey-title">{surveyTitle}</h2>
-        <p className="survey-due">Survey due to: {surveyDueDate}</p>
-        <hr className="divider" />
-        <p className="survey-description">{surveyDescription}</p>
-      </div>
-
-      <div className="table-container">
-        <table {...getTableProps()}>
-          <thead>
-            {headerGroups.map(headerGroup => (
-              <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map(column => (
-                  <th key={column.id} {...column.getHeaderProps()}>
-                    {column.render('Header')}
-                  </th>
+    <div className="table-container">
+      <table {...getTableProps()}>
+        <thead>
+          {headerGroups.map(headerGroup => (
+            <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map(column => (
+                <th key={column.id} {...column.getHeaderProps()}>
+                  {column.render('Header')}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {rows.map(row => {
+            prepareRow(row);
+            return (
+              <tr key={row.id} {...row.getRowProps()}>
+                {row.cells.map(cell => (
+                  <td key={cell.id} {...cell.getCellProps()}>
+                    {cell.column.id === 'name' ? <Link to="/SurveyHistory">{cell.render('Cell')}</Link> : cell.render('Cell')}
+                  </td>
                 ))}
               </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map(row => {
-              prepareRow(row);
-              return (
-                <tr key={row.id} {...row.getRowProps()}>
-                  {row.cells.map(cell => (
-                    <td key={cell.id} {...cell.getCellProps()}>
-                      {cell.column.id === 'name' ? <Link to="/SurveyHistory">{cell.render('Cell')}</Link> : cell.render('Cell')}
-                    </td>
-                  ))}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+const SurveyStatusView = () => {
+  const { surveyId } = useParams();
+  const [surveyTitle, setSurveyTitle] = useState('');
+  const [surveyDescription, setSurveyDescription] = useState('');
+  const [surveyDueDate, setSurveyDueDate] = useState('');
+  const [surveyData, setSurveyData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+
+    axios
+      .get(`/api/surveys/${surveyId}`)
+      .then(response => {
+        const surveyData = response.data;
+        setSurveyTitle(surveyData.title);
+        setSurveyDescription(surveyData.description);
+        setSurveyDueDate(surveyData.dueDate);
+        setSurveyData(surveyData);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching survey data:', error);
+        setLoading(false);
+      });
+  }, [surveyId]);
+
+  const columns = [
+    {
+      Header: 'User',
+      accessor: 'name',
+    },
+    {
+      Header: 'Completion Status',
+      accessor: 'status',
+    },
+  ];
+
+  if (!surveyData) {
+    return null;
+  }
+
+  return (
+    <div className="survey-page">
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <SurveyInfo surveyTitle={surveyTitle} surveyDueDate={surveyDueDate} surveyDescription={surveyDescription} />
+      )}
+      <SurveyTable columns={columns} data={surveyData} />
     </div>
   );
 };

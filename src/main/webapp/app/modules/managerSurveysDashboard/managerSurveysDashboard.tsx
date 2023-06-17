@@ -9,6 +9,8 @@ import PublishPopUp from './components/publishPopUp';
 import { Link, useNavigate } from 'react-router-dom';
 import { deleteEntity } from 'app/entities/survey/survey.reducer';
 import { useAppDispatch } from 'app/config/store';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ManagerSurveysDashboard = () => {
   const [groups, setGroups] = useState([]);
@@ -149,8 +151,10 @@ const ManagerSurveysDashboard = () => {
         setRefreshSurveys(true);
         // You can navigate to a different page if needed
         navigate('/manager-surveys-dashboard');
+        toast.success('Survey published successfully');
       } catch (error) {
         console.error('Error updating survey:', error);
+        toast.error('Failed to publish the survey');
       }
     };
 

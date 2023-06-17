@@ -1,6 +1,7 @@
 package com.pwr.students.web.rest;
 
 import com.pwr.students.domain.Survey;
+import com.pwr.students.repository.QuestionRepository;
 import com.pwr.students.repository.SurveyRepository;
 import com.pwr.students.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -13,9 +14,11 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
@@ -35,9 +38,11 @@ public class SurveyResource {
     private String applicationName;
 
     private final SurveyRepository surveyRepository;
+    private final QuestionRepository questionRepository;
 
-    public SurveyResource(SurveyRepository surveyRepository) {
+    public SurveyResource(SurveyRepository surveyRepository, QuestionRepository questionRepository) {
         this.surveyRepository = surveyRepository;
+        this.questionRepository = questionRepository;
     }
 
     /**
@@ -183,10 +188,22 @@ public class SurveyResource {
      * @param id the id of the survey to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
+
     @DeleteMapping("/surveys/{id}")
     public ResponseEntity<Void> deleteSurvey(@PathVariable Long id) {
         log.debug("REST request to delete Survey : {}", id);
-        surveyRepository.deleteById(id);
+
+        // Retrieve the survey
+        Survey survey = surveyRepository
+            .findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Survey not found"));
+
+        // Delete the associated questions
+        questionRepository.deleteAll(survey.getQuestions());
+
+        // Delete the survey
+        surveyRepository.delete(survey);
+
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

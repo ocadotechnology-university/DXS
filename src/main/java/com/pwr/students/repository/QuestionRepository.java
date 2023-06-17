@@ -35,7 +35,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Query("select distinct question from Question question left join fetch question.survey")
     List<Question> findAllWithToOneRelationships();
 
-    @Query("select question from Question question left join fetch question.survey where question.id =:id")
+    @Query("select distinct question from Question question where question.id =:id")
     Optional<Question> findOneWithToOneRelationships(@Param("id") Long id);
 
     @Query("SELECT question FROM Question question WHERE question.survey.id = :surveyId")

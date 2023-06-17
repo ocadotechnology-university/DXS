@@ -22,6 +22,10 @@ const SurveyModification = () => {
     setSurveyDescInput(event.target.value);
   };
 
+  function handleBackButtonClick() {
+    window.history.back();
+  }
+
   const handleSaveButtonClick = async () => {
     const surveyModified = {
       name: surveyNameInput,
@@ -45,7 +49,7 @@ const SurveyModification = () => {
     <div style={{ backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {/* Survey Name */}
       <div style={{ backgroundColor: '#D9D9D9', padding: '20px', borderBottom: '1px solid #D9D9D9', marginBottom: '45px', width: '65%' }}>
-        <h2>{'Survey ' + (surveyData?.name ?? '') + ' modification'}</h2>
+        <h2>{'Survey: ' + (surveyData?.name ?? '')}</h2>
       </div>
 
       <div style={{ width: '65%', borderRadius: '15px', backgroundColor: '#D9D9D9', padding: '20px' }}>
@@ -100,13 +104,13 @@ const SurveyModification = () => {
           <Col>
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
               <button
-                style={{ backgroundColor: 'red', color: 'white', borderRadius: '5px', marginRight: '10px' }}
-                // onClick={handleBackButtonClick}
+                style={{ backgroundColor: '#B85151', color: 'white', borderRadius: '15px', marginRight: '15px', width: '100px' }}
+                onClick={handleBackButtonClick}
               >
                 BACK
               </button>
               <button
-                style={{ backgroundColor: 'gray', color: 'white', borderRadius: '5px' }}
+                style={{ backgroundColor: '#A9A0A0', color: 'white', borderRadius: '15px', width: '100px' }}
                 onClick={() => {
                   void handleSaveButtonClick();
                 }}

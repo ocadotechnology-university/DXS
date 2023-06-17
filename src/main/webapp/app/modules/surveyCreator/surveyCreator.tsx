@@ -32,6 +32,10 @@ const SurveyCreator = () => {
     setSurveyDescInput(event.target.value);
   };
 
+  function handleBackButtonClick() {
+    window.history.back();
+  }
+
   const handleSaveButtonClick = async () => {
     const surveyData = {
       name: surveyNameInput,
@@ -115,18 +119,18 @@ const SurveyCreator = () => {
           <Col>
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
               <button
-                style={{ backgroundColor: 'red', color: 'white', borderRadius: '5px', marginRight: '10px' }}
-                // onClick={handleBackButtonClick}
+                style={{ backgroundColor: '#B85151', color: 'white', borderRadius: '15px', marginRight: '15px', width: '100px' }}
+                onClick={handleBackButtonClick}
               >
-                BACK
+                Cancel
               </button>
               <button
-                style={{ backgroundColor: 'gray', color: 'white', borderRadius: '5px' }}
+                style={{ backgroundColor: '#A9A0A0', color: 'white', borderRadius: '15px', width: '100px' }}
                 onClick={() => {
                   void handleSaveButtonClick();
                 }}
               >
-                SAVE
+                Save
               </button>
             </div>
           </Col>

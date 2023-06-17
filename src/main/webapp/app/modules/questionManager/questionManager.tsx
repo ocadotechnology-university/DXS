@@ -93,12 +93,20 @@ const QuestionManager = () => {
     const dropIndex = event.target.dataset.index;
 
     if (droppedQuestion) {
-      const updatedQuestions = [...questions];
+      const updatedQuestions = [...questions]; // Create a copy of the original array
+      const existingQuestionIndex = updatedQuestions.findIndex(q => q.id === droppedQuestion.id);
+
+      if (existingQuestionIndex !== -1) {
+        // Remove the existing question from its previous position
+        updatedQuestions.splice(existingQuestionIndex, 1);
+      }
+
+      // Insert the dropped question at the drop position
       updatedQuestions.splice(dropIndex, 0, droppedQuestion);
+
       setQuestions(updatedQuestions);
     }
   };
-
   const handleDragOver = event => {
     event.preventDefault();
   };
@@ -123,6 +131,15 @@ const QuestionManager = () => {
 
   const handleModifyQuestion = question => {
     navigate('/questionModification', { state: { question } });
+  };
+
+  const handleSaveButtonClick = () => {
+    navigate('/manager-surveys-dashboard');
+  };
+
+  const handleCancelButtonClick = () => {
+    // broken routes to home, that's why navigating to '/' which is homepage
+    navigate('/');
   };
 
   return (
@@ -223,22 +240,30 @@ const QuestionManager = () => {
           </Col>
         </Row>
         <Row className="my-3">
-          <Col className="d-flex justify-content-center">
-            <Button
-              color="primary"
-              style={{ borderRadius: '25px' }}
+          <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+            <button
+              style={{ backgroundColor: '#B85151', color: 'white', borderRadius: '15px', marginRight: '15px', width: '100px' }}
+              onClick={handleCancelButtonClick}
+            >
+              Cancel
+            </button>
+            <button
+              style={{ backgroundColor: '#bd9d9d', color: 'white', borderRadius: '15px', marginRight: '15px', width: '130px' }}
               onClick={() => {
                 void handleAddQuestion();
               }}
             >
               Add Question
-            </Button>
-          </Col>
-          <Col className="d-flex justify-content-center">
-            <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" style={{ borderRadius: '25px' }}>
-              Create survey
-            </Button>
-          </Col>
+            </button>
+            <button
+              style={{ backgroundColor: '#A9A0A0', color: 'white', borderRadius: '15px', width: '100px' }}
+              onClick={() => {
+                void handleSaveButtonClick();
+              }}
+            >
+              Save
+            </button>
+          </div>
         </Row>
       </div>
       {/* Drag and Drop List of Created Questions */}
@@ -249,7 +274,7 @@ const QuestionManager = () => {
             .filter(question => question.survey?.id === surveyData.id)
             .map((question, index) => (
               <li
-                key={index}
+                key={question.id}
                 draggable
                 onDragStart={event => handleDragStart(event, question)}
                 onDrop={handleDrop}

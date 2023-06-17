@@ -34,6 +34,9 @@ const QuestionModification = () => {
     setIsObligatorySwitch(e.target.checked);
   };
 
+  function handleBackButtonClick() {
+    window.history.back();
+  }
   const handleModifyButtonClick = async () => {
     const modifiedQuestion = {
       questionContent: selectedQuestion,
@@ -107,9 +110,8 @@ const QuestionModification = () => {
                 }}
               >
                 <option value="">Select an answer type</option>
-                <option value="text">Text</option>
-                <option value="number">Number</option>
-                <option value="select">Select</option>
+                <option value="TEXT">Text</option>
+                <option value="SLIDER">Slider</option>
               </ValidatedField>
             </ValidatedForm>
           </Col>
@@ -159,15 +161,15 @@ const QuestionModification = () => {
           <Col>
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
               <button
-                style={{ backgroundColor: 'red', color: 'white', borderRadius: '5px', marginRight: '10px' }}
-                // onClick={handleBackButtonClick}
+                style={{ backgroundColor: '#B85151', color: 'white', borderRadius: '15px', marginRight: '15px', width: '190px' }}
+                onClick={handleBackButtonClick}
               >
-                BACK
+                Back to questions list
               </button>
               <button
-                style={{ backgroundColor: 'gray', color: 'white', borderRadius: '5px' }}
+                style={{ backgroundColor: '#A9A0A0', color: 'white', borderRadius: '15px', width: '100px' }}
                 onClick={() => {
-                  void handleModifyButtonClick;
+                  void handleModifyButtonClick();
                 }}
               >
                 Modify

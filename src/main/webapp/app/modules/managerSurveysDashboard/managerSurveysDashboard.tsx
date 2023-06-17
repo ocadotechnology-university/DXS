@@ -11,6 +11,7 @@ import { deleteEntity } from 'app/entities/survey/survey.reducer';
 import { useAppDispatch } from 'app/config/store';
 
 const ManagerSurveysDashboard = () => {
+  const [groups, setGroups] = useState([]);
   const [surveys, setSurveys] = useState([]);
   const [refreshSurveys, setRefreshSurveys] = useState(false);
 
@@ -29,6 +30,15 @@ const ManagerSurveysDashboard = () => {
       .finally(() => {
         // Reset the refresh status
         setRefreshSurveys(false);
+      });
+    axios
+      .get('/api/groups')
+      .then(response => {
+        // Update the groups state with the fetched data
+        setGroups(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching group data:', error);
       });
   }, [refreshSurveys]);
 
@@ -99,13 +109,49 @@ const ManagerSurveysDashboard = () => {
 
     const surveyPath = `/survey/${survey.id}`;
     const [showPopup, setShowPopup] = useState(false);
+    const navigate = useNavigate();
 
     const handleCancel = () => {
       setShowPopup(false);
     };
 
-    const handlePublish = () => {
-      // TODO publish survey
+    const handlePublish = async (deadline, targetGroup) => {
+      try {
+        const updatedFields = {
+          id: survey.id, // Include the survey ID
+          status: 'Published',
+          deadline: deadline,
+        };
+
+        // Make the API request to update the specific fields of the survey
+        await axios.patch(`/api/surveys/${survey.id}`, updatedFields);
+
+        // Find the group ID based on the targetGroup value
+        const selectedGroup = groups.find(group => group.name === targetGroup);
+
+        // Create a new record in the survey_target_groups table
+        const groupResponse = await axios.post('/api/survey-target-groups', {
+          survey: {
+            id: survey.id,
+            name: survey.name,
+            description: survey.description,
+            deadline: survey.deadline,
+            // Include other survey properties if needed
+          },
+          group: {
+            id: selectedGroup.id,
+            name: selectedGroup.name,
+            // Include other group properties if needed
+          },
+        });
+
+        setShowPopup(false);
+        setRefreshSurveys(true);
+        // You can navigate to a different page if needed
+        navigate('/manager-surveys-dashboard');
+      } catch (error) {
+        console.error('Error updating survey:', error);
+      }
     };
 
     return (
@@ -140,13 +186,7 @@ const ManagerSurveysDashboard = () => {
             <p className={'wrap-text'}>{survey.name}</p>
           </div>
         </Link>
-        {showPopup && (
-          <PublishPopUp
-            surveyName={survey.name}
-            onCancel={handleCancel}
-            onPublish={handlePublish}
-          />
-        )}
+        {showPopup && <PublishPopUp surveyName={survey.name} onCancel={handleCancel} onPublish={handlePublish} />}
         {/* Render other survey details as needed */}
 
         <Modal show={showDeleteModal} onHide={handleDeleteCancel} centered backdropClassName="custom-backdrop">

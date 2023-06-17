@@ -1,37 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
+
+type Group = {
+  id: number;
+  name: string;
+};
 
 type PublishPopupProps = {
   surveyName: string;
   onCancel: () => void;
-  onPublish: (duration: string, targetGroup: string) => void;
+  onPublish: (deadline: string, targetGroup: string) => void;
 };
 
 const PublishPopUp: React.FC<PublishPopupProps> = ({ surveyName, onCancel, onPublish }) => {
-  const [surveyStart, setSurveyStart] = useState('');
-  const [surveyDuration, setSurveyDuration] = useState('');
+  const [deadline, setDeadline] = useState('');
   const [targetGroup, setTargetGroup] = useState('');
+  const [groupOptions, setGroupOptions] = useState<Group[]>([]);
   const [showNotification, setShowNotification] = useState(false);
 
-  const handleSurveyStartChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSurveyStart(event.target.value);
+  useEffect(() => {
+    fetchGroupOptions(); // Fetch group names when component mounts
+  }, []);
+
+  const fetchGroupOptions = async () => {
+    try {
+      const response = await fetch('/api/groups'); // Replace with your actual API endpoint
+      const groups: Group[] = await response.json();
+      setGroupOptions(groups);
+    } catch (error) {
+      console.error('Error fetching group options:', error);
+    }
   };
 
-  const handleDurationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSurveyDuration(event.target.value);
+  const handleDeadlineChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDeadline(event.target.value);
   };
 
-  const handleTargetGroupChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTargetGroupChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setTargetGroup(event.target.value);
   };
 
   const handlePublish = () => {
-    onPublish(surveyDuration, targetGroup);
+    onPublish(deadline, targetGroup);
     setShowNotification(true);
 
     setTimeout(() => {
       setShowNotification(false);
-    }, 3000); // Ukryj notyfikację po 3 sekundach (3000 ms)
+    }, 3000); // Hide notification after 3 seconds (3000 ms)
   };
 
   const handleCancel = () => {
@@ -40,7 +55,7 @@ const PublishPopUp: React.FC<PublishPopupProps> = ({ surveyName, onCancel, onPub
   };
 
   return (
-    <Modal show={true} onHide={handleCancel}>
+    <Modal show={true} onHide={handleCancel} dialogClassName="modal-lg">
       <Modal.Header closeButton>
         <Modal.Title>Publish Survey</Modal.Title>
       </Modal.Header>
@@ -51,15 +66,24 @@ const PublishPopUp: React.FC<PublishPopupProps> = ({ surveyName, onCancel, onPub
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <div style={{ marginRight: '1rem' }}>
             <label htmlFor="targetGroup">Target group:</label>
-            <input type="text" id="targetGroup" className="form-control" value={targetGroup} onChange={handleTargetGroupChange} />
-          </div>
-          <div style={{ marginRight: '1rem' }}>
-            <label htmlFor="surveyStart">Survey start:</label>
-            <input type="date" id="surveyStart" className="form-control" value={surveyStart} onChange={handleSurveyStartChange} />
+            <select
+              id="targetGroup"
+              className="form-control"
+              value={targetGroup}
+              onChange={handleTargetGroupChange}
+              style={{ width: '100%' }}
+            >
+              <option value="">Select a group</option>
+              {groupOptions.map(group => (
+                <option key={group.id} value={group.name}>
+                  {group.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
-            <label htmlFor="surveyDuration">Survey duration:</label>
-            <input type="date" id="surveyDuration" className="form-control" value={surveyDuration} onChange={handleDurationChange} />
+            <label htmlFor="deadline">Deadline:</label>
+            <input type="date" id="deadline" className="form-control" value={deadline} onChange={handleDeadlineChange} />
           </div>
         </div>
       </Modal.Body>
@@ -71,11 +95,7 @@ const PublishPopUp: React.FC<PublishPopupProps> = ({ surveyName, onCancel, onPub
           Publish
         </Button>
       </Modal.Footer>
-      {showNotification && (
-        <div className="notification">
-          Survey &quot;{surveyName}&quot; published successfully!
-        </div>
-      )}
+      {showNotification && <div className="notification">Survey &quot;{surveyName}&quot; published successfully!</div>}
     </Modal>
   );
 };

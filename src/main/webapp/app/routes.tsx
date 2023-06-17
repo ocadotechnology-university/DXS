@@ -15,9 +15,12 @@ import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 import PageNotFound from 'app/shared/error/page-not-found';
 import { AUTHORITIES } from 'app/config/constants';
 import SurveyCreator from 'app/modules/surveyCreator/surveyCreator';
+import QuestionManager from 'app/modules/questionManager/questionManager';
 import UserSurveysDashboard from 'app/modules/userSurveysDashboard/userSurveysDashboard';
 import ManagerSurveysDashboard from 'app/modules/managerSurveysDashboard/managerSurveysDashboard';
 import SurveyStatusView from 'app/modules/SurveyStatusView/SurveyStatusView';
+import QuestionModification from 'app/modules/questionModification/questionModification';
+import SurveyModification from 'app/modules/surveyModification/surveyModification';
 
 const loading = <div>loading ...</div>;
 
@@ -43,6 +46,30 @@ const AppRoutes = () => {
           element={
             <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
               <SurveyCreator />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="questionManager"
+          element={
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
+              <QuestionManager />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="questionModification"
+          element={
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
+              <QuestionModification />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="survey-modification"
+          element={
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
+              <SurveyModification />
             </PrivateRoute>
           }
         />

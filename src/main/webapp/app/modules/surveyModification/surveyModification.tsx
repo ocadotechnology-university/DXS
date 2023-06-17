@@ -1,28 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { createEntity as createSurveyEntity } from 'app/entities/survey/survey.reducer';
+import React, { useState } from 'react';
+import { partialUpdateEntity as updateSurveyEntity } from 'app/entities/survey/survey.reducer';
 import { Col, Label, Row } from 'reactstrap';
 import { ValidatedField, ValidatedForm } from 'react-jhipster';
-import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getSession } from 'app/shared/reducers/authentication';
-import { reset } from 'app/modules/account/settings/settings.reducer';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from 'app/config/store';
 
-const SurveyCreator = () => {
+const SurveyModification = () => {
   const dispatch = useAppDispatch();
+  const location = useLocation();
   const navigate = useNavigate();
+  const surveyData = location.state?.survey;
 
-  const user = useAppSelector(state => state.authentication.account);
-
-  // Fetch the user information during component initialization
-  useEffect(() => {
-    dispatch(getSession());
-    return () => {
-      dispatch(reset());
-    };
-  }, []);
-
-  const [surveyNameInput, setSurveyNameInput] = useState('');
-  const [surveyDescInput, setSurveyDescInput] = useState('');
+  const [surveyNameInput, setSurveyNameInput] = useState(surveyData?.name ?? '');
+  const [surveyDescInput, setSurveyDescInput] = useState(surveyData?.description ?? '');
 
   const handleSurveyNameInputChange = event => {
     setSurveyNameInput(event.target.value);
@@ -33,41 +23,35 @@ const SurveyCreator = () => {
   };
 
   const handleSaveButtonClick = async () => {
-    const surveyData = {
+    const surveyModified = {
       name: surveyNameInput,
       description: surveyDescInput,
-      status: 'DRAFT',
-      user,
+      id: surveyData.id,
     };
 
-    const createSurveyAction = createSurveyEntity(surveyData);
-    const createSurveyResult = await dispatch(createSurveyAction);
+    const updateSurveyAction = updateSurveyEntity(surveyModified);
+    const createSurveyResult = await dispatch(updateSurveyAction);
 
     if (createSurveyResult.payload) {
-      // Survey creation successful
-      // @ts-ignore
-      navigate('/questionManager', { state: { surveyData: createSurveyResult.payload.data } });
+      // Survey modification successful
+      navigate('/manager-surveys-dashboard');
     } else {
-      // Handle error during survey creation
-      console.error('Error creating survey');
+      // Handle error during survey modification
+      console.error('Error modifying survey');
     }
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: '#F5F5F5',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: '1.5rem',
-        height: '100%',
-      }}
-    >
-      <div style={{ width: '75%', borderRadius: '15px', backgroundColor: '#D9D9D9', padding: '20px' }}>
+    <div style={{ backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      {/* Survey Name */}
+      <div style={{ backgroundColor: '#D9D9D9', padding: '20px', borderBottom: '1px solid #D9D9D9', marginBottom: '45px', width: '65%' }}>
+        <h2>{'Survey ' + (surveyData?.name ?? '') + ' modification'}</h2>
+      </div>
+
+      <div style={{ width: '65%', borderRadius: '15px', backgroundColor: '#D9D9D9', padding: '20px' }}>
         <Row>
           <Col>
-            <h2 style={{ textAlign: 'center' }}>Create a new Survey</h2>
+            <h2 style={{ textAlign: 'center' }}>Modify a survey</h2>
           </Col>
         </Row>
         <Row className="my-3">
@@ -132,4 +116,4 @@ const SurveyCreator = () => {
   );
 };
 
-export default SurveyCreator;
+export default SurveyModification;

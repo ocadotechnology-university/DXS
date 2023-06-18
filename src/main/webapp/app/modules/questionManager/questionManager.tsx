@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { createEntity as createQuestionEntity, deleteEntity as deleteQuestionEntity } from 'app/entities/question/question.reducer';
+import {
+  createEntity as createQuestionEntity,
+  deleteEntity as deleteQuestionEntity,
+  partialUpdateEntityWithoutToast,
+} from 'app/entities/question/question.reducer';
 import { Col, FormGroup, Label, Row } from 'reactstrap';
 import { ValidatedField, ValidatedForm } from 'react-jhipster';
 import { FaPen, FaTrash } from 'react-icons/fa';
@@ -9,6 +13,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from 'app/config/store';
 import { Button, Modal } from 'react-bootstrap';
 import { partialUpdateEntity } from 'app/entities/question/question.reducer';
+import { toast } from 'react-toastify';
 
 const QuestionManager = () => {
   const dispatch = useAppDispatch();
@@ -122,7 +127,9 @@ const QuestionManager = () => {
       setQuestions(updatedQuestionsWithOrder);
 
       // Dispatch the partialUpdateEntity action for each question with its updated order
-      const updateOrderPromises = updatedQuestionsWithOrder.map(q => dispatch(partialUpdateEntity({ ...q, id: q.id })));
+      const updateOrderPromises = updatedQuestionsWithOrder.map(
+        q => dispatch(partialUpdateEntityWithoutToast({ ...q, id: q.id })) // Dispatch the action without displaying toast notifications
+      );
 
       Promise.all(updateOrderPromises)
         .then(() => {

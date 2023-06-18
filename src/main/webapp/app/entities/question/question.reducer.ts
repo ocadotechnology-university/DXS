@@ -62,6 +62,26 @@ export const partialUpdateEntity = createAsyncThunk(
   { serializeError: serializeAxiosError }
 );
 
+export const partialUpdateEntityWithoutToast = createAsyncThunk('question/partial_update_entity', async (entity: IQuestion, thunkAPI) => {
+  try {
+    // Perform the patch request without using axios shortcut methods
+    const response = await axios({
+      method: 'patch',
+      url: `${apiUrl}/${entity.id}`,
+      data: cleanEntity(entity),
+    });
+
+    // Dispatch the getEntities action to fetch updated data
+    thunkAPI.dispatch(getEntities({}));
+
+    return response.data;
+  } catch (error) {
+    // Handle any error that occurred during the patch request
+    const serializedError = serializeAxiosError(error);
+    throw serializedError;
+  }
+});
+
 export const deleteEntity = createAsyncThunk(
   'question/delete_entity',
   async (id: string | number, thunkAPI) => {

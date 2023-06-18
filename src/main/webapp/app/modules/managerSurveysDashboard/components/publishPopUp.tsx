@@ -9,12 +9,13 @@ type Group = {
 type PublishPopupProps = {
   surveyName: string;
   onCancel: () => void;
-  onPublish: (deadline: string, targetGroup: string) => Promise<void>;
+  onPublish: (deadline: string, targetGroup: string[]) => Promise<void>;
 };
 
 const PublishPopUp: React.FC<PublishPopupProps> = ({ surveyName, onCancel, onPublish }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [targetGroups, setTargetGroups] = useState<number[]>([]);
   const [deadline, setDeadline] = useState('');
-  const [targetGroup, setTargetGroup] = useState('');
   const [groupOptions, setGroupOptions] = useState<Group[]>([]);
   const [showNotification, setShowNotification] = useState(false);
 
@@ -36,12 +37,18 @@ const PublishPopUp: React.FC<PublishPopupProps> = ({ surveyName, onCancel, onPub
     setDeadline(event.target.value);
   };
 
-  const handleTargetGroupChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setTargetGroup(event.target.value);
+  const handleTargetGroupChange = event => {
+    const { value, checked } = event.target;
+    if (checked) {
+      setTargetGroups(prevGroups => [...prevGroups, parseInt(value, 10)]);
+    } else {
+      setTargetGroups(prevGroups => prevGroups.filter(group => group !== parseInt(value, 10)));
+    }
   };
 
   const handlePublish = () => {
-    onPublish(deadline, targetGroup);
+    const targetGroupStrings = targetGroups.map(group => String(group));
+    onPublish(deadline, targetGroupStrings);
     setShowNotification(true);
 
     setTimeout(() => {
@@ -64,22 +71,33 @@ const PublishPopUp: React.FC<PublishPopupProps> = ({ surveyName, onCancel, onPub
           <p>Survey name: {surveyName}</p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <div style={{ marginRight: '1rem' }}>
-            <label htmlFor="targetGroup">Target group:</label>
-            <select
-              id="targetGroup"
-              className="form-control"
-              value={targetGroup}
-              onChange={handleTargetGroupChange}
-              style={{ width: '100%' }}
-            >
-              <option value="">Select a group</option>
-              {groupOptions.map(group => (
-                <option key={group.id} value={group.name}>
-                  {group.name}
-                </option>
-              ))}
-            </select>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <label htmlFor="targetGroup" style={{ marginBottom: '0.5rem' }}>
+              Target group:
+            </label>
+            <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+              {groupOptions
+                .filter(group => group.name.toLowerCase().includes(searchTerm.toLowerCase()))
+                .map(group => (
+                  <div key={group.id}>
+                    <input
+                      type="checkbox"
+                      id={`targetGroup_${group.id}`}
+                      value={group.id}
+                      checked={targetGroups.includes(group.id)}
+                      onChange={handleTargetGroupChange}
+                    />
+                    <label htmlFor={`targetGroup_${group.id}`}>{group.name}</label>
+                  </div>
+                ))}
+            </div>
+            <input
+              type="text"
+              placeholder="Search group"
+              value={searchTerm}
+              onChange={event => setSearchTerm(event.target.value)}
+              style={{ marginTop: '0.5rem' }}
+            />
           </div>
           <div>
             <label htmlFor="deadline">Deadline:</label>

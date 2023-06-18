@@ -117,35 +117,51 @@ const ManagerSurveysDashboard = () => {
       setShowPopup(false);
     };
 
-    const handlePublish = async (deadline, targetGroup) => {
+    const handlePublish = async (deadline: string, targetGroups: string[]) => {
       try {
+        // eslint-disable-next-line no-console
+        console.log('survey:', survey); // Check the value of survey
+        // eslint-disable-next-line no-console
+        console.log('targetGroups:', targetGroups); // Check the value of targetGroups
+
         const updatedFields = {
           id: survey.id, // Include the survey ID
           status: 'Published',
           deadline,
         };
 
+        // eslint-disable-next-line no-console
+        console.log('updatedFields:', updatedFields); // Check the value of updatedFields
+
         // Make the API request to update the specific fields of the survey
         await axios.patch(`/api/surveys/${survey.id}`, updatedFields);
 
-        // Find the group ID based on the targetGroup value
-        const selectedGroup = groups.find(group => group.name === targetGroup);
+        // Create a new record in the survey_target_groups table for each selected group
+        const createGroupPromises = targetGroups.map(async targetGroup => {
+          // eslint-disable-next-line no-console
+          console.log('targetGroup:', targetGroup); // Check the value of targetGroup
+          const selectedGroup = groups.find(group => group.id === parseInt(targetGroup, 10));
+          // eslint-disable-next-line no-console
+          console.log('selectedGroup:', selectedGroup); // Check the value of selectedGroup
 
-        // Create a new record in the survey_target_groups table
-        const groupResponse = await axios.post('/api/survey-target-groups', {
-          survey: {
-            id: survey.id,
-            name: survey.name,
-            description: survey.description,
-            deadline: survey.deadline,
-            // Include other survey properties if needed
-          },
-          group: {
-            id: selectedGroup.id,
-            name: selectedGroup.name,
-            // Include other group properties if needed
-          },
+          await axios.post('/api/survey-target-groups', {
+            survey: {
+              id: survey.id,
+              name: survey.name,
+              description: survey.description,
+              deadline: survey.deadline,
+              // Include other survey properties if needed
+            },
+            group: {
+              id: selectedGroup.id,
+              name: selectedGroup.name,
+              // Include other group properties if needed
+            },
+          });
         });
+
+        // Wait for all the group creation requests to complete
+        await Promise.all(createGroupPromises);
 
         setShowPopup(false);
         setRefreshSurveys(true);

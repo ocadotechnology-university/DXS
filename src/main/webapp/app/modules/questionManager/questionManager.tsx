@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   createEntity as createQuestionEntity,
   deleteEntity as deleteQuestionEntity,
+  partialUpdateEntity,
   partialUpdateEntityWithoutToast,
 } from 'app/entities/question/question.reducer';
 import { Col, FormGroup, Label, Row } from 'reactstrap';
@@ -12,8 +13,6 @@ import Switch from '@mui/material/Switch';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from 'app/config/store';
 import { Button, Modal } from 'react-bootstrap';
-import { partialUpdateEntity } from 'app/entities/question/question.reducer';
-import { toast } from 'react-toastify';
 
 const QuestionManager = () => {
   const dispatch = useAppDispatch();
@@ -348,7 +347,7 @@ const QuestionManager = () => {
       </div>
       {/* Drag and Drop List of Created Questions */}
       <div style={{ backgroundColor: '#D9D9D9', padding: '20px', borderTop: '1px solid #D9D9D9', width: '65%' }}>
-        <ul>
+        <ul style={{ margin: 0, padding: 0 }}>
           {questions
             .filter(question => question.survey?.id === surveyData.id)
             .map((question, index) => (
@@ -364,10 +363,17 @@ const QuestionManager = () => {
                   backgroundColor: index % 2 === 0 ? '#ECECEC' : '#F5F5F5',
                   display: 'flex',
                   justifyContent: 'space-between',
+                  minHeight: '65px',
+                  height: 'auto',
+                  alignItems: 'center',
+                  padding: '10px',
                 }}
               >
                 <div style={{ flex: '0 0 10%' }}>{question.order}</div>
-                <div style={{ flex: '0 0 30%' }}>{question.questionContent}</div>
+                <div style={{ flex: '0 0 30%', wordBreak: 'break-all' }}>
+                  {question.questionContent}
+                  {question.isRequired && <span style={{ color: 'red' }}>*</span>}
+                </div>
                 <div style={{ flex: '0 0 20%' }}>{question.category}</div>
                 <div style={{ flex: '0 0 20%' }}>{question.answerType}</div>
                 <div style={{ flex: '0 0 10%' }}>

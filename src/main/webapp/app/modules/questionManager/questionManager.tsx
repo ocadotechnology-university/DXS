@@ -8,6 +8,7 @@ import Switch from '@mui/material/Switch';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from 'app/config/store';
 import { Button, Modal } from 'react-bootstrap';
+import { partialUpdateEntity } from 'app/entities/question/question.reducer';
 
 const QuestionManager = () => {
   const dispatch = useAppDispatch();
@@ -20,6 +21,7 @@ const QuestionManager = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedAnswerType, setSelectedAnswerType] = useState('');
   const [isObligatorySwitch, setIsObligatorySwitch] = useState(false);
+  const [order, setOrder] = useState(1);
 
   useEffect(() => {
     (async () => {
@@ -51,34 +53,38 @@ const QuestionManager = () => {
   const handleAnswerTypeChange = event => {
     setSelectedAnswerType(event.target.value);
   };
-
   const handleAddQuestion = async () => {
     if (selectedQuestion) {
       let newQuestion = {
         questionContent: selectedQuestion,
         category: selectedCategory,
         answerType: selectedAnswerType,
-        isRequired: isObligatorySwitch, // Include the isRequired property
+        isRequired: isObligatorySwitch,
         survey: surveyData,
+        order,
       };
 
-      const createQuestionAction = createQuestionEntity(newQuestion);
-      const getQuestionData = await dispatch(createQuestionAction);
+      try {
+        const createQuestionAction = createQuestionEntity(newQuestion);
+        const getQuestionData = await dispatch(createQuestionAction);
 
-      newQuestion = {
-        questionContent: selectedQuestion,
-        category: selectedCategory,
-        // @ts-expect-error not good practice but works for now
-        id: getQuestionData.payload.data.id,
-        answerType: selectedAnswerType,
-        isRequired: isObligatorySwitch, // Include the isRequired property
-        survey: surveyData,
-      };
+        newQuestion = {
+          ...newQuestion,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          id: getQuestionData.payload.data.id,
+        };
 
-      setQuestions([...questions, newQuestion]);
-      setSelectedQuestion('');
-      setSelectedCategory('');
-      setSelectedAnswerType('');
+        setQuestions([...questions, newQuestion]);
+        setSelectedQuestion('');
+        setSelectedCategory('');
+        setSelectedAnswerType('');
+
+        // Increment the order for the next question
+        setOrder(prevOrder => prevOrder + 1);
+      } catch (error) {
+        console.error('Error creating question:', error);
+      }
     }
   };
 
@@ -90,8 +96,9 @@ const QuestionManager = () => {
   const handleDrop = event => {
     event.preventDefault();
     const droppedQuestion = JSON.parse(event.dataTransfer.getData('question'));
-    const dropIndex = event.target.dataset.index;
-
+    const dropIndex = event.currentTarget.dataset.index;
+    // eslint-disable-next-line no-console
+    console.log('dropIndex:' + dropIndex);
     if (droppedQuestion) {
       const updatedQuestions = [...questions]; // Create a copy of the original array
       const existingQuestionIndex = updatedQuestions.findIndex(q => q.id === droppedQuestion.id);
@@ -104,24 +111,69 @@ const QuestionManager = () => {
       // Insert the dropped question at the drop position
       updatedQuestions.splice(dropIndex, 0, droppedQuestion);
 
-      setQuestions(updatedQuestions);
+      // Update the order values based on the updated array
+      const updatedQuestionsWithOrder = updatedQuestions
+        .filter(q => q.survey?.id === surveyData.id)
+        .map((q, index) => ({
+          ...q,
+          order: index + 1, // Set the order based on the index (+1 to start from 1)
+        }));
+
+      setQuestions(updatedQuestionsWithOrder);
+
+      // Dispatch the partialUpdateEntity action for each question with its updated order
+      const updateOrderPromises = updatedQuestionsWithOrder.map(q => dispatch(partialUpdateEntity({ ...q, id: q.id })));
+
+      Promise.all(updateOrderPromises)
+        .then(() => {
+          // eslint-disable-next-line no-console
+          console.log('Order values updated successfully');
+        })
+        .catch(error => {
+          console.error('Error updating order values:', error);
+        });
     }
   };
   const handleDragOver = event => {
     event.preventDefault();
   };
-
   const handleDeleteQuestion = question => {
     const deleteQuestionAction = deleteQuestionEntity(question.id);
     dispatch(deleteQuestionAction);
 
-    const updatedQuestions = questions.filter(q => q !== question);
+    const updatedQuestions = questions
+      .filter(q => q !== question && q.survey?.id === surveyData.id)
+      .map(q => {
+        if (q.order > question.order) {
+          // Decrease the order value for questions with order greater than the deleted one
+          return {
+            ...q,
+            order: q.order - 1,
+          };
+        }
+        return q;
+      });
     setQuestions(updatedQuestions);
     setShowDeleteModal(false);
+    setOrder(prevOrder => prevOrder - 1);
+
+    return Promise.all(
+      updatedQuestions
+        .filter(q => q !== question && q.survey?.id === surveyData.id)
+        .map(q => dispatch(partialUpdateEntity({ ...q, id: q.id }))) // Use the partialUpdateEntity action
+    )
+      .then(() => {
+        // eslint-disable-next-line no-console
+        console.log('Order values updated successfully');
+      })
+      .catch(error => {
+        console.error('Error updating order values:', error);
+      });
   };
 
   const handleDeleteClick = question => {
     setSelectedQuestion(question);
+    setSelectedCategory(question.order);
     setShowDeleteModal(true);
   };
 
@@ -266,9 +318,29 @@ const QuestionManager = () => {
           </div>
         </Row>
       </div>
+      {/* Created Questions */}
+      <div style={{ backgroundColor: '#D9D9D9', padding: '20px', borderTop: '1px solid #D9D9D9', width: '65%' }}>
+        <h3 style={{ textAlign: 'center', marginBottom: '20px', width: '100%' }}>Created Questions</h3>
+      </div>
+      {/* Static Columns */}
+      <div
+        style={{
+          backgroundColor: '#D9D9D9',
+          padding: '10px',
+          width: '65%',
+          marginBottom: '10px',
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
+        <div style={{ flex: '0 0 10%' }}>Order</div>
+        <div style={{ flex: '0 0 30%' }}>Question</div>
+        <div style={{ flex: '0 0 20%' }}>Category</div>
+        <div style={{ flex: '0 0 20%' }}>Answer Type</div>
+        <div style={{ flex: '0 0 10%' }}>Actions</div>
+      </div>
       {/* Drag and Drop List of Created Questions */}
       <div style={{ backgroundColor: '#D9D9D9', padding: '20px', borderTop: '1px solid #D9D9D9', width: '65%' }}>
-        <h3 style={{ textAlign: 'center', marginBottom: '20px' }}>Created Questions</h3>
         <ul>
           {questions
             .filter(question => question.survey?.id === surveyData.id)
@@ -287,16 +359,11 @@ const QuestionManager = () => {
                   justifyContent: 'space-between',
                 }}
               >
-                <div>
-                  <strong>Question:</strong> {question.questionContent}
-                </div>
-                <div>
-                  <strong>Category:</strong> {question.category}
-                </div>
-                <div>
-                  <strong>Answer Type:</strong> {question.answerType}
-                </div>
-                <div>
+                <div style={{ flex: '0 0 10%' }}>{question.order}</div>
+                <div style={{ flex: '0 0 30%' }}>{question.questionContent}</div>
+                <div style={{ flex: '0 0 20%' }}>{question.category}</div>
+                <div style={{ flex: '0 0 20%' }}>{question.answerType}</div>
+                <div style={{ flex: '0 0 10%' }}>
                   <FaTrash onClick={() => handleDeleteClick(question)} style={{ cursor: 'pointer' }} />
                   <FaPen onClick={() => handleModifyQuestion(question)} style={{ cursor: 'pointer' }} />
                 </div>
@@ -308,12 +375,14 @@ const QuestionManager = () => {
                     <Modal.Title>Delete Question</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <p className={'wrap-text'}>Are you sure you want to delete a question {question.id}?</p>
+                    {/* eslint-disable-next-line react/no-unescaped-entities */}
+                    <p className="wrap-text">Are you sure you want to delete question {selectedCategory}?</p>
                   </Modal.Body>
                   <Modal.Footer>
                     <Button variant="secondary" onClick={handleDeleteCancel}>
                       Cancel
                     </Button>
+                    {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
                     <Button variant="danger" onClick={() => handleDeleteQuestion(selectedQuestion)}>
                       Delete
                     </Button>

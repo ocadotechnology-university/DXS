@@ -10,15 +10,14 @@ const SurveyInfo = ({ surveyTitle, surveyDueDate, surveyDescription }) => {
       <h2 className="survey-title">{surveyTitle}</h2>
       <p className="survey-due">Survey due to: {surveyDueDate}</p>
       <hr className="divider" />
-      <p className="survey-description">{surveyDescription}</p>
+      <p className="survey-description">Description: {surveyDescription}</p>
     </div>
   );
 };
-
 const SurveyTable = ({ columns, data }) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
     columns,
-    data: data.users || [],
+    data,
   });
 
   return (
@@ -42,7 +41,7 @@ const SurveyTable = ({ columns, data }) => {
               <tr key={row.id} {...row.getRowProps()}>
                 {row.cells.map(cell => (
                   <td key={cell.id} {...cell.getCellProps()}>
-                    {cell.column.id === 'name' ? <Link to="/SurveyHistory">{cell.render('Cell')}</Link> : cell.render('Cell')}
+                    {cell.column.id === 'user' ? <Link to={`/user/${cell.value.id}`}>{cell.value.name}</Link> : cell.render('Cell')}
                   </td>
                 ))}
               </tr>
@@ -61,6 +60,7 @@ const SurveyStatusView = () => {
   const [surveyDueDate, setSurveyDueDate] = useState('');
   const [surveyData, setSurveyData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [surveyAssignments, setSurveyAssignments] = useState([]);
 
   useEffect(() => {
     setLoading(true);
@@ -71,7 +71,7 @@ const SurveyStatusView = () => {
         const surveyDataResponse = response.data;
         setSurveyTitle(surveyDataResponse.title);
         setSurveyDescription(surveyDataResponse.description);
-        setSurveyDueDate(surveyDataResponse.dueDate);
+        setSurveyDueDate(surveyDataResponse.deadline);
         setSurveyData(surveyDataResponse);
         setLoading(false);
       })
@@ -79,16 +79,26 @@ const SurveyStatusView = () => {
         console.error('Error fetching survey data:', error);
         setLoading(false);
       });
+    axios
+      .get(`/api/survey-assignments?surveyId=${surveyId}`) // Replace '/api/survey-assignments' with the appropriate endpoint URL
+      .then(response => {
+        // Update the surveyAssignments state with the fetched data
+        setSurveyAssignments(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching survey assignment data:', error);
+      });
   }, [surveyId]);
 
   const columns = [
     {
       Header: 'User',
-      accessor: 'name',
+      accessor: 'user.login',
     },
     {
       Header: 'Completion Status',
-      accessor: 'status',
+      accessor: 'is_finished',
+      Cell: ({ value }) => (value ? 'Finished' : 'Incomplete'), // Add this line
     },
   ];
 
@@ -101,9 +111,11 @@ const SurveyStatusView = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <SurveyInfo surveyTitle={surveyTitle} surveyDueDate={surveyDueDate} surveyDescription={surveyDescription} />
+        <>
+          <SurveyInfo surveyTitle={surveyTitle} surveyDueDate={surveyDueDate} surveyDescription={surveyDescription} />
+          <SurveyTable columns={columns} data={surveyAssignments} />
+        </>
       )}
-      <SurveyTable columns={columns} data={surveyData} />
     </div>
   );
 };

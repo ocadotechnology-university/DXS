@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button, Dropdown, Modal } from 'react-bootstrap';
 import './managerSurveysDashboard.css';
-import { BsThreeDots, BsGear } from 'react-icons/bs';
+import { BsGear, BsThreeDots } from 'react-icons/bs';
 import { FiSend, FiTrash2 } from 'react-icons/fi';
 import { GrStatusInfo } from 'react-icons/gr';
 import PublishPopUp from './components/publishPopUp';
@@ -92,6 +92,7 @@ const ManagerSurveysDashboard = () => {
   function SurveyBox({ survey }) {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const handleDeleteClick = () => {
       setShowDeleteModal(true);
@@ -111,7 +112,6 @@ const ManagerSurveysDashboard = () => {
 
     const surveyPath = `/survey/${survey.id}`;
     const [showPopup, setShowPopup] = useState(false);
-    const navigate = useNavigate();
 
     const handleCancel = () => {
       setShowPopup(false);
@@ -216,6 +216,10 @@ const ManagerSurveysDashboard = () => {
       }
     };
 
+    const handleModifySurvey = () => {
+      navigate('/survey-modification', { state: { survey } });
+    };
+
     return (
       <div className={'survey'}>
         <div className={'survey-inside'}></div>
@@ -229,7 +233,7 @@ const ManagerSurveysDashboard = () => {
               <FiSend className={'icon'} />
               Publish
             </Dropdown.Item>
-            <Dropdown.Item>
+            <Dropdown.Item onClick={handleModifySurvey}>
               <BsGear className={'icon'} />
               Modify
             </Dropdown.Item>

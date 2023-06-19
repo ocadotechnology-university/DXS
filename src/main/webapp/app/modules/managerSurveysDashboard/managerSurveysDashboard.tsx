@@ -162,6 +162,48 @@ const ManagerSurveysDashboard = () => {
 
         // Wait for all the group creation requests to complete
         await Promise.all(createGroupPromises);
+        // Retrieve all users from the selected target groups
+        const getUsersPromises = targetGroups.map(async targetGroup => {
+          const response = await axios.get(`/api/group-assigments?groupId=${targetGroup}`);
+          const groupAssignments = response.data;
+          return groupAssignments.map(groupAssignment => groupAssignment.user);
+        });
+
+        // Wait for all the getUsersPromises to complete and flatten the array
+        const users = (await Promise.all(getUsersPromises))
+          .flat()
+          .filter((user, index, self) => user && self.findIndex(u => u.id === user.id) === index);
+        // eslint-disable-next-line no-console,@typescript-eslint/require-await
+        // Create survey assignments for each unique user
+        const createdUserIds = new Set(); // Track the user IDs for whom survey assignments have been created
+        // eslint-disable-next-line no-console
+        console.log('users table:' + users);
+        const createAssignmentPromises = users.map(async user => {
+          // eslint-disable-next-line no-console
+          console.log('userid in if:' + user.id);
+          if (!createdUserIds.has(user.id)) {
+            await axios.post('/api/survey-assigments', {
+              survey: {
+                id: survey.id,
+                name: survey.name,
+                description: survey.description,
+                deadline: survey.deadline,
+                // Include other survey properties if needed
+              },
+              user: {
+                id: user.id,
+                name: user.name,
+                // Include other user properties if needed
+              },
+              is_finished: false, // Set the is_finished field to false
+            });
+
+            createdUserIds.add(user.id); // Add the user ID to the set of created users
+          }
+        });
+
+        // Wait for all the survey assignment creation requests to complete
+        await Promise.all(createAssignmentPromises);
 
         setShowPopup(false);
         setRefreshSurveys(true);

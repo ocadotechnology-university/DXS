@@ -169,6 +169,12 @@ public class SurveyResource {
         }
     }
 
+    @GetMapping("/surveys/currentuser")
+    public List<Survey> getAllSurveysForCurrentUser() {
+        log.debug("REST request to get all Surveys for the current user");
+        return surveyRepository.findByUserIsCurrentUser();
+    }
+
     /**
      * {@code GET  /surveys/:id} : get the "id" survey.
      *

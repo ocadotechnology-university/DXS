@@ -22,7 +22,7 @@ const ManagerSurveysDashboard = () => {
   useEffect(() => {
     // Fetch survey data from the backend API
     axios
-      .get('/api/surveys')
+      .get('/api/surveys/currentuser')
       .then(response => {
         // Update the surveys state with the fetched data
         setSurveys(response.data);

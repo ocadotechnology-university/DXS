@@ -89,7 +89,13 @@ const UserSurveysDashboard = () => {
 
   // Component for the expired surveys section
   function ExpiredSurveysSection() {
-    const expiredSurveys = surveys.filter(survey => survey.status === 'EXPIRED');
+    const expiredSurveys = surveyAssignments
+      .filter(assignment => assignment.is_finished === true)
+      .map(assignment => {
+        const surveybox = surveys.find(survey => survey.id === assignment.survey.id && survey.status === 'EXPIRED');
+        return surveybox || null;
+      })
+      .filter(survey => survey !== null);
 
     return (
       <div>

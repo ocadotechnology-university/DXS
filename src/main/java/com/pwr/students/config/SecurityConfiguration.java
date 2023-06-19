@@ -89,6 +89,7 @@ public class SecurityConfiguration {
                     .requestMatchers("/management/info").permitAll()
                     .requestMatchers("/management/prometheus").permitAll()
                     .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.MANAGER)
                     .requestMatchers("/api/questions/**").permitAll()
                     .requestMatchers("/api/surveys/**").permitAll()
                     .requestMatchers("/api/**").authenticated()

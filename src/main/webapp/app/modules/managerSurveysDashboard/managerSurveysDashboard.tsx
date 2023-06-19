@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button, Dropdown, Modal } from 'react-bootstrap';
 import './managerSurveysDashboard.css';
-import { BsGear, BsThreeDots } from 'react-icons/bs';
+import { BsThreeDots, BsGear } from 'react-icons/bs';
 import { FiSend, FiTrash2 } from 'react-icons/fi';
 import { GrStatusInfo } from 'react-icons/gr';
 import PublishPopUp from './components/publishPopUp';
@@ -45,8 +45,7 @@ const ManagerSurveysDashboard = () => {
   }, [refreshSurveys]);
 
   function ActiveSurveysSection() {
-    // const activeSurveys = surveys.filter((survey) => survey.status === 'active'); // TODO uncomment it after column status is added to survey table
-    const activeSurveys = surveys.filter(survey => survey.id !== 0); // TODO remove it after column status is added to survey table
+    const activeSurveys = surveys.filter(survey => survey.status === 'ACTIVE');
 
     return (
       <div>
@@ -62,28 +61,32 @@ const ManagerSurveysDashboard = () => {
 
   // Component for the expired surveys section
   function NotPublishedSurveysSection() {
-    const notPublishedSurveys = surveys.filter(survey => survey.status === 'inactive');
+    const notPublishedSurveys = surveys.filter(survey => survey.status === 'DRAFT');
 
     return (
       <div>
         <h2>Not published</h2>
-        {notPublishedSurveys.map(survey => (
-          <SurveyBox key={survey.id} survey={survey} />
-        ))}
+        <div className={'survey-container'}>
+          {notPublishedSurveys.map(survey => (
+            <SurveyBox key={survey.id} survey={survey} />
+          ))}
+        </div>
       </div>
     );
   }
 
   // Component for the expired surveys section
   function ExpiredSurveysSection() {
-    const expiredSurveys = surveys.filter(survey => survey.status === 'expired');
+    const expiredSurveys = surveys.filter(survey => survey.status === 'EXPIRED');
 
     return (
       <div>
         <h2>Expired</h2>
-        {expiredSurveys.map(survey => (
-          <SurveyBox key={survey.id} survey={survey} />
-        ))}
+        <div className={'survey-container'}>
+          {expiredSurveys.map(survey => (
+            <SurveyBox key={survey.id} survey={survey} />
+          ))}
+        </div>
       </div>
     );
   }

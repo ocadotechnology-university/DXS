@@ -41,7 +41,8 @@ public class Survey implements Serializable {
     private LocalDate deadline;
 
     @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private SurveyStatus status;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "survey")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -115,16 +116,16 @@ public class Survey implements Serializable {
         this.deadline = deadline;
     }
 
-    public String getStatus() {
+    public SurveyStatus getStatus() {
         return this.status;
     }
 
-    public Survey status(String status) {
+    public Survey status(SurveyStatus status) {
         this.setStatus(status);
         return this;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(SurveyStatus status) {
         this.status = status;
     }
 

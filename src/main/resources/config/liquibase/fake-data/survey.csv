@@ -1,11 +1,11 @@
-id;name;description;deadline;status
-1;Division;BMW Pound Zealand;2023-05-09;weber Cheese
-2;Auburn platforms;networks Architect;2023-05-10;Lauderhill Bedfordshire Chips
-3;orchid;Drive ZirconiumX;2023-05-10;Principal
-4;infomediaries Route;that EngineerXXX;2023-05-09;neutral incentivize
-5;navigation synthesize next;Analyst matrix Interactions;2023-05-09;frozen Steel
-6;backing holistic;Rupiah North Luxurious;2023-05-10;silky
-7;neutral;panel consequently Operations;2023-05-10;withdrawal Account
-8;Ohio avaricious Cisgender;CambridgeshireXX;2023-05-10;stable Wooden
-9;Convertible oh;Hybrid KiaXXXXXX;2023-05-10;Account
-10;IP Orland;kilogramXXXXXXXX;2023-05-10;Bicycle Markets
+id;name;description;deadline;status;user_id
+1;Division;BMW Pound Zealand;2023-05-09;ACTIVE;1
+2;Auburn platforms;networks Architect;2023-05-10;ACTIVE;1
+3;orchid;Drive ZirconiumX;2023-05-10;ACTIVE;1
+4;infomediaries Route;that EngineerXXX;2023-05-09;ACTIVE;1
+5;navigation synthesize next;Analyst matrix Interactions;2023-05-09;ACTIVE;1
+6;backing holistic;Rupiah North Luxurious;2023-05-10;EXPIRED;2
+7;neutral;panel consequently Operations;2023-05-10;EXPIRED;2
+8;Ohio avaricious Cisgender;CambridgeshireXX;2023-05-10;EXPIRED;2
+9;Convertible oh;Hybrid KiaXXXXXX;2023-05-10;EXPIRED;2
+10;IP Orland;kilogramXXXXXXXX;2023-05-10;DRAFT;2

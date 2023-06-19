@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.pwr.students.IntegrationTest;
 import com.pwr.students.domain.Survey;
+import com.pwr.students.domain.SurveyStatus;
 import com.pwr.students.repository.SurveyRepository;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
@@ -25,7 +26,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -50,8 +50,8 @@ class SurveyResourceIT {
     private static final LocalDate DEFAULT_DEADLINE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DEADLINE = LocalDate.now(ZoneId.systemDefault());
 
-    private static final String DEFAULT_STATUS = "AAAAAAAAAA";
-    private static final String UPDATED_STATUS = "BBBBBBBBBB";
+    private static final SurveyStatus DEFAULT_STATUS = SurveyStatus.ACTIVE;
+    private static final SurveyStatus UPDATED_STATUS = SurveyStatus.EXPIRED;
 
     private static final String ENTITY_API_URL = "/api/surveys";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -194,7 +194,7 @@ class SurveyResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].deadline").value(hasItem(DEFAULT_DEADLINE.toString())))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -229,7 +229,7 @@ class SurveyResourceIT {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.deadline").value(DEFAULT_DEADLINE.toString()))
-            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS));
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
     }
 
     @Test

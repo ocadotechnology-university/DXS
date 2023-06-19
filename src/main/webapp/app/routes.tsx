@@ -18,6 +18,7 @@ import SurveyCreator from 'app/modules/surveyCreator/surveyCreator';
 import QuestionManager from 'app/modules/questionManager/questionManager';
 import UserSurveysDashboard from 'app/modules/userSurveysDashboard/userSurveysDashboard';
 import ManagerSurveysDashboard from 'app/modules/managerSurveysDashboard/managerSurveysDashboard';
+import SurveyPage from 'app/modules/surveyCompletion/survey-page';
 import SurveyStatusView from 'app/modules/SurveyStatusView/SurveyStatusView';
 import QuestionModification from 'app/modules/questionModification/questionModification';
 import SurveyModification from 'app/modules/surveyModification/surveyModification';
@@ -78,6 +79,14 @@ const AppRoutes = () => {
           element={
             <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
               <UserSurveysDashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/complete-survey/:surveyId"
+          element={
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
+              <SurveyPage />
             </PrivateRoute>
           }
         />

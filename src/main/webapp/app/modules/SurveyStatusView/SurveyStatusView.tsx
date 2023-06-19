@@ -1,5 +1,6 @@
 import React from 'react';
 import './SurveyStatusView.css';
+import { Link } from 'react-router-dom';
 import { useTable } from 'react-table';
 
 const SurveyStatusView = () => {
@@ -39,10 +40,8 @@ const SurveyStatusView = () => {
   return (
     <div className="survey-page">
       <div className="info-container">
-        <div className="survey-info">
-          <h2 className="survey-title">{surveyTitle}</h2>
-          <p className="survey-due">Survey due to: {surveyDueDate}</p>
-        </div>
+        <h2 className="survey-title">{surveyTitle}</h2>
+        <p className="survey-due">Survey due to: {surveyDueDate}</p>
         <hr className="divider" />
         <p className="survey-description">{surveyDescription}</p>
       </div>
@@ -53,7 +52,9 @@ const SurveyStatusView = () => {
             {headerGroups.map(headerGroup => (
               <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map(column => (
-                  <th key={column.id} {...column.getHeaderProps()}>{column.render('Header')}</th>
+                  <th key={column.id} {...column.getHeaderProps()}>
+                    {column.render('Header')}
+                  </th>
                 ))}
               </tr>
             ))}
@@ -64,7 +65,9 @@ const SurveyStatusView = () => {
               return (
                 <tr key={row.id} {...row.getRowProps()}>
                   {row.cells.map(cell => (
-                    <td key={cell.id} {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                    <td key={cell.id} {...cell.getCellProps()}>
+                      {cell.column.id === 'name' ? <Link to="/SurveyHistory">{cell.render('Cell')}</Link> : cell.render('Cell')}
+                    </td>
                   ))}
                 </tr>
               );

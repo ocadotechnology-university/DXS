@@ -3,10 +3,23 @@ import axios from 'axios';
 import './userSurveysDashboard.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Modal } from 'react-bootstrap';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { getSession } from 'app/shared/reducers/authentication';
+import { reset } from 'app/modules/account/settings/settings.reducer';
 
 const UserSurveysDashboard = () => {
   const [surveys, setSurveys] = useState([]);
   const [surveyAssignments, setSurveyAssignments] = useState([]);
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(state => state.authentication.account);
+
+  // Fetch the user information during component initialization
+  useEffect(() => {
+    dispatch(getSession());
+    return () => {
+      dispatch(reset());
+    };
+  }, []);
 
   // TODO this code will look different bacause we will have to fetch the surveys assigned for this user (for now it fetches everything, waiting for backend to be ready)
   useEffect(() => {
@@ -21,7 +34,7 @@ const UserSurveysDashboard = () => {
         console.error('Error fetching survey data:', error);
       });
     axios
-      .get('/api/survey-assignments') // Replace '/api/survey-assignments' with the appropriate endpoint URL
+      .get(`/api/survey-assignments?userId=${user.id}`) // Replace '/api/survey-assignments' with the appropriate endpoint URL
       .then(response => {
         // Update the surveyAssignments state with the fetched data
         setSurveyAssignments(response.data);

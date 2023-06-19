@@ -43,7 +43,7 @@ const SurveyPage = () => {
         console.error('Error fetching survey data:', error);
       });
     axios
-      .get(`/api/survey-assignments?surveyId=${surveyId}`)
+      .get(`/api/survey-assignments?surveyId=${surveyId}&userId=${user.id}`)
       .then(response => {
         const surveyAssignment = response.data[0]; // Assuming there is only one survey assignment per survey
         setSurveyAssignmentId(surveyAssignment.id);

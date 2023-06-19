@@ -43,4 +43,10 @@ public interface SurveyAssigmentRepository extends JpaRepository<SurveyAssigment
 
     @Query("SELECT sa FROM SurveyAssigment sa WHERE sa.survey.id = :surveyId")
     List<SurveyAssigment> findAllBySurveyId(@Param("surveyId") Long surveyId);
+
+    @Query("SELECT sa FROM SurveyAssigment sa WHERE sa.user.id = :userId")
+    List<SurveyAssigment> findAllByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT sa FROM SurveyAssigment sa WHERE sa.survey.id = :surveyId AND sa.user.id = :userId")
+    List<SurveyAssigment> findAllBySurveyAndUserId(@Param("surveyId") Long surveyId, @Param("userId") Long userId);
 }

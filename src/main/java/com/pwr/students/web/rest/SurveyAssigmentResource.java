@@ -146,10 +146,16 @@ public class SurveyAssigmentResource {
     @GetMapping("/survey-assignments")
     public List<SurveyAssigment> getSurveyAssignments(
         @RequestParam(required = false, defaultValue = "false") boolean eagerload,
-        @RequestParam(required = false) Long surveyId
+        @RequestParam(required = false) Long surveyId,
+        @RequestParam(required = false) Long userId
     ) {
         log.debug("REST request to get SurveyAssignments");
-        if (surveyId != null) {
+
+        if (surveyId != null && userId != null) {
+            return surveyAssigmentRepository.findAllBySurveyAndUserId(surveyId, userId);
+        } else if (userId != null) {
+            return surveyAssigmentRepository.findAllByUserId(userId);
+        } else if (surveyId != null) {
             return surveyAssigmentRepository.findAllBySurveyId(surveyId);
         } else {
             if (eagerload) {
@@ -169,7 +175,7 @@ public class SurveyAssigmentResource {
     @GetMapping("/survey-assignments/{id}")
     public ResponseEntity<SurveyAssigment> getSurveyAssigment(@PathVariable Long id) {
         log.debug("REST request to get SurveyAssigment : {}", id);
-        Optional<SurveyAssigment> surveyAssigment = surveyAssigmentRepository.findOneWithEagerRelationships(id);
+        Optional<SurveyAssigment> surveyAssigment = surveyAssigmentRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(surveyAssigment);
     }
 

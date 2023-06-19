@@ -1,6 +1,7 @@
 package com.pwr.students.repository;
 
 import com.pwr.students.domain.Answer;
+import com.pwr.students.domain.SurveyAssigment;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -37,4 +38,7 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
 
     @Query("select answer from Answer answer left join fetch answer.user where answer.id =:id")
     Optional<Answer> findOneWithToOneRelationships(@Param("id") Long id);
+
+    @Query("SELECT answer from Answer answer WHERE answer.question.id = :questionId AND answer.user.id = :userId")
+    List<Answer> findAllByQuestionAndUserId(@Param("questionId") Long questionId, @Param("userId") Long userId);
 }

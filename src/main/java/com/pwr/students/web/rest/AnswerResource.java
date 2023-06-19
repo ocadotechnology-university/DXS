@@ -157,6 +157,16 @@ public class AnswerResource {
         }
     }
 
+    @GetMapping("/answersforquestion")
+    public List<Answer> getAllAnswersForQuestion(
+        @RequestParam(required = true) Long questionId,
+        @RequestParam(required = true) Long userId
+    ) {
+        log.debug("REST request to get all Answers by an user for a question");
+
+        return answerRepository.findAllByQuestionAndUserId(questionId, userId);
+    }
+
     /**
      * {@code GET  /answers/:id} : get the "id" answer.
      *

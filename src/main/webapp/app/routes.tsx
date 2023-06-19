@@ -46,7 +46,7 @@ const AppRoutes = () => {
         <Route
           path="surveyCreator"
           element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER, AUTHORITIES.MANAGER]}>
               <SurveyCreator />
             </PrivateRoute>
           }
@@ -54,7 +54,7 @@ const AppRoutes = () => {
         <Route
           path="questionManager"
           element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER, AUTHORITIES.MANAGER]}>
               <QuestionManager />
             </PrivateRoute>
           }
@@ -62,7 +62,7 @@ const AppRoutes = () => {
         <Route
           path="questionModification"
           element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER, AUTHORITIES.MANAGER]}>
               <QuestionModification />
             </PrivateRoute>
           }
@@ -70,7 +70,7 @@ const AppRoutes = () => {
         <Route
           path="survey-modification"
           element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER, AUTHORITIES.MANAGER]}>
               <SurveyModification />
             </PrivateRoute>
           }
@@ -78,7 +78,7 @@ const AppRoutes = () => {
         <Route
           path="user-surveys-dashboard"
           element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER, AUTHORITIES.MANAGER]}>
               <UserSurveysDashboard />
             </PrivateRoute>
           }
@@ -86,7 +86,7 @@ const AppRoutes = () => {
         <Route
           path="/complete-survey/:surveyId"
           element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER, AUTHORITIES.MANAGER]}>
               <SurveyPage />
             </PrivateRoute>
           }
@@ -94,24 +94,23 @@ const AppRoutes = () => {
         <Route
           path="manager-surveys-dashboard"
           element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.MANAGER]}>
               <ManagerSurveysDashboard />
             </PrivateRoute>
           }
         />
         <Route
-          path="SurveyHistory"
+          path="SurveyHistory/:surveyId/:userId"
           element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.MANAGER, AUTHORITIES.USER]}>
               <SurveyHistory />
             </PrivateRoute>
           }
         />
-
         <Route
           path="SurveyStatusView/:surveyId"
           element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.MANAGER]}>
               <SurveyStatusView />
             </PrivateRoute>
           }
@@ -121,7 +120,7 @@ const AppRoutes = () => {
           <Route
             path="*"
             element={
-              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER, AUTHORITIES.MANAGER]}>
                 <Account />
               </PrivateRoute>
             }
@@ -144,7 +143,7 @@ const AppRoutes = () => {
         <Route
           path="*"
           element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER, AUTHORITIES.MANAGER]}>
               <EntitiesRoutes />
             </PrivateRoute>
           }

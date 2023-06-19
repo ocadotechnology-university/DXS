@@ -1,38 +1,69 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './SurveyHistory.css';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 const SurveyHistory = () => {
-  // Data for survey questions
-  const questionData = [
-    {
-      questionNumber: 'Question 1',
-      questionText: 'I’m satisfied happy with our tech stack',
-      userAnswer: '9 out of 10',
-      userComment: 'I love Java!',
-      managerResponse: 'Me too!',
-    },
-    {
-      questionNumber: 'Question 2',
-      questionText: 'Do you think your laptop should be replaced with a new one?',
-      userAnswer: 'Yes',
-      userComment: 'My equipment is already 4 years old!',
-      managerResponse: '-',
-    },
-    {
-      questionNumber: 'Question 3',
-      questionText: 'What do you like most about your daily work?',
-      userAnswer: 'New challenges every day, interesting projects',
-      userComment: '-',
-      managerResponse: '-',
-    },
-    {
-      questionNumber: 'Question 4',
-      questionText: 'I feel like a lot of my time gets wasted.',
-      userAnswer: '2/10',
-      userComment: '-',
-      managerResponse: '-',
-    },
-  ];
+  const { surveyId, userId } = useParams();
+  const [questions, setQuestions] = useState([]);
+  const [answers, setAnswers] = useState([]);
+  const [questionData, setQuestionData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`/api/surveys/${surveyId}/questions`)
+      .then(response => setQuestions(response.data))
+      .catch(error => console.error('Error fetching survey assignment data:', error));
+  }, [surveyId]);
+
+  useEffect(() => {
+    if (questions.length > 0) {
+      const fetchAnswersAndUpdateData = async () => {
+        const updatedData = await Promise.all(
+          questions.map(async question => {
+            try {
+              const response = await axios.get(`/api/answersforquestion?questionId=${question.id}&userId=${userId}`);
+              const answerData = response.data;
+              return {
+                questionNumber: question.order,
+                questionText: question.questionContent,
+                userAnswer: answerData.answer || '',
+                userComment: answerData.comment || '',
+                managerResponse: answerData.comment_answer || '',
+              };
+            } catch (error) {
+              console.error('Error fetching answers:', error);
+              return {
+                questionNumber: question.order,
+                questionText: question.questionContent,
+                userAnswer: '',
+                userComment: '',
+                managerResponse: '',
+              };
+            }
+          })
+        );
+        setQuestionData(updatedData);
+      };
+      fetchAnswersAndUpdateData();
+    }
+  }, [questions, userId]);
+
+  useEffect(() => {
+    if (answers.length === questions.length) {
+      const updatedQuestionData = questions.map((question, index) => {
+        const answerData = answers[index] || {};
+        return {
+          questionNumber: question.order,
+          questionText: question.questionContent,
+          userAnswer: answerData.answer || '',
+          userComment: answerData.comment || '',
+          managerResponse: answerData.comment_answer || '',
+        };
+      });
+      setQuestionData(updatedQuestionData);
+    }
+  }, [questions, answers]);
 
   const surveyTitle = 'Survey1';
   const surveyDate = '2023-06-01';
@@ -43,7 +74,6 @@ const SurveyHistory = () => {
         <div className="survey-title">{surveyTitle}</div>
         <div className="survey-date">Completed on: {surveyDate}</div>
       </div>
-
       {questionData.map((question, index) => (
         <table className="question-table" key={index}>
           <tbody>
@@ -66,7 +96,6 @@ const SurveyHistory = () => {
           </tbody>
         </table>
       ))}
-
       <div className="question-break"></div>
     </div>
   );

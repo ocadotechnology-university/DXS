@@ -3,6 +3,7 @@ import './SurveyStatusView.css';
 import { Link, useParams } from 'react-router-dom';
 import { useTable } from 'react-table';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const SurveyInfo = ({ surveyTitle, surveyDueDate, surveyDescription }) => {
   return (
@@ -54,6 +55,7 @@ const SurveyTable = ({ columns, data }) => {
 };
 
 const SurveyStatusView = () => {
+  const navigate = useNavigate();
   const { surveyId } = useParams();
   const [surveyTitle, setSurveyTitle] = useState('');
   const [surveyDescription, setSurveyDescription] = useState('');
@@ -61,7 +63,9 @@ const SurveyStatusView = () => {
   const [surveyData, setSurveyData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [surveyAssignments, setSurveyAssignments] = useState([]);
-
+  const navigateToHistory = userId => {
+    navigate(`/SurveyHistory/${surveyId}/${userId}`);
+  };
   useEffect(() => {
     setLoading(true);
 
@@ -90,6 +94,8 @@ const SurveyStatusView = () => {
       });
   }, [surveyId]);
 
+  function handleButtonClick(original: any) {}
+
   const columns = [
     {
       Header: 'User',
@@ -98,10 +104,21 @@ const SurveyStatusView = () => {
     {
       Header: 'Completion Status',
       accessor: 'is_finished',
-      Cell: ({ value }) => (value ? 'Finished' : 'Incomplete'), // Add this line
+      Cell: ({ value }) => (value ? 'Finished' : 'Incomplete'),
+    },
+    {
+      Header: 'Actions',
+      id: 'actions',
+      Cell({ row }) {
+        // Check if the 'Completion Status' is 'Finished'
+        if (row.values.is_finished) {
+          return <button onClick={() => navigateToHistory(row.original.user.id)}>History</button>;
+        }
+        // If 'Completion Status' is not 'Finished', do not render a button
+        return null;
+      },
     },
   ];
-
   if (!surveyData) {
     return null;
   }

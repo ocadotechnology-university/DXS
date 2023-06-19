@@ -16,6 +16,7 @@ const ManagerSurveysDashboard = () => {
   const [groups, setGroups] = useState([]);
   const [surveys, setSurveys] = useState([]);
   const [refreshSurveys, setRefreshSurveys] = useState(false);
+  const navigate = useNavigate();
 
   // TODO this code will look different because we will have to fetch the surveys created only by this manager (for now it fetches everything, waiting for backend to be ready)
   useEffect(() => {
@@ -240,7 +241,7 @@ const ManagerSurveysDashboard = () => {
               <BsGear className={'icon'} />
               Modify
             </Dropdown.Item>
-            <Dropdown.Item as={Link} to="/SurveyStatusView">
+            <Dropdown.Item as={Link} to={`/SurveyStatusView/${survey.id}`}>
               <GrStatusInfo className={'icon'} />
               Status
             </Dropdown.Item>
@@ -250,7 +251,7 @@ const ManagerSurveysDashboard = () => {
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <Link to="/SurveyStatusView">
+        <Link to={`/SurveyStatusView/${survey.id}`}>
           <div className={'name-row'}>
             <p className={'wrap-text'}>{survey.name}</p>
           </div>

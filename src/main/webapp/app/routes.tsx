@@ -22,6 +22,7 @@ import SurveyPage from 'app/modules/surveyCompletion/survey-page';
 import SurveyStatusView from 'app/modules/SurveyStatusView/SurveyStatusView';
 import QuestionModification from 'app/modules/questionModification/questionModification';
 import SurveyModification from 'app/modules/surveyModification/surveyModification';
+import SurveyHistory from 'app/modules/SurveyHistory/SurveyHistory';
 
 const loading = <div>loading ...</div>;
 
@@ -99,13 +100,23 @@ const AppRoutes = () => {
           }
         />
         <Route
-          path="SurveyStatusView"
+          path="SurveyHistory"
+          element={
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
+              <SurveyHistory />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="SurveyStatusView/:surveyId"
           element={
             <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
               <SurveyStatusView />
             </PrivateRoute>
           }
         />
+
         <Route path="account">
           <Route
             path="*"

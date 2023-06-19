@@ -68,11 +68,11 @@ const SurveyStatusView = () => {
     axios
       .get(`/api/surveys/${surveyId}`)
       .then(response => {
-        const surveyData = response.data;
-        setSurveyTitle(surveyData.title);
-        setSurveyDescription(surveyData.description);
-        setSurveyDueDate(surveyData.dueDate);
-        setSurveyData(surveyData);
+        const surveyDataResponse = response.data;
+        setSurveyTitle(surveyDataResponse.title);
+        setSurveyDescription(surveyDataResponse.description);
+        setSurveyDueDate(surveyDataResponse.dueDate);
+        setSurveyData(surveyDataResponse);
         setLoading(false);
       })
       .catch(error => {

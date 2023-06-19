@@ -96,7 +96,6 @@ const ManagerSurveysDashboard = () => {
   function SurveyBox({ survey }) {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const dispatch = useAppDispatch();
-    const navigate = useNavigate();
 
     const handleDeleteClick = () => {
       setShowDeleteModal(true);
@@ -130,7 +129,7 @@ const ManagerSurveysDashboard = () => {
 
         const updatedFields = {
           id: survey.id, // Include the survey ID
-          status: 'Published',
+          status: 'ACTIVE',
           deadline,
         };
 
@@ -186,7 +185,7 @@ const ManagerSurveysDashboard = () => {
           // eslint-disable-next-line no-console
           console.log('userid in if:' + user.id);
           if (!createdUserIds.has(user.id)) {
-            await axios.post('/api/survey-assigments', {
+            await axios.post('/api/survey-assignments', {
               survey: {
                 id: survey.id,
                 name: survey.name,

@@ -4,6 +4,7 @@ import com.pwr.students.domain.Survey;
 import com.pwr.students.repository.QuestionRepository;
 import com.pwr.students.repository.SurveyRepository;
 import com.pwr.students.web.rest.errors.BadRequestAlertException;
+import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
@@ -13,9 +14,13 @@ import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -39,10 +44,19 @@ public class SurveyResource {
 
     private final SurveyRepository surveyRepository;
     private final QuestionRepository questionRepository;
+    private String currentUserName;
 
     public SurveyResource(SurveyRepository surveyRepository, QuestionRepository questionRepository) {
         this.surveyRepository = surveyRepository;
         this.questionRepository = questionRepository;
+    }
+
+    private String getcurrentusername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getName() != null) {
+            return authentication.getName();
+        }
+        throw new IllegalStateException("Current user authentication not available");
     }
 
     /**
@@ -162,11 +176,20 @@ public class SurveyResource {
     @GetMapping("/surveys")
     public List<Survey> getAllSurveys(@RequestParam(required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Surveys");
+        List<Survey> surveys;
+        currentUserName = getcurrentusername();
+        log.debug("currentUserName: " + currentUserName);
         if (eagerload) {
-            return surveyRepository.findAllWithEagerRelationships();
+            surveys = surveyRepository.findAllWithEagerRelationships();
         } else {
-            return surveyRepository.findAll();
+            surveys = surveyRepository.findAll();
         }
+
+        for (Survey survey : surveys) {
+            survey.setcurrentusername(currentUserName);
+        }
+
+        return surveys;
     }
 
     @GetMapping("/surveys/currentuser")

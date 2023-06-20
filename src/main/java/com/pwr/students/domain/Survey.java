@@ -2,6 +2,7 @@ package com.pwr.students.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -61,6 +62,20 @@ public class Survey implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "survey")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<SurveyTargetGroups> SurveyTargetGroups = new HashSet<>();
+
+    // Additional field for currentusername
+    @Transient
+    @JsonProperty("currentusername")
+    private String currentusername;
+
+    @JsonProperty("currentusername")
+    public String getcurrentusername() {
+        return currentusername;
+    }
+
+    public void setcurrentusername(String currentusername) {
+        this.currentusername = currentusername;
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 

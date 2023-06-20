@@ -22,10 +22,15 @@ const ManagerSurveysDashboard = () => {
   useEffect(() => {
     // Fetch survey data from the backend API
     axios
-      .get('/api/surveys/currentuser')
+      .get('/api/surveys')
       .then(response => {
         // Update the surveys state with the fetched data
-        setSurveys(response.data);
+        //const currentUserName = response.data.currentusername;
+        // eslint-disable-next-line no-console
+        //console.log(currentUserName);
+
+        const filteredSurveys = response.data.filter(survey => survey.user.login === survey.currentusername);
+        setSurveys(filteredSurveys);
       })
       .catch(error => {
         console.error('Error fetching survey data:', error);
